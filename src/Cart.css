@@ -1,0 +1,35 @@
+body{
+    background-color: #023E7D;
+}
+
+.CartContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 25px;
+}
+
+.CartView {
+    display: flex;
+    justify-content: space-evenly;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.ItemList {
+    background-color: white;
+    width: 64%;
+    min-width: 370px;
+    border-radius: 25px;
+    margin-left: 2%;
+    padding-top: 12px;
+}
+
+.Summary {
+    background-color: white;
+    width: 30%;
+    min-width: 300px;
+    border-radius: 25px;
+    margin-right: 2%;
+    padding-top: 12px;
+}
