@@ -5,13 +5,18 @@ import Menubar from './Component/Menubar';
 function Cart() {
   return (
     <>
-    <Menubar />
-    <div className='ItemList'>
-        <p>Hi</p>
-    </div>
-    <div className='Summary'>
-        <p>Hi</p>
-    </div>
+      <div className='CartContainer'>
+        <Menubar />
+        <div className='CartView'>
+          <div className='ItemList'>
+            <p>Hi</p>
+          </div>
+          <div className='Summary'>
+              <p>Hi</p>
+          </div>
+        </div>
+        
+      </div>
     </>
   );
 }
