@@ -1,0 +1,40 @@
+.CartCard {
+    display: grid;
+    grid-template-columns: 1fr 3fr 5fr 3fr;
+    align-items: center;
+    padding: 2% 2% 2% 2%;
+    min-width: 320;
+}
+
+.NotSelected {
+    background-color: none;
+    border-radius: 30px;
+    width: 69%;
+    height: 29%;
+    font-size: 100%;
+}
+
+.Selected, .NotSelected:hover {
+    background-color: greenyellow;
+    border-radius: 30px;
+    width: 69%;
+    height: 29%;
+    font-size: 100%;
+}
+
+.ItemPhoto img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.ItemPhoto {
+    border-color: black;
+    border-width: 1px;
+    border-style: solid;
+    width: 80%;
+    height: 80%;
+    align-items: center;
+    vertical-align: middle;
+    border-radius: 10px;
+}
