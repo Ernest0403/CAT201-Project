@@ -38,16 +38,21 @@ function Cartlist(){
                     </div>
                 </div>
                 <div className="CartItemQuantity">
-                    <div className="CartItemAmount">
+                    <div>
                         Quantity:
                     </div>
                     <div className="CartAmountOption">
-                        1
+                        <button className="SubCart">-</button>
+                        <div className="CartCurrentAmount">1</div>
+                        <button className="AddCart">+</button>
                     </div>
-                <button className="RemoveCart">Remove</button>
                 </div>
+                <button className="RemoveCart">Remove</button>
             </div>
-            <div>Price</div>
+            <div className="CartItemPrice">
+                <div>Price</div>
+                <div>RM 46.36</div>
+            </div>
         </div>
     )
 }

@@ -11,6 +11,10 @@ function Cart() {
         <div className='CartView'>
           <div className='ItemList'>
             <Cartlist />
+            <Cartlist />
+            <Cartlist />
+            <Cartlist />
+            <Cartlist />
           </div>
           <div className='Summary'>
               <div className='SummaryTitle'>
