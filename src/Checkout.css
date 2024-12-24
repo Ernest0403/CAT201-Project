@@ -151,7 +151,11 @@ input[type=ShippingCity],
 input[type=ShippingPostcode],
 input[type=ShippingState],
 input[type=ShippingContactNumber],
-input[type=ShippingNotes] {
+input[type=ShippingNotes],
+input[type=CardNumber],
+input[type=CardHolderName],
+input[type=CardED],
+input[type=CardCVV] {
     width: 85%;
     height: 40px;
     margin-top: -10px;

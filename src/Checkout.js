@@ -154,7 +154,19 @@ function Checkout() {
                             </div>
                         </div>
                     </button>
-                    {selectedPayment === "card" ? <div>Is Open</div> : <></>}
+                    {selectedPayment === "card" ?
+                        <div className='ShippingDetails'>
+                            <div className='InformationLable'>Card Number</div>
+                            <input type = "CardNumber" name= "CardNumberInput" />
+                            <div className='InformationLable'>Card's Holder Name</div>
+                            <input type = "CardHolderName" name= "CardHolderNameInput" />
+                            <div className='InformationLable'>Card Expiry Date</div>
+                            <input type = "CardED" name= "CardEDInput" />
+                            <div className='InformationLable'>CVV</div>
+                            <input type = "CardCVV" name= "CardCVVInput" /> 
+                        </div>
+                        : <></>
+                    }
                 </div>
                 <div className='CheckoutNav'>
                     <button className='BackToCart'>Back to Cart</button>
