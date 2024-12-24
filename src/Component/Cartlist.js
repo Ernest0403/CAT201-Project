@@ -24,10 +24,29 @@ function Cartlist(){
                 onClick={changeStatus}>
                 ✓
             </button>
-            <div className="ItemPhoto">
+            <div className="CartItemPhoto">
             <img src={"/Images/cart.jpg"} alt="" />
             </div>
-            <div>Item details</div>
+            <div className="CartItemDetails">
+                <div className="CartItemName">Item Name</div>
+                <div className="CartTagGroup">
+                    <div className="CartTag">
+                        Tag 1
+                    </div>
+                    <div className="CartTag">
+                        Tag 2
+                    </div>
+                </div>
+                <div className="CartItemQuantity">
+                    <div className="CartItemAmount">
+                        Quantity:
+                    </div>
+                    <div className="CartAmountOption">
+                        1
+                    </div>
+                <button className="RemoveCart">Remove</button>
+                </div>
+            </div>
             <div>Price</div>
         </div>
     )

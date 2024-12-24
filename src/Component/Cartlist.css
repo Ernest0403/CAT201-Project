@@ -1,40 +1,67 @@
 .CartCard {
-    display: grid;
-    grid-template-columns: 1fr 3fr 5fr 3fr;
+    display: flex;
+    /* grid-template-columns: 1fr 3fr 5fr 3fr; */
     align-items: center;
-    padding: 2% 2% 2% 2%;
+    padding: 10px 20px 10px 20px;
     min-width: 320;
+    border-width: 1px;
+    border-style: solid;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    gap: 20px;
+    height: auto;
+    flex-wrap: wrap;
 }
 
 .NotSelected {
     background-color: none;
     border-radius: 30px;
-    width: 69%;
+    width: 30px;
     height: 29%;
     font-size: 100%;
+    min-width: 30px;
 }
 
 .Selected, .NotSelected:hover {
     background-color: greenyellow;
     border-radius: 30px;
-    width: 69%;
-    height: 29%;
+    width: 30px;
     font-size: 100%;
+    min-width: 30px;
 }
 
-.ItemPhoto img {
+.CartItemPhoto img {
     width: 100%;
     height: 100%;
     object-fit: contain;
 }
 
-.ItemPhoto {
+.CartItemPhoto {
     border-color: black;
     border-width: 1px;
     border-style: solid;
-    width: 80%;
-    height: 80%;
+    width: 150px;
+    height: 150px;
     align-items: center;
     vertical-align: middle;
     border-radius: 10px;
+    min-width: 150px;
+    min-height: 150px;
+}
+
+.CartItemDetials {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    min-width: 300px;
+}
+
+.CartItemName {
+    font-size: 120%;
+    font-weight: bold;
+}
+
+.CartTagGroup {
+    display: flex;
+    gap: 2px;
+
 }
