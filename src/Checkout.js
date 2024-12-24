@@ -1,8 +1,53 @@
 import './Checkout.css';
 import React from 'react';
 import Menubar from './Component/Menubar';
+import { useState } from "react";
 
 function Checkout() {
+    //Codes below are used to toggle between shipping options button
+    const [
+        selectedShip,
+        setSelectedShip,
+    ] = useState("fast");
+
+    const handleShipOption = (
+        value
+    ) => {
+        if(selectedShip !== value){
+            setSelectedShip(value);
+        }
+        console.log("clicked!")
+    };
+
+    //Codes below are used to toggle between payment method button
+    const [
+        selectedPayment,
+        setSelectedPayment,
+    ] = useState("");
+
+    const handlePaymentMethod = (
+        value
+    ) => {
+        if(selectedPayment !== value){
+            setSelectedPayment(value);
+        }
+        console.log("clicked!")
+    };
+
+    //Codes below are used to toggle between payment platform button
+    const [
+        selectedPlatform,
+        setSelectedPlatform,
+    ] = useState("");
+
+    const handlePaymentPlatform = (
+        value
+    ) => {
+        if(selectedPlatform !== value){
+            setSelectedPlatform(value);
+        }
+    };
+    
     return (
       <>
         <div className='CheckoutContainer'>
@@ -14,7 +59,8 @@ function Checkout() {
                     <div className='OptionLable'>
                         SHIPPING OPTION
                     </div>
-                    <button className='ShippingType'>
+                    <button className= {`ShippingType ${selectedShip === "fast" ? "fast" : ""}`}
+                    onClick={() => handleShipOption("fast")}>
                         <div className='TypeDesc'>
                             <div className='TypeLable'>
                             Fast Shipping
@@ -27,13 +73,14 @@ function Checkout() {
                             RM20
                         </div>
                     </button>
-                    <button className='ShippingType'>
+                    <button className={`ShippingType ${selectedShip === "normal" ? "normal" : ""}` }
+                    onClick={() => handleShipOption("normal")}>
                     <div className='TypeDesc'>
                             <div className='TypeLable'>
                             Normal Shipping
                             </div>
                             <div >
-                                Your ohrder will be received between 6 to 20 days
+                                Your order will be received between 6 to 20 days
                             </div>
                         </div>
                         <div className='ShippingFee'>
@@ -64,7 +111,8 @@ function Checkout() {
                 <div className='OptionLable'>
                         PAYMENT METHOD
                     </div>
-                    <button className='PaymentType'>
+                    <button className={`PaymentType ${selectedPayment === "online" ? "online" : ""}`}
+                    onClick = {() => handlePaymentMethod("online")}>
                         <div className='TypeDesc'>
                             <div className='TypeLable'>
                             Online Banking
@@ -74,7 +122,29 @@ function Checkout() {
                             </div>
                         </div>
                     </button>
-                    <button className='PaymentType'>
+                    {selectedPayment === "online" ? 
+                            <div className='bankingplatform'>
+                                <button className={`PaymentType ${selectedPlatform === "Maybank2U" ? "selected" : ""}`}
+                                onClick = {() => handlePaymentPlatform("Maybank2U")}>
+                                Maybank2U
+                                </button>
+                                <button className={`PaymentType ${selectedPlatform === "BankingRHBnline" ? "selected" : ""}`}
+                                onClick = {() => handlePaymentPlatform("BankingRHBnline")}>
+                                BankingRHB
+                                </button> 
+                                <button className={`PaymentType ${selectedPlatform === "myBSN" ? "selected" : ""}`}
+                                onClick = {() => handlePaymentPlatform("myBSN")}>
+                                myBSN
+                                </button> 
+                                <button className={`PaymentType ${selectedPlatform === "AmOnline" ? "selected" : ""}`}
+                                onClick = {() => handlePaymentPlatform("AmOnline")}>
+                                AmOnline
+                                </button> 
+                            </div>
+                        : <></>
+                    }
+                    <button className={`PaymentType ${selectedPayment === "card" ? "card" : ""}`}
+                    onClick = {() => handlePaymentMethod("card")}>
                         <div className='TypeDesc'>
                             <div className='TypeLable'>
                             Credit/Debit Card
@@ -84,6 +154,7 @@ function Checkout() {
                             </div>
                         </div>
                     </button>
+                    {selectedPayment === "card" ? <div>Is Open</div> : <></>}
                 </div>
                 <div className='CheckoutNav'>
                     <button className='BackToCart'>Back to Cart</button>

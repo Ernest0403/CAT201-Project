@@ -104,7 +104,7 @@
 }
 
 .ShippingType,
-.PaymentType {
+.PaymentType{
     display: flex;
     flex-direction: row;
     border-style: solid;
@@ -115,6 +115,14 @@
     align-items: center;
     border-radius: 15px;
     background-color: white;
+}
+
+.ShippingType.fast,
+.ShippingType.normal,
+.PaymentType.online,
+.PaymentType.card,
+.PaymentType.selected {
+    background-color: rgba(4, 102, 200, 0.3);
 }
 
 .TypeDesc {
@@ -165,4 +173,11 @@ input[type=ShippingNotes] {
     background-color: white;
     border-radius: 15px;
     font-size: 20px;
+}
+
+.bankingplatform {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
 }
