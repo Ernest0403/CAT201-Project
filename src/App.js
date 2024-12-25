@@ -1,5 +1,6 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import Navbar from './Component/Navbar';
 import Sidebar from './Component/Sidebar';
 import AdminHeader from './Component/AdminHeader';
 import './App.css';
@@ -10,25 +11,27 @@ import ManageProducts from './pages/admin/ManageProducts';
 import ManageOrders from './pages/admin/ManageOrders';
 import Promotions from './pages/admin/Promotions';
 import CustomerService from './pages/admin/CustomerService';
+import LivingRoomPage from './LivingRoomPage';
+import BedroomPage from './BedroomPage';
+import KitchenPage from './KitchenPage';
+import DiningRoomPage from './DiningRoom';
+import WorkRoomPage from './WorkRoom';
 
 const App = () => {
   return (
     <Router>
-      <div className="app">
-        <Sidebar />
-        <div className="main-content">
-          <AdminHeader />
-          <div className="content">
-            <Routes>
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/manage-products" element={<ManageProducts />} />
-              <Route path="/manage-orders" element={<ManageOrders />} />
-              <Route path="/promotions" element={<Promotions />} />
-              <Route path="/customer-service" element={<CustomerService />} />
-            </Routes>
-          </div>
-        </div>
-      </div>
+      <Navbar />
+        <Switch>
+        {/* Home page route */}
+        <Route exact path="/" component={HomePage} />
+        
+        {/* Category page routes */}
+        <Route path="/LivingRoom" component={LivingRoomPage} />
+        <Route path="/Bedroom" component={BedroomPage} />
+        <Route path="/Kitchen" component={KitchenPage} />
+        <Route path="/DiningRoom" component={DiningRoomPage} />
+        <Route path="/WorkRoom" component={WorkRoomPage} />
+      </Switch>
     </Router>
   );
 };
