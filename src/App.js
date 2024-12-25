@@ -1,7 +1,10 @@
+// App.js
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Sidebar from './Component/Sidebar';
-import AdminHeader from './Component/AdminHeader';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import AdminLayout from './layouts/AdminLayout';
+import UserLayout from './layouts/UserLayout';
+import Menubar from './Component/Menubar';
+import Navbar from './Component/Navbar';
 import './App.css';
 
 // Pages
@@ -10,25 +13,52 @@ import ManageProducts from './pages/admin/ManageProducts';
 import ManageOrders from './pages/admin/ManageOrders';
 import Promotions from './pages/admin/Promotions';
 import CustomerService from './pages/admin/CustomerService';
+import Login from './pages/login';
+import Register from './pages/Register';
+import ForgetPassword from './pages/ForgetPassword';
+import UserDashboard from './pages/user/UserDashboard';
+import AboutUs from './AboutUs';
+
+const HomePage = () => (
+  <div>
+    <Menubar />
+    <Navbar />
+    <div style={{ padding: '20px', textAlign: 'center' }}>
+      <h2>Welcome to Our Store</h2>
+      <p>Browse through our amazing furniture collections!</p>
+    </div>
+  </div>
+);
 
 const App = () => {
   return (
     <Router>
-      <div className="app">
-        <Sidebar />
-        <div className="main-content">
-          <AdminHeader />
-          <div className="content">
-            <Routes>
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/manage-products" element={<ManageProducts />} />
-              <Route path="/manage-orders" element={<ManageOrders />} />
-              <Route path="/promotions" element={<Promotions />} />
-              <Route path="/customer-service" element={<CustomerService />} />
-            </Routes>
-          </div>
-        </div>
-      </div>
+      <Routes>
+        {/* Admin Routes */}
+        <Route path="/dashboard" element={<AdminLayout><Dashboard /></AdminLayout>} />
+        <Route path="/manage-products" element={<AdminLayout><ManageProducts /></AdminLayout>} />
+        <Route path="/manage-orders" element={<AdminLayout><ManageOrders /></AdminLayout>} />
+        <Route path="/promotions" element={<AdminLayout><Promotions /></AdminLayout>} />
+        <Route path="/customer-service" element={<AdminLayout><CustomerService /></AdminLayout>} />
+
+        {/* User Routes */}
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<UserLayout><Login /></UserLayout>} />
+        <Route path="/register" element={<UserLayout><Register /></UserLayout>} />
+        <Route path="/reset-password" element={<UserLayout><ForgetPassword /></UserLayout>} />
+        <Route path="/user-dashboard" element={<UserLayout><UserDashboard /></UserLayout>} />
+
+        {/* Living Room and Other Category Routes */}
+        <Route path="/living-room" element={<UserLayout><div>Living Room Content</div></UserLayout>} />
+        <Route path="/bedroom" element={<UserLayout><div>Bedroom Content</div></UserLayout>} />
+        <Route path="/kitchen" element={<UserLayout><div>Kitchen and Dining Room Content</div></UserLayout>} />
+        <Route path="/home-office" element={<UserLayout><div>Home Office Content</div></UserLayout>} />
+        <Route path="/about-us" element={<UserLayout><AboutUs /></UserLayout>} />
+        <Route path="/terms" element={<UserLayout><div>Terms and Conditions Content</div></UserLayout>} />
+
+        {/* Default Route */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
     </Router>
   );
 };
