@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import AboutUs from './AboutUs';
+import UserDashboard from './pages/user/UserDashboard';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <AboutUs />
+    <UserDashboard />
   </React.StrictMode>
 );
 
