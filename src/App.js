@@ -1,26 +1,32 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import AdminLayout from './layouts/AdminLayout';
+import UserLayout from './layouts/UserLayout';
+import Menubar from './Component/Menubar';
 import Navbar from './Component/Navbar';
-import Sidebar from './Component/Sidebar';
-import AdminHeader from './Component/AdminHeader';
 import './App.css';
 
-// Pages
+// Admin Pages
 import Dashboard from './pages/admin/Dashboard';
 import ManageProducts from './pages/admin/ManageProducts';
 import ManageOrders from './pages/admin/ManageOrders';
 import Promotions from './pages/admin/Promotions';
 import CustomerService from './pages/admin/CustomerService';
+
+//General Pages
 import Login from './pages/login';
 import Register from './pages/Register';
 import ForgetPassword from './pages/ForgetPassword';
-import UserDashboard from './pages/user/UserDashboard';
 import AboutUs from './AboutUs';
+import Tnc from './Tnc';
 import LivingRoom from './LivingRoom';
 import Bedroom from './Bedroom';
 import Kitchen from './Kitchen';
 import DiningRoom from './DiningRoom';
 import WorkRoom from './WorkRoom';
+
+//User Pages
+import UserDashboard from './pages/user/UserDashboard';
 
 const HomePage = () => (
   <div>
@@ -58,7 +64,7 @@ const App = () => {
         <Route path="/dining-room" element={<UserLayout><DiningRoom/></UserLayout>} />
         <Route path="/work-room" element={<UserLayout><WorkRoom/></UserLayout>} />
         <Route path="/about-us" element={<UserLayout><AboutUs /></UserLayout>} />
-        <Route path="/terms" element={<UserLayout><div>Terms and Conditions Content</div></UserLayout>} />
+        <Route path="/terms" element={<UserLayout><TnC></UserLayout>} />
 
         {/* Default Route */}
         <Route path="*" element={<Navigate to="/" replace />} />
