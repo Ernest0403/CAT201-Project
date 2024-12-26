@@ -1,13 +1,10 @@
 import './Cart.css';
 import React from 'react';
-import Menubar from './Component/Menubar';
-import Cartlist from './Component/Cartlist';
+import Cartlist from '../../Component/Cartlist';
 
 function Cart() {
   return (
     <>
-      <div className='CartContainer'>
-        <Menubar />
         <div className='CartView'>
           <div className='ItemList'>
             <Cartlist />
@@ -39,8 +36,6 @@ function Cart() {
               </button>
           </div>
         </div>
-        
-      </div>
     </>
   );
 }
