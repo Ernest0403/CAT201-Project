@@ -7,7 +7,7 @@ import Menubar from './Component/Menubar';
 import Navbar from './Component/Navbar';
 import './App.css';
 
-//Admin Pages
+// Admin Pages
 import Dashboard from './pages/admin/Dashboard';
 import ManageProducts from './pages/admin/ManageProducts';
 import ManageOrders from './pages/admin/ManageOrders';
@@ -19,7 +19,13 @@ import Login from './pages/login';
 import Register from './pages/Register';
 import ForgetPassword from './pages/ForgetPassword';
 import AboutUs from './AboutUs';
-import TnC from './TnC';
+
+import Tnc from './Tnc';
+import LivingRoom from './LivingRoom';
+import Bedroom from './Bedroom';
+import Kitchen from './Kitchen';
+import DiningRoom from './DiningRoom';
+import WorkRoom from './WorkRoom';
 
 //User Pages
 import UserDashboard from './pages/user/UserDashboard';
@@ -61,12 +67,13 @@ const App = () => {
         <Route path="/favourite" element={<UserLayout><Favourite /></UserLayout>} />
 
         {/* Living Room and Other Category Routes */}
-        <Route path="/living-room" element={<UserLayout><div>Living Room Content</div></UserLayout>} />
-        <Route path="/bedroom" element={<UserLayout><div>Bedroom Content</div></UserLayout>} />
-        <Route path="/kitchen" element={<UserLayout><div>Kitchen and Dining Room Content</div></UserLayout>} />
-        <Route path="/home-office" element={<UserLayout><div>Home Office Content</div></UserLayout>} />
+        <Route path="/living-room" element={<UserLayout><LivingRoom/></UserLayout>} />
+        <Route path="/bedroom" element={<UserLayout><Bedroom/></UserLayout>} />
+        <Route path="/kitchen" element={<UserLayout><Kitchen/></UserLayout>} />
+        <Route path="/dining-room" element={<UserLayout><DiningRoom/></UserLayout>} />
+        <Route path="/work-room" element={<UserLayout><WorkRoom/></UserLayout>} />
         <Route path="/about-us" element={<UserLayout><AboutUs /></UserLayout>} />
-        <Route path="/terms" element={<UserLayout><TnC /></UserLayout>} />
+        <Route path="/terms" element={<UserLayout><TnC/></UserLayout>} />
 
         {/* Default Route */}
         <Route path="*" element={<Navigate to="/" replace />} />

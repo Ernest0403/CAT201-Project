@@ -8,8 +8,9 @@ function Navbar() {
                 <ul className="nav-links">
                     <li><Link to="/living-room">Living Room</Link></li>
                     <li><Link to="/bedroom">Bedroom</Link></li>
-                    <li><Link to="/kitchen">Kitchen and Dining Room</Link></li>
-                    <li><Link to="/home-office">Home Office</Link></li>
+                    <li><Link to="/kitchen">Kitchen</Link></li>
+                    <li><Link to="/dining-room">Dining Room</Link></li>
+                    <li><Link to="/work-room">Work/Study Room</Link></li>
                     <li><Link to="/about-us">About Us</Link></li>
                     <li><Link to="/terms">Terms and Conditions</Link></li>
                 </ul>
