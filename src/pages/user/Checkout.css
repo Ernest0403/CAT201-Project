@@ -16,7 +16,7 @@
     padding: 2%;
 }
 
-.Summary {
+.CheckoutSummary {
     background-color: #DBDBDB;
     width: 30%;
     min-width: 300px;
@@ -26,17 +26,17 @@
     position: sticky;
     top: 25px;
     padding-bottom: 30px;
-    max-height: 470px;
+    height: fit-content;
 }
 
-.Summary .SummaryTitle {
+.CheckoutSummary .SummaryTitle {
     font-size: 38px;
     text-decoration: underline;
     margin-top: -10px;
     margin-bottom: -10px;
 }
 
-.Summary .SummaryBreakdown {
+.CheckoutSummary .SummaryBreakdown {
     display: grid;
     grid-template-columns: 5fr 1fr;
     padding-left: 20px;

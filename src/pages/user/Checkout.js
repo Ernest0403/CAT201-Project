@@ -1,7 +1,8 @@
 import './Checkout.css';
 import React from 'react';
-import Menubar from './Component/Menubar';
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 
 function Checkout() {
     //Codes below are used to toggle between shipping options button
@@ -47,11 +48,12 @@ function Checkout() {
             setSelectedPlatform(value);
         }
     };
+
+    const navigate = useNavigate();
     
     return (
       <>
         <div className='CheckoutContainer'>
-          <Menubar />
           <div className='linetop'></div>
           <div className='CheckoutView'>
             <div className='CheckoutColumn'>
@@ -169,11 +171,11 @@ function Checkout() {
                     }
                 </div>
                 <div className='CheckoutNav'>
-                    <button className='BackToCart'>Back to Cart</button>
-                    <button className='ProceedPayment'>Proceed to Payment</button>
+                    <button className='BackToCart' onClick={() => navigate('/cart')}>Back to Cart</button>
+                    <button className='ProceedPayment' onClick={() => navigate('/payment-success')}>Proceed to Payment</button>
                 </div>
             </div>
-            <div className='Summary'>
+            <div className='CheckoutSummary'>
                 <div className='SummaryTitle'>
                   <p>SUMMARY</p>
                 </div>
