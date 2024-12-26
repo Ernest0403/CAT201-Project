@@ -26,12 +26,12 @@ const ManageProducts = () => {
   const [displayTable, setDisplayTable] = useState(true);
   const [editingItemId, setEditingItemId] = useState(null);
   const [editFormData, setEditFormData] = useState(emptyProduct);
-  const [isAddingProduct, setIsAddingProduct] = useState(false); // New state to track if we are adding a product
+  const [isAddingProduct, setIsAddingProduct] = useState(false);
 
-  const categories = [...new Set(items.map((item) => item.category)), 'Full list'];
+  const categories = [...new Set(items.map((item) => item.category)), 'Full List'];
 
   const handleCategoryClick = (category) => {
-    setSelectedCategory(category === 'Full list' ? null : category);
+    setSelectedCategory(category === 'Full List' ? null : category);
   };
 
   const filteredItems = selectedCategory
@@ -66,9 +66,9 @@ const ManageProducts = () => {
   }
 
   const handleAddProductClick = () => {
-    setIsAddingProduct(true); // Enable adding product
-    setEditFormData(emptyProduct); // Reset form to empty product
-    setDisplayTable(false); // Hide the table
+    setIsAddingProduct(true);
+    setEditFormData(emptyProduct); 
+    setDisplayTable(false); 
   }
 
   const handleFormInputChange = (e) => {
@@ -82,9 +82,8 @@ const ManageProducts = () => {
       return;
     }
   
-    // Add new item to the list
     setItems((prevItems) => [...prevItems, editFormData]);
-    // After adding, reset form and switch back to the table view
+  
     setEditFormData(emptyProduct);
     setDisplayTable(true);
     setIsAddingProduct(false);
@@ -96,32 +95,38 @@ const ManageProducts = () => {
         item.id === editFormData.id ? { ...editFormData } : item
       ));
     setEditFormData(emptyProduct);
-    setDisplayTable(true); // Show the table again after saving
+    setDisplayTable(true);
   };
 
   const handleCancel = () => {
     setEditFormData(emptyProduct);
     setDisplayTable(true);
-    setIsAddingProduct(false); // Reset add mode
+    setIsAddingProduct(false);
   };
 
   return (
     <div className='manageContainer'>
       {displayTable ? (
         <>
-          <div className="categories">
-            {categories.map((category) => (
-              <button
-                key={category}
-                type="button"
-                onClick={() => handleCategoryClick(category)}
-                className={selectedCategory === category ? 'selected-category' : ''}
-              >
-                {category}
-              </button>
-            ))}
-          </div>
           <table>
+            <thead>
+              <tr>
+                <td colSpan='5'>
+                <div>
+                  {categories.map((category) => (
+                    <button
+                      key={category}
+                      type="button"
+                      onClick={() => handleCategoryClick(category)}
+                      className={selectedCategory === category ? 'selected-category' : ''}
+                    >
+                      {category}
+                    </button>
+                  ))}
+                </div>
+                </td>
+              </tr>
+            </thead>
             <tbody>
               {filteredItems.length === 0 ? (
                 <tr>
