@@ -6,7 +6,7 @@
     border-top: 0cap;
     border-bottom: 0cap;
     border-style: solid;
-    width: 250px;
+    max-width: 250px;
     text-align: center;
     flex-grow: 1;
 }

@@ -23,6 +23,7 @@ import TnC from './TnC';
 
 //User Pages
 import UserDashboard from './pages/user/UserDashboard';
+import Orders from './pages/user/OrderHistory';
 
 
 const HomePage = () => (
@@ -53,6 +54,7 @@ const App = () => {
         <Route path="/register" element={<UserLayout><Register /></UserLayout>} />
         <Route path="/reset-password" element={<UserLayout><ForgetPassword /></UserLayout>} />
         <Route path="/user-dashboard" element={<UserLayout><UserDashboard /></UserLayout>} />
+        <Route path="/orders" element={<UserLayout><Orders /></UserLayout>} />
 
         {/* Living Room and Other Category Routes */}
         <Route path="/living-room" element={<UserLayout><div>Living Room Content</div></UserLayout>} />
