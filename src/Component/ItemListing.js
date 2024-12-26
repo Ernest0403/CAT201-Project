@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect , useState } from "react";
 import "./ItemListing.css";
 import Footer from './Footer';
 import SortBy from "./SortBy";

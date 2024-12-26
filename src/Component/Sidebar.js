@@ -21,7 +21,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="sidebar">
+    <div className="admin-sidebar">
       <ul>
         <li><button onClick={() => navigate('/dashboard')}>Dashboard</button></li>
         <li><button onClick={() => navigate('/manage-products')}>Manage Product</button></li>
