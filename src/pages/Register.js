@@ -10,7 +10,7 @@ function Register() {
         setShowPopup(true);
         setTimeout(() => {
             setShowPopup(false);
-            navigate("/"); 
+            navigate("/"); // Redirect to the homepage after 3 seconds
         }, 3000);
     };
 
@@ -18,21 +18,47 @@ function Register() {
         <div className="RegisterPage">
             <div className="RegisterContainer">
                 <h2>My Account</h2>
-                <div className="RegisterForm">
-                    <label>Email address</label>
-                    <input type="text" placeholder="Enter your email" />
+                <form className="RegisterForm" onSubmit={(e) => e.preventDefault()}>
+                    <label htmlFor="email">Email Address</label>
+                    <input
+                        id="email"
+                        type="text"
+                        placeholder="Enter your email"
+                        required
+                    />
 
-                    <label>Username</label>
-                    <input type="text" placeholder="Enter your username" />
+                    <label htmlFor="username">Username</label>
+                    <input
+                        id="username"
+                        type="text"
+                        placeholder="Enter your username"
+                        required
+                    />
 
-                    <label>Password</label>
-                    <input type="password" placeholder="Enter your password" />
+                    <label htmlFor="password">Password</label>
+                    <input
+                        id="password"
+                        type="password"
+                        placeholder="Enter your password"
+                        required
+                    />
 
-                    <label>Confirm your password</label>
-                    <input type="password" placeholder="Confirm your password" />
+                    <label htmlFor="confirm-password">Confirm Password</label>
+                    <input
+                        id="confirm-password"
+                        type="password"
+                        placeholder="Confirm your password"
+                        required
+                    />
 
-                    <button className="RegisterButton" onClick={handleRegister}>Register</button>
-                </div>
+                    <button
+                        type="submit"
+                        className="RegisterButton"
+                        onClick={handleRegister}
+                    >
+                        Register
+                    </button>
+                </form>
             </div>
 
             {showPopup && (
