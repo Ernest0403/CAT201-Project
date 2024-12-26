@@ -11,7 +11,7 @@ const WorkRoomCategories = [
 
 const WorkRoomPage = () => (
   <ItemListing
-    title="BedrooWork/Study room"
+    title="Work/Study room"
     dataEndpoint="https://example.com/api/living-room-products"
     categories={WorkRoomCategories}
   />

@@ -1,20 +1,30 @@
 import React, { useEffect, useState } from "react";
 import "./ItemListing.css";
-import Menubar from './Menubar';
-import Navbar from './Navbar';
 import Footer from './Footer';
 
-function ProductListing({ title, dataEndpoint, categories }) {
+function ItemListing({ title, dataEndpoint, categories }) {
   const [products, setProducts] = useState([]);
   const [filterPrice, setFilterPrice] = useState([0, 5000]);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [pageTitle, setPageTitle] = useState(title);
 
   // Fetch data from the provided endpoint
-  useEffect(() => {
-    fetch(dataEndpoint)
+ /* useEffect(() => {
+    fetch("dataEndpoint")
       .then((response) => response.json())
-      .then((data) => setProducts(data))
+      .then((data) => {
+        console.log("Fetched data:", data);  // Debug: check the data
+        setProducts(data);
+      })
       .catch((error) => console.error("Error fetching products:", error));
-  }, [dataEndpoint]);
+  }, [dataEndpoint]);*/
+
+   // Filter products by category
+   const filteredProducts = selectedCategory
+   ? products.filter((product) => product.category === selectedCategory)
+   : products;
+
+   console.log("Filtered products:", filteredProducts);
 
   // Handle price filtering
   const handlePriceFilter = () => {
@@ -26,11 +36,16 @@ function ProductListing({ title, dataEndpoint, categories }) {
     setProducts(filtered);
   };
 
+  // Handle category selection
+  const handleCategoryClick = (category) => {
+    setSelectedCategory(category);
+    setPageTitle(category); // Update the title based on selected category
+  };
+
   return (
-    <div className="product-listing-container">
-      <Menubar />
-      <Navbar />
-      <h1 className="page-title">{title}</h1>
+    <div className="product-container">
+      <h1 className="page-title">{pageTitle}</h1>
+      <div className="listing-container">
       <div className="sidebar">
         <div className="filter-section">
           <h3>Filter by Price</h3>
@@ -53,7 +68,9 @@ function ProductListing({ title, dataEndpoint, categories }) {
           <h3>Product Categories</h3>
           <ul>
             {categories.map((category, index) => (
-              <li key={index}>{category}</li>
+              <li key={index} onClick={() => handleCategoryClick(category)}>
+                {category}
+              </li>
             ))}
           </ul>
         </div>
@@ -75,7 +92,9 @@ function ProductListing({ title, dataEndpoint, categories }) {
       </div>
       <Footer />
     </div>
+    </div>
   );
 }
 
-export default ProductListing;
+
+export default ItemListing;

@@ -4,10 +4,9 @@ import Menubar from './Component/Menubar';
 import Navbar from './Component/Navbar';
 import Footer from './Component/Footer';
 
-
 function HomePage() {
   return (
-    <div className='container'>
+    <div className='homepage-container'>
       <Menubar />
       <Navbar />
       <img src="\Images\chat.png" alt='' className="chat-icon" />
@@ -24,17 +23,17 @@ function HomePage() {
             <div className="item-price">RM 100</div>
           </div>
           <div className="item-card">
-            <img src="\Images\chat.png" alt="Item 2" />
+            <img src="https://www.furnituredirect.com.my/wp-content/uploads/2024/03/VESTA-6D-CD04-0045-1.jpg" alt="Item 2" />
             <div className="item-name">Item 2</div>
             <div className="item-price">RM 200</div>
           </div>
           <div className="item-card">
-            <img src="\Images\chat.png" alt="Item 3" />
+            <img src="https://www.furnituredirect.com.my/wp-content/uploads/2024/03/VESTA-6D-CD04-0045-1.jpg" alt="Item 3" />
             <div className="item-name">Item 3</div>
             <div className="item-price">RM 300</div>
           </div>
           <div className="item-card">
-            <img src="\Images\chat.png" alt="Item 4" />
+            <img src="https://www.furnituredirect.com.my/wp-content/uploads/2024/03/VESTA-6D-CD04-0045-1.jpg" alt="Item 4" />
             <div className="item-name">Item 4</div>
             <div className="item-price">RM 400</div>
           </div>
@@ -50,17 +49,17 @@ function HomePage() {
             <div className="item-price">RM 100</div>
           </div>
           <div className="item-card">
-            <img src="\Images\chat.png" alt="Item 2" />
+            <img src="https://www.furnituredirect.com.my/wp-content/uploads/2024/03/VESTA-6D-CD04-0045-1.jpg" alt="Item 2" />
             <div className="item-name">Item 2</div>
             <div className="item-price">RM 200</div>
           </div>
           <div className="item-card">
-            <img src="\Images\chat.png" alt="Item 3" />
+            <img src="https://www.furnituredirect.com.my/wp-content/uploads/2024/03/VESTA-6D-CD04-0045-1.jpg" alt="Item 3" />
             <div className="item-name">Item 3</div>
             <div className="item-price">RM 300</div>
           </div>
           <div className="item-card">
-            <img src="\Images\chat.png" alt="Item 4" />
+            <img src="https://www.furnituredirect.com.my/wp-content/uploads/2024/03/VESTA-6D-CD04-0045-1.jpg" alt="Item 4" />
             <div className="item-name">Item 4</div>
             <div className="item-price">RM 400</div>
           </div>
