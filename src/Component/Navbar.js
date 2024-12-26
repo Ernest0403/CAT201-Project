@@ -1,8 +1,8 @@
 import './Navbar.css';
 import { Link } from 'react-router-dom';
 
-function Navbar(){
-    return(
+function Navbar() {
+    return (
         <nav className="navigation">
             <div className="nav-background">
                 <ul className="nav-links">

@@ -1,3 +1,4 @@
+// App.js
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import AdminLayout from './layouts/AdminLayout';
@@ -18,6 +19,7 @@ import Login from './pages/login';
 import Register from './pages/Register';
 import ForgetPassword from './pages/ForgetPassword';
 import AboutUs from './AboutUs';
+
 import Tnc from './Tnc';
 import LivingRoom from './LivingRoom';
 import Bedroom from './Bedroom';
@@ -27,6 +29,8 @@ import WorkRoom from './WorkRoom';
 
 //User Pages
 import UserDashboard from './pages/user/UserDashboard';
+import Orders from './pages/user/OrderHistory';
+
 
 const HomePage = () => (
   <div>

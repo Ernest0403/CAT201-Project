@@ -8,10 +8,10 @@
     justify-content: space-between;
     align-items: baseline;
     gap: 20px;
-
     font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     font-size: 20px;
-    align-items: center;
+    /* align-items: center; */
+    vertical-align: middle;
 }
 
 .Menubar-flex .Searchbar {
@@ -20,7 +20,7 @@
     min-width: 240px;
 }
 
-input[type=Searchtext] {
+input[type=text] {
     width: 100%;
     min-width: 170px;
     font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
@@ -29,7 +29,7 @@ input[type=Searchtext] {
 
 .Searchbar .SearchIcon img {
    position: absolute; 
-   top: -0.5px;
+   top: 7px;
    right: 0.5%;
    width: 30px;
    height: 30px;
