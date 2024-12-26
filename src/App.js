@@ -64,7 +64,7 @@ const App = () => {
         <Route path="/dining-room" element={<UserLayout><DiningRoom/></UserLayout>} />
         <Route path="/work-room" element={<UserLayout><WorkRoom/></UserLayout>} />
         <Route path="/about-us" element={<UserLayout><AboutUs /></UserLayout>} />
-        <Route path="/terms" element={<UserLayout><TnC></UserLayout>} />
+        <Route path="/terms" element={<UserLayout><TnC/></UserLayout>} />
 
         {/* Default Route */}
         <Route path="*" element={<Navigate to="/" replace />} />
