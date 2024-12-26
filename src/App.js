@@ -32,6 +32,8 @@ import UserDashboard from './pages/user/UserDashboard';
 import Orders from './pages/user/OrderHistory';
 import Cart from './pages/user/Cart';
 import Favourite from './pages/user/Favourite';
+import Checkout from './pages/user/Checkout';
+import PaymentSuccess from './pages/user/PaymentSuccess';
 
 
 const HomePage = () => (
@@ -65,6 +67,8 @@ const App = () => {
         <Route path="/orders" element={<UserLayout><Orders /></UserLayout>} />
         <Route path="/cart" element={<UserLayout><Cart /></UserLayout>} />
         <Route path="/favourite" element={<UserLayout><Favourite /></UserLayout>} />
+        <Route path="/checkout" element={<UserLayout><Checkout /></UserLayout>} />
+        <Route path="/payment-success" element={<UserLayout><PaymentSuccess /></UserLayout>} />
 
         {/* Living Room and Other Category Routes */}
         <Route path="/living-room" element={<UserLayout><LivingRoom/></UserLayout>} />
