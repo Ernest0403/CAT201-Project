@@ -20,7 +20,7 @@ import Register from './pages/Register';
 import ForgetPassword from './pages/ForgetPassword';
 import AboutUs from './AboutUs';
 
-import Tnc from './Tnc';
+import TnC from './TnC';
 import LivingRoom from './LivingRoom';
 import Bedroom from './Bedroom';
 import Kitchen from './Kitchen';
