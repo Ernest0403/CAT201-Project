@@ -61,13 +61,13 @@ input[type=text] {
 }
 
 
-.CartButton img {
+.Button img {
     width: 40px;
     height: 40px;
     object-fit: contain;
 }
 
-.CartButton {
+.Button {
     background-color: white;
     border: none;
 }

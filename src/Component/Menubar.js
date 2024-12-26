@@ -5,10 +5,6 @@ import "./Menubar.css";
 function Menubar() {
     const navigate = useNavigate();
 
-    const handleLoginClick = () => {
-        navigate("/login"); 
-    };
-
     return (
         <div className="Menubar-flex">
             <div><p>ComfortZone</p></div>
@@ -20,14 +16,17 @@ function Menubar() {
                     </span>
                 </div>
             </label>
-            <button className='LoginButton' onClick={handleLoginClick}>
+            <button className='LoginButton' onClick={() => navigate('/login')}>
                 <div className='LoginIcon'>
                     <img src={"/Images/accounticon.png"} alt="Account Icon" />
                     <p>Login/Register</p>
                 </div>
             </button>
-            <button className='CartButton'>
+            <button className='Button' onClick={() => navigate('/cart')}>
                 <img src={"/Images/cart.jpg"} alt="Cart Icon" />
+            </button>
+            <button className='Button' onClick={() => navigate('/favourite')}>
+                <img src={"/Images/favourite.png"} alt="Favourite Icon" />
             </button>
         </div>
     );
