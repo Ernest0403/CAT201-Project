@@ -7,17 +7,24 @@ import Menubar from './Component/Menubar';
 import Navbar from './Component/Navbar';
 import './App.css';
 
-// Pages
+//Admin Pages
 import Dashboard from './pages/admin/Dashboard';
 import ManageProducts from './pages/admin/ManageProducts';
 import ManageOrders from './pages/admin/ManageOrders';
 import Promotions from './pages/admin/Promotions';
 import CustomerService from './pages/admin/CustomerService';
+
+//General Pages
 import Login from './pages/login';
 import Register from './pages/Register';
 import ForgetPassword from './pages/ForgetPassword';
-import UserDashboard from './pages/user/UserDashboard';
 import AboutUs from './AboutUs';
+import TnC from './TnC';
+
+//User Pages
+import UserDashboard from './pages/user/UserDashboard';
+import Orders from './pages/user/OrderHistory';
+
 
 const HomePage = () => (
   <div>
@@ -47,6 +54,7 @@ const App = () => {
         <Route path="/register" element={<UserLayout><Register /></UserLayout>} />
         <Route path="/reset-password" element={<UserLayout><ForgetPassword /></UserLayout>} />
         <Route path="/user-dashboard" element={<UserLayout><UserDashboard /></UserLayout>} />
+        <Route path="/orders" element={<UserLayout><Orders /></UserLayout>} />
 
         {/* Living Room and Other Category Routes */}
         <Route path="/living-room" element={<UserLayout><div>Living Room Content</div></UserLayout>} />
@@ -54,7 +62,7 @@ const App = () => {
         <Route path="/kitchen" element={<UserLayout><div>Kitchen and Dining Room Content</div></UserLayout>} />
         <Route path="/home-office" element={<UserLayout><div>Home Office Content</div></UserLayout>} />
         <Route path="/about-us" element={<UserLayout><AboutUs /></UserLayout>} />
-        <Route path="/terms" element={<UserLayout><div>Terms and Conditions Content</div></UserLayout>} />
+        <Route path="/terms" element={<UserLayout><TnC /></UserLayout>} />
 
         {/* Default Route */}
         <Route path="*" element={<Navigate to="/" replace />} />

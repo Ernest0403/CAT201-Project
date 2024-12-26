@@ -1,0 +1,46 @@
+.OrderHistory {
+    font-family: Inter;
+    flex-grow: 1;
+}
+
+.order-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.order-item {
+    border-top: 1px solid #0466C8;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    padding: 30px;
+    flex-wrap: wrap;
+}
+
+.order-item:last-child {
+    border-bottom: 1px solid #0466C8;
+}
+
+.status {
+    margin-left: auto;
+    text-align: right;
+}
+
+.ButtonGroup {
+    display: flex;
+    gap: 10px;
+}
+
+.RedButton,
+.BlueButton {
+    border-radius: 25px;
+}
+
+.RedButton {
+    background: linear-gradient(#FFD5D5, #FF0000);
+}
+
+.BlueButton {
+    background: linear-gradient(#CBE5FF, #0466C8);
+}
