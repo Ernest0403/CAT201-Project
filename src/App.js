@@ -26,6 +26,7 @@ import Bedroom from './Bedroom';
 import Kitchen from './Kitchen';
 import DiningRoom from './DiningRoom';
 import WorkRoom from './WorkRoom';
+import Description from './Component/Description';
 
 //User Pages
 import UserDashboard from './pages/user/UserDashboard';
@@ -78,6 +79,7 @@ const App = () => {
         <Route path="/work-room" element={<UserLayout><WorkRoom/></UserLayout>} />
         <Route path="/about-us" element={<UserLayout><AboutUs /></UserLayout>} />
         <Route path="/terms" element={<UserLayout><TnC/></UserLayout>} />
+        <Route path="/item/:id" element={<UserLayout><Description /></UserLayout>} />
 
         {/* Default Route */}
         <Route path="*" element={<Navigate to="/" replace />} />

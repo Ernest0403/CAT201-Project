@@ -1,108 +1,100 @@
-import React, { useEffect , useState } from "react";
+import React, { useState } from "react";
 import "./ItemListing.css";
 import Footer from './Footer';
 import SortBy from "./SortBy";
+import ItemGrid from "./ItemGrid";
 
-const mockProducts = [
+const mockitems = [
   {
     id: 1,
-    name: "Product A",
+    name: "item A",
     image: "https://www.furnituredirect.com.my/wp-content/uploads/2024/03/VESTA-6D-CD04-0045-1.jpg", // Placeholder image
     originalPrice: 100,
     discountedPrice: 80,
-    category: "Electronics",
+    category: "Sofas",
     date: "2024-12-01",
     popularity: 5,
   },
   {
     id: 2,
-    name: "Product B",
+    name: "item B",
     image: "https://www.furnituredirect.com.my/wp-content/uploads/2024/03/VESTA-6D-CD04-0045-1.jpg",
     originalPrice: 200,
     discountedPrice: 150,
-    category: "Clothing",
+    category: "Sofas",
     date: "2024-12-10",
     popularity: 10,
   },
   {
     id: 3,
-    name: "Product C",
+    name: "item C",
     image: "https://www.furnituredirect.com.my/wp-content/uploads/2024/03/VESTA-6D-CD04-0045-1.jpg",
     originalPrice: 300,
     discountedPrice: 250,
-    category: "Accessories",
+    category: "Pouf",
     date: "2024-11-20",
     popularity: 7,
   },
   {
     id: 4,
-    name: "Product D",
+    name: "item D",
     image: "https://www.furnituredirect.com.my/wp-content/uploads/2024/03/VESTA-6D-CD04-0045-1.jpg",
     originalPrice: 400,
     discountedPrice: 350,
-    category: "Electronics",
+    category: "Pouf",
+    date: "2024-12-15",
+    popularity: 3,
+  },
+
+  {
+    id: 5,
+    name: "item E",
+    image: "https://www.furnituredirect.com.my/wp-content/uploads/2024/03/VESTA-6D-CD04-0045-1.jpg",
+    originalPrice: 400,
+    discountedPrice: 350,
+    category: "Pouf",
+    date: "2024-12-15",
+    popularity: 3,
+  },
+
+  {
+    id: 6,
+    name: "item E",
+    image: "https://www.furnituredirect.com.my/wp-content/uploads/2024/03/VESTA-6D-CD04-0045-1.jpg",
+    originalPrice: 400,
+    discountedPrice: 350,
+    category: "Pouf",
     date: "2024-12-15",
     popularity: 3,
   },
 ];
 
-function ItemListing({ title, dataEndpoint, categories }) {
-  const [products, setProducts] = useState(mockProducts);
+function ItemListing({ title, categories }) {
+  const [items, setItems] = useState(mockitems);
   const [filterPrice, setFilterPrice] = useState([0, 5000]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [pageTitle, setPageTitle] = useState(title);
-  const [sortOption, setSortOption] = useState("default");
+  const [setSortOption] = useState("default");
 
-  // Fetch data from the provided endpoint
- /* useEffect(() => {
-    fetch("dataEndpoint")
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Fetched data:", data);  // Debug: check the data
-        setProducts(data);
-      })
-      .catch((error) => console.error("Error fetching products:", error));
-  }, [dataEndpoint]);*/
-
-   // Filter products by category
-   const filteredProducts = selectedCategory
-   ? products.filter((product) => product.category === selectedCategory)
-   : products;
+   // Filter items by category
+   const filteredItems = selectedCategory
+   ? items.filter((item) => item.category === selectedCategory)
+   : items;
 
   // Handle price filtering
   const handlePriceFilter = () => {
-    const filtered = products.filter(
-      (product) =>
-        product.discountedPrice >= filterPrice[0] &&
-        product.discountedPrice <= filterPrice[1]
+    const filtered = items.filter(
+      (item) =>
+        item.discountedPrice >= filterPrice[0] &&
+        item.discountedPrice <= filterPrice[1]
     );
-    setProducts(filtered);
+    setItems(filtered);
   };
 
   // Handle category selection
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
-    setPageTitle(category); // Update the title based on selected category
-  };
-
-  // Sorting logic
-  const sortProducts = (productsToSort) => {
-    switch (sortOption) {
-      case "price-low-high":
-        return productsToSort.sort(
-          (a, b) => a.discountedPrice - b.discountedPrice
-        );
-      case "price-high-low":
-        return productsToSort.sort(
-          (a, b) => b.discountedPrice - a.discountedPrice
-        );
-      case "new-arrivals":
-        return productsToSort.sort((a, b) => new Date(b.date) - new Date(a.date));
-      case "popularity":
-        return productsToSort.sort((a, b) => b.popularity - a.popularity);
-      default:
-        return productsToSort; // Default or no sorting
-    }
+    setPageTitle(category); 
   };
 
   const handleSortChange = (value) => {
@@ -132,7 +124,7 @@ function ItemListing({ title, dataEndpoint, categories }) {
         </div>
 
         <div className="categories-section">
-          <h3>Product Categories</h3>
+          <h3>item Categories</h3>
           <ul>
             {categories.map((category, index) => (
               <li key={index} onClick={() => handleCategoryClick(category)}>
@@ -144,20 +136,7 @@ function ItemListing({ title, dataEndpoint, categories }) {
       </div>
       <div className="wrap-content">
       <SortBy onSortChange={handleSortChange} />
-      <div className="product-grid">
-        {products.map((product) => (
-          <div className="product-card" key={product.id}>
-            <img src={product.image} alt={product.name} />
-            <h4>{product.name}</h4>
-            <p>
-              <span className="original-price">RM {product.originalPrice}</span>{" "}
-              <span className="discounted-price">
-                RM {product.discountedPrice}
-              </span>
-            </p>
-          </div>
-        ))}
-      </div>
+      <ItemGrid items={filteredItems} />
       </div>
     </div>
     <Footer />

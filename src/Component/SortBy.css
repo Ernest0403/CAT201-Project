@@ -1,8 +1,8 @@
 .sort-by-container {
     display: flex;
-    justify-content: flex-end; /* Align to the right */
+    justify-content: flex-end; 
     align-items: center;
-    margin-bottom: 20px; /* Space below the sort component */
+    margin-bottom: 50px; 
   }
   
   .sort-by-label {

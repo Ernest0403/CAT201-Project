@@ -1,5 +1,6 @@
-import './Footer.css';
 import React from 'react';
+import { Link } from 'react-router-dom';
+import './Footer.css';
 
 function Footer() {
     return(
@@ -15,20 +16,20 @@ function Footer() {
             <div class="footer-section">
             <h2>Useful Links</h2>
             <ul>
-                <li><a href="#">Contact Us</a></li>
-                <li><a href="#">FAQ</a></li>
-                <li><a href="#">Buy Now Pay Later</a></li>
-                <li><a href="#">Return and Refund Policy</a></li>
-                <li><a href="#">Terms & Conditions</a></li>
+                <li><Link to="/">Contact Us</Link></li>
+                <li><Link to="/">FAQ</Link></li>
+                <li><Link to="/">Buy Now Pay Later</Link></li>
+                <li><Link to="/">Return and Refund Policy</Link></li>
+                <li><Link to="/">Terms & Conditions</Link></li>
             </ul>
             </div>
 
             <div class="footer-section">
             <h2>Follow Us</h2>
             <div class="social-icons">
-                <a href="#"><img src="\Images\facebook.png" alt="Facebook" /></a>
-                <a href="#"><img src="\Images\instagram.png" alt="Instagram" /></a>
-                <a href="#"><img src="\Images\tiktok.png" alt="Tiktok" /></a>
+                <img src="\Images\facebook.png" alt="Facebook" />
+                <img src="\Images\instagram.png" alt="Instagram" />
+                <img src="\Images\tiktok.png" alt="Tiktok" />
             </div>
             </div>
         </div>
