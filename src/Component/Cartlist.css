@@ -15,18 +15,21 @@
 .NotSelected {
     background-color: none;
     border-radius: 30px;
-    width: 30px;
-    height: 29%;
     font-size: 100%;
-    min-width: 30px;
+    width: 40px;
+    height: 40px; 
+    line-height: 1; 
+    cursor: pointer; 
 }
 
 .Selected, .NotSelected:hover {
     background-color: greenyellow;
     border-radius: 30px;
-    width: 30px;
     font-size: 100%;
-    min-width: 30px;
+    width: 40px;
+    height: 40px; 
+    line-height: 1; 
+    cursor: pointer; 
 }
 
 .CartItemPhoto img {

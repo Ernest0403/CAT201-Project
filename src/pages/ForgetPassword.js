@@ -1,4 +1,3 @@
-// ForgetPassword.js
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./ForgetPassword.css";
@@ -11,7 +10,7 @@ function ForgetPassword() {
         setShowPopup(true);
         setTimeout(() => {
             setShowPopup(false);
-            navigate("/"); // Redirect to homepage layout after 3 seconds
+            navigate("/"); // Redirect to homepage after 3 seconds
         }, 3000);
     };
 
@@ -19,18 +18,39 @@ function ForgetPassword() {
         <div className="ForgetPasswordPage">
             <div className="ForgetPasswordContainer">
                 <h2>Reset Password</h2>
-                <div className="ForgetPasswordForm">
-                    <label>Email address/Username</label>
-                    <input type="text" placeholder="Enter your email or username" />
+                <form className="ForgetPasswordForm" onSubmit={(e) => e.preventDefault()}>
+                    <label htmlFor="email">Email address/Username</label>
+                    <input
+                        id="email"
+                        type="text"
+                        placeholder="Enter your email or username"
+                        required
+                    />
 
-                    <label>New Password</label>
-                    <input type="password" placeholder="Enter your new password" />
+                    <label htmlFor="new-password">New Password</label>
+                    <input
+                        id="new-password"
+                        type="password"
+                        placeholder="Enter your new password"
+                        required
+                    />
 
-                    <label>Confirm New Password</label>
-                    <input type="password" placeholder="Confirm your new password" />
+                    <label htmlFor="confirm-password">Confirm New Password</label>
+                    <input
+                        id="confirm-password"
+                        type="password"
+                        placeholder="Confirm your new password"
+                        required
+                    />
 
-                    <button className="SubmitButton" onClick={handleSubmit}>Submit</button>
-                </div>
+                    <button
+                        type="submit"
+                        className="SubmitButton"
+                        onClick={handleSubmit}
+                    >
+                        Submit
+                    </button>
+                </form>
             </div>
 
             {showPopup && (
