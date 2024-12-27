@@ -15,10 +15,11 @@
   display: flex;
   flex-wrap: wrap;
   list-style: none;
-  margin: 0;
+  gap: 20px;
   padding: 0;
-  margin-left: 44px;
-  gap: 30px;
+  margin: 0 44px;
+  width: 100%;
+  justify-content: space-between;
 }
 
 .nav-links a {
