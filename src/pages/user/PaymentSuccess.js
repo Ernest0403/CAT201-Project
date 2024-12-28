@@ -8,7 +8,6 @@ function PaymentSuccess() {
     return (
         <>
         <div className='PaymentSuccessContainer'>
-            <Menubar />
             <div className='linetop'></div>
             <div className='SuccessView'>
                 <img src={"/Images/doubletick.png"} alt='' />
