@@ -14,6 +14,7 @@ const KitchenPage = () => (
     title="Kitchen"
     dataEndpoint="https://example.com/api/living-room-products"
     categories={KitchenCategories}
+    roomType="Kitchen"
   />
 );
 

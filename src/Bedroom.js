@@ -14,6 +14,7 @@ const BedroomPage = () => (
     title="Bedroom"
     dataEndpoint="https://example.com/api/living-room-products"
     categories={BedroomCategories}
+    roomType="Bedroom"
   />
 );
 
