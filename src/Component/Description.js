@@ -1,64 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import "./Description.css";
 import ItemGrid from "./ItemGrid";
+import mockItems from './mockItems';
 
-const mockProducts = [
-    {
-      id: 1,
-      name: "Product A",
-      image: "https://www.furnituredirect.com.my/wp-content/uploads/2024/03/VESTA-6D-CD04-0045-1.jpg", // Placeholder image
-      originalPrice: 100,
-      discountedPrice: 80,
-      category: "Electronics",
-      date: "2024-12-01",
-      popularity: 5,
-    },
-    {
-      id: 2,
-      name: "Product B",
-      image: "https://www.furnituredirect.com.my/wp-content/uploads/2024/03/VESTA-6D-CD04-0045-1.jpg",
-      originalPrice: 200,
-      discountedPrice: 150,
-      category: "Clothing",
-      date: "2024-12-10",
-      popularity: 10,
-    },
-    {
-      id: 3,
-      name: "Product C",
-      image: "https://www.furnituredirect.com.my/wp-content/uploads/2024/03/VESTA-6D-CD04-0045-1.jpg",
-      originalPrice: 300,
-      discountedPrice: 250,
-      category: "Accessories",
-      date: "2024-11-20",
-      popularity: 7,
-    },
-    {
-      id: 4,
-      name: "Product D",
-      image: "https://www.furnituredirect.com.my/wp-content/uploads/2024/03/VESTA-6D-CD04-0045-1.jpg",
-      originalPrice: 400,
-      discountedPrice: 350,
-      category: "Electronics",
-      date: "2024-12-15",
-      popularity: 3,
-    },
-
-    {
-        id: 5,
-        name: "Product E",
-        image: "https://www.furnituredirect.com.my/wp-content/uploads/2024/03/VESTA-6D-CD04-0045-1.jpg",
-        originalPrice: 500,
-        discountedPrice: 450,
-        category: "Electronics",
-        date: "2024-12-15",
-        popularity: 3,
-      },
-  ];
-
-const ProductPage = () => {
+const ItemPage = () => {
+  const { id } = useParams();
+  const [item, setItem] = useState(null);
   const [activeTab, setActiveTab] = useState("Description");
   const [quantity, setQuantity] = useState(1);
+
+  useEffect(() => {
+    const selectedItem = mockItems.find(item => item.id === parseInt(id));
+    setItem(selectedItem);
+  }, [id]);
+
+  if (!item) {
+    return <p>Loading...</p>;
+  }
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -91,22 +50,20 @@ const ProductPage = () => {
   return (
     <div className="main-container">
     <div className="main-container">
-      {/* Main Product Section */}
       <div className="desc-container">
-        {/* Product Image */}
-        <img src="https://www.furnituredirect.com.my/wp-content/uploads/2024/03/VESTA-6D-CD04-0045-1.jpg" alt= "" className="product-image"/>
-
-        {/* Product Details */}
+        <img src={item.image} alt= {item.name} className="product-image"/>
         <div className="product-details">
-          <h1>Item Name</h1>
-          <h2>Price: </h2>
+          <h1>{item.name}</h1>
+          <h2>RM {item.discountedPrice} </h2>
           <p>Description: </p>
           <div className="quantity">
             <button onClick={handleDecrease}>-</button>
             <span>{quantity}</span>
             <button onClick={handleIncrease}>+</button>
           </div>
-          <button className="add-to-cart">Add to cart</button>
+          <div className="add-to-cart">
+            <button>Add to cart</button>
+          </div>
           <div className="product-meta">
             <p>SKU:</p>
             <p>Categories:</p>
@@ -116,7 +73,6 @@ const ProductPage = () => {
         </div>
       </div>
 
-      {/* Tabs Section */}
       <div className="tabs">
         <div className="tabs-header">
           <button
@@ -141,14 +97,13 @@ const ProductPage = () => {
         <div className="tabs-content">{renderTabContent()}</div>
       </div>
 
-      {/* Related Products Section */}
       <div className="related-products">
         <h2>Related Products</h2>
-        <ItemGrid items={mockProducts}/>
+        <ItemGrid items={mockItems}/>
       </div>
       </div>
     </div>
   );
 };
 
-export default ProductPage;
+export default ItemPage;

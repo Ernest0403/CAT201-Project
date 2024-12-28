@@ -14,6 +14,7 @@ const DiningRoomPage = () => (
     title="Dining Room"
     dataEndpoint="https://example.com/api/living-room-products"
     categories={DiningRoomCategories}
+    roomType="Dining Room"
   />
 );
 

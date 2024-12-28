@@ -5,7 +5,7 @@ const SortBy = ({ onSortChange }) => {
 
     const handleSortChange = (event) => {
     const value = event.target.value;
-    if (onSortChange) onSortChange(value); // Notify parent component about the selected sort option
+    if (onSortChange) onSortChange(value); 
   };
   return (
     <div className="sort-by-container">

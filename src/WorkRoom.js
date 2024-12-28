@@ -11,9 +11,10 @@ const WorkRoomCategories = [
 
 const WorkRoomPage = () => (
   <ItemListing
-    title="Work/Study room"
+    title="Work/Study Room"
     dataEndpoint="https://example.com/api/living-room-products"
     categories={WorkRoomCategories}
+    roomType="Work/Study Room"
   />
 );
 
