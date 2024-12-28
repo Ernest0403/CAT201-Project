@@ -1,6 +1,5 @@
 import './PaymentSuccess.css';
 import React from 'react';
-import Menubar from '../../Component/Menubar';
 import { useNavigate } from "react-router-dom";
 
 function PaymentSuccess() {

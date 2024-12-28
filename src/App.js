@@ -35,6 +35,9 @@ import Cart from './pages/user/Cart';
 import Favourite from './pages/user/Favourite';
 import Checkout from './pages/user/Checkout';
 import PaymentSuccess from './pages/user/PaymentSuccess';
+import AccountDetails from './pages/user/AccountDetails';
+import Addresses from './pages/user/Addresses';
+import Chat from './pages/user/Chat'
 
 
 const HomePage = () => (
@@ -66,6 +69,9 @@ const App = () => {
         <Route path="/reset-password" element={<UserLayout><ForgetPassword /></UserLayout>} />
         <Route path="/user-dashboard" element={<UserLayout><UserDashboard /></UserLayout>} />
         <Route path="/orders" element={<UserLayout><Orders /></UserLayout>} />
+        <Route path="/account-details" element={<UserLayout><AccountDetails /></UserLayout>}/>
+        <Route path="/addresses" element={<UserLayout><Addresses /></UserLayout>}/>
+        <Route path="/chat" element={<UserLayout><Chat /></UserLayout>}/>
         <Route path="/cart" element={<UserLayout><Cart /></UserLayout>} />
         <Route path="/favourite" element={<UserLayout><Favourite /></UserLayout>} />
         <Route path="/checkout" element={<UserLayout><Checkout /></UserLayout>} />
