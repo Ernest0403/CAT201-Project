@@ -7,19 +7,19 @@ function Menubar() {
 
     return (
         <div className="Menubar-flex">
-            <div><p>ComfortZone</p></div>
-            <label className='Searchbar'>
+            <div className="TextLogo">ComfortZone</div>
+            <div className='Searchbar'>
                 <div>
                     <input type="text" name="SearchInput" placeholder="Search for products" />
                     <span className='SearchIcon'>
                         <img src={"/Images/search.png"} alt="Search Icon" /> 
                     </span>
                 </div>
-            </label>
-            <button className='LoginButton' onClick={() => navigate('/login')}>
+            </div>
+            <button className='MenuLoginButton' onClick={() => navigate('/login')}>
                 <div className='LoginIcon'>
                     <img src={"/Images/accounticon.png"} alt="Account Icon" />
-                    <p>Login/Register</p>
+                    <div>Login/Register</div>
                 </div>
             </button>
             <button className='Button' onClick={() => navigate('/cart')}>
