@@ -1,17 +1,10 @@
 .Menubar-flex {
-    background-color: white;
-    height: auto;
-    margin-top: -16px;
-    padding: 18px 20px 2px 20px;
+    margin: 0px;
+    padding: 2px 40px 2px 40px;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 20px;
-    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    font-size: 20px;
-    /* align-items: center; */
-    vertical-align: middle;
+    font-family:Inter;
+    font-size: larger;
 }
 
 .Menubar-flex .Searchbar {
@@ -20,12 +13,31 @@
     min-width: 240px;
 }
 
-input[type=text] {
+.TextLogo {
+    background: linear-gradient(to right, #0466C8, #001233, #0466C8);
+    -webkit-text-fill-color: transparent;
+    background-size: 200%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    animation: animate-gradient 2.5s linear infinite;
+    font-weight: bold;
+}
+
+@keyframes animate-gradient {
+    to {
+        background-position: 200%;
+    }
+}
+
+.Searchbar [type=text] {
     width: 100%;
     min-width: 170px;
-    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    font-size: 20px;
+    font-family:Inter;
 }
+
+.Searchbar .SearchIcon{
+    width: 30px;
+ }
 
 .Searchbar .SearchIcon img {
    position: absolute; 
@@ -36,21 +48,23 @@ input[type=text] {
    object-fit: contain;
 }
 
-.LoginButton {
+.MenuLoginButton {
     background-color: white;
-    border: none;
+    border: solid;
+    border-width: 2px;
     &:hover{
         background-color: lightgray;
+        border-color: #0466C8;
     }
-    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    font-size: 20px;
+    font-family:Inter;
+    padding: 5px;
 }
 
 .LoginIcon {
     display: flex;
     background-color: none;
     min-width: 100px;
-    gap: 10px;
+    gap: 3px;
     align-items: center;
 }
 
@@ -58,6 +72,7 @@ input[type=text] {
     width: 30px;
     height: 30px;
     object-fit: contain;
+    border-radius: 5px;
 }
 
 
