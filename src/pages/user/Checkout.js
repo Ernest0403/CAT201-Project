@@ -94,20 +94,22 @@ function Checkout() {
                     <div className='OptionLable'>
                             DETAILS AND INFORMATION
                     </div>
-                    <div className='InformationLable'>Shipping Address Details</div>
-                    <input type = "ShippingAddress" name= "ShippingAddressInput" />
-                    <div className='InformationLable'>Shipping Address Details (Optional)</div>
-                    <input type = "ShippingAddressOptional" name= "ShippingAddressOptionalInput" /> 
-                    <div className='InformationLable'>City</div>
-                    <input type = "ShippingCity" name= "ShippingCityInput" /> 
-                    <div className='InformationLable'>Postcode</div>
-                    <input type = "ShippingPostcode" name= "ShippingPostcodeInput" /> 
-                    <div className='InformationLable'>State</div>
-                    <input type = "ShippingState" name= "ShippingStateInput" /> 
-                    <div className='InformationLable'>Contact Number</div>
-                    <input type = "ShippingContactNumber" name= "ShippingContactNumberInput" /> 
-                    <div className='InformationLable'>Notes/Messages</div>
-                    <input type = "ShippingNotes" name= "ShippingNotesInput" />  
+                    <lable className='InformationLable'>Recipient Name</lable>
+                    <input type="text" id="ShippingRecipientName" name="ShippingRecipientNameInput" />                    
+                    <lable className='InformationLable'>Shipping Address Details</lable>
+                    <input type="text" id="ShippingAddress" name="ShippingAddressInput" />                    
+                    <lable className='InformationLable'>Shipping Address Details (Optional)</lable>
+                    <input type="text" id = "ShippingAddressOptional" name= "ShippingAddressOptionalInput" /> 
+                    <lable className='InformationLable'>City</lable>
+                    <input type="text" id = "ShippingCity" name= "ShippingCityInput" /> 
+                    <lable className='InformationLable'>Postcode</lable>
+                    <input type="text" id = "ShippingPostcode" name= "ShippingPostcodeInput" /> 
+                    <lable className='InformationLable'>State</lable>
+                    <input type="text" id = "ShippingState" name= "ShippingStateInput" /> 
+                    <lable className='InformationLable'>Contact Number</lable>
+                    <input type="text" id = "ShippingContactNumber" name= "ShippingContactNumberInput" /> 
+                    <lable className='InformationLable'>Notes/Messages</lable>
+                    <input type="text" id = "ShippingNotes" name= "ShippingNotesInput" />  
                 </div>
                 <div className='PaymentMethod'>
                 <div className='OptionLable'>
@@ -159,13 +161,13 @@ function Checkout() {
                     {selectedPayment === "card" ?
                         <div className='ShippingDetails'>
                             <div className='InformationLable'>Card Number</div>
-                            <input type = "CardNumber" name= "CardNumberInput" />
+                            <input type="text" id = "CardNumber" name= "CardNumberInput" />
                             <div className='InformationLable'>Card's Holder Name</div>
-                            <input type = "CardHolderName" name= "CardHolderNameInput" />
+                            <input type="text" id = "CardHolderName" name= "CardHolderNameInput" />
                             <div className='InformationLable'>Card Expiry Date</div>
-                            <input type = "CardED" name= "CardEDInput" />
+                            <input type="text" id = "CardED" name= "CardEDInput" />
                             <div className='InformationLable'>CVV</div>
-                            <input type = "CardCVV" name= "CardCVVInput" /> 
+                            <input type="text" id = "CardCVV" name= "CardCVVInput" /> 
                         </div>
                         : <></>
                     }
@@ -194,7 +196,12 @@ function Checkout() {
                 <div className='line'></div>
                 <div className='SummaryBreakdown'>
                   <div className='SubTotalWord'>Subtotal:</div>
-                  <div className='SubTotal'>RM165.73</div>
+                  <div className='SubTotal'>
+                    <span style={{ fontSize: 'small',verticalAlign: 'top' }}>
+                        RM
+                    </span>
+                    135.73
+                    </div>
                 </div>
                 <div className='line'></div>
                 <div className='SummaryBreakdown'>
