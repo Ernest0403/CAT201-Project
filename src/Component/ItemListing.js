@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./ItemListing.css";
 import Footer from './Footer';
 import SortBy from "./SortBy";
@@ -11,6 +12,8 @@ function ItemListing({ title, categories, roomType }) {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [pageTitle, setPageTitle] = useState(title);
   const [setSortOption] = useState("default");
+
+  const navigate = useNavigate();
 
   const roomItems = mockItems.filter((item) => item.roomType === roomType);
 
@@ -31,8 +34,9 @@ function ItemListing({ title, categories, roomType }) {
   };
 
   const handleCategoryClick = (category) => {
-    setSelectedCategory(category);
-    setPageTitle(category); 
+      setSelectedCategory(category);
+      setPageTitle(category);
+      navigate(`/${roomType.toLowerCase().replace(" ", "-")}/${category.toLowerCase().replace(" ", "-")}`);
   };
 
   const handleSortChange = (value) => {

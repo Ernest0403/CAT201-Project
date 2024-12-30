@@ -23,13 +23,11 @@ body {
 }
 
 .chat-icon {
-  position: fixed;
-  bottom: 0px;
-  right: 0px;
-  width: 115px;
-  height: 120px;
+  position: fixed;     
+  bottom: 20px;        
+  right: 20px;         
+  z-index: 9999;     
   cursor: pointer;
-  object-fit: contain;
 }
 
 .item-container {

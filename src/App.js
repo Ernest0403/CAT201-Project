@@ -85,6 +85,11 @@ const App = () => {
         <Route path="/work-room" element={<UserLayout><WorkRoom/></UserLayout>} />
         <Route path="/about-us" element={<UserLayout><AboutUs /></UserLayout>} />
         <Route path="/terms" element={<UserLayout><TnC/></UserLayout>} />
+        <Route path="/living-room/:category" element={<UserLayout><LivingRoom/></UserLayout>} />
+        <Route path="/bedroom/:category" element={<UserLayout><Bedroom/></UserLayout>} />
+        <Route path="/kitchen/:category" element={<UserLayout><Kitchen/></UserLayout>} />
+        <Route path="/dining-room/:category" element={<UserLayout><DiningRoom/></UserLayout>} />
+        <Route path="/work-room/:category" element={<UserLayout><WorkRoom/></UserLayout>} />
         <Route path="/item/:id" element={<UserLayout><Description /></UserLayout>} />
 
         {/* Default Route */}
