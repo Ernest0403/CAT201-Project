@@ -1,4 +1,5 @@
 import React from "react";
+import { useParams } from "react-router-dom";
 import ItemListing from "./Component/ItemListing";
 
 const DiningRoomCategories = [
@@ -9,13 +10,18 @@ const DiningRoomCategories = [
   "Sideboard"
 ];
 
-const DiningRoomPage = () => (
-  <ItemListing
-    title="Dining Room"
-    dataEndpoint="https://example.com/api/living-room-products"
-    categories={DiningRoomCategories}
-    roomType="Dining Room"
-  />
-);
+const DiningRoomPage = () => {
+  const { category } = useParams();
+
+  return(
+    <ItemListing
+      title="Dining Room"
+      dataEndpoint="https://example.com/api/living-room-products"
+      categories={DiningRoomCategories}
+      roomType="Dining Room"
+      defaultCategory={category ? category.replace("-", " ") : ""}
+    />
+  );
+};
 
 export default DiningRoomPage;

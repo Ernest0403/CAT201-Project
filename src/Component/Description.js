@@ -7,12 +7,21 @@ import mockItems from './mockItems';
 const ItemPage = () => {
   const { id } = useParams();
   const [item, setItem] = useState(null);
+  const [relatedItems, setRelatedItems] = useState([]);
   const [activeTab, setActiveTab] = useState("Description");
   const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
     const selectedItem = mockItems.find(item => item.id === parseInt(id));
     setItem(selectedItem);
+
+    if (selectedItem) {
+      const related = mockItems
+        .filter((i) => i.category === selectedItem.category && i.id !== selectedItem.id) 
+        .sort(() => Math.random() - 0.5) 
+        .slice(0, 5); 
+      setRelatedItems(related);
+    }
   }, [id]);
 
   if (!item) {
@@ -99,7 +108,7 @@ const ItemPage = () => {
 
       <div className="related-products">
         <h2>Related Products</h2>
-        <ItemGrid items={mockItems}/>
+        <ItemGrid items={relatedItems}/>
       </div>
       </div>
     </div>
