@@ -37,7 +37,7 @@ function Cart() {
         </div>
         <div className='Summary'>
             <div className='SummaryTitle'>
-              <p>SUMMARY</p>
+              SUMMARY
             </div>
             <div className='SummaryBreakdown'>
               <div className='SubDetails'>Selected Item:</div>
@@ -50,7 +50,7 @@ function Cart() {
             <div className='line'></div>
             <div className='SummaryBreakdown'>
               <div className='SubTotalWord'>Subtotal:</div>
-              <div className='SubTotal'>RM138.35</div>
+              <div className='SubTotal'><span style={{ fontSize: 'small',verticalAlign: 'top' }}>RM</span>138.35</div>
             </div>
             <div className='line'></div>
             <button className='Checkout'onClick={() => navigate('/checkout')}>

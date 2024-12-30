@@ -19,7 +19,7 @@
     background-size: 200%;
     background-clip: text;
     -webkit-background-clip: text;
-    animation: animate-gradient 2.5s linear infinite;
+    animation: animate-gradient 1.5s linear infinite;
     font-weight: bold;
 }
 

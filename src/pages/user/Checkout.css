@@ -19,7 +19,7 @@
 .CheckoutSummary {
     background-color: #DBDBDB;
     width: 30%;
-    min-width: 300px;
+    /* min-width: 300px; */
     border-radius: 25px;
     text-align: center;
     font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
@@ -27,6 +27,10 @@
     top: 25px;
     padding-bottom: 30px;
     height: fit-content;
+
+    @media screen and (max-width: 769px) {
+        width: 100%;
+    }
 }
 
 .CheckoutSummary .SummaryTitle {
@@ -60,16 +64,6 @@
     margin: 15px;
 }
 
-.SubTotalWord {
-    text-align: left;
-    font-size: 32px;
-}
-
-.SubTotal {
-    text-align: right;
-    font-size: 32px;
-}
-
 .CheckoutColumn {
     display: flex;
     flex-direction: column;
@@ -82,6 +76,10 @@
     padding-bottom: 17px;
     align-items: center;
     gap: 15px;
+
+    @media screen and (max-width: 769px) {
+        width: 100%;
+    }
 }
 
 .ShippingOption, 
@@ -92,14 +90,19 @@
     background-color: white;
     width: 90%;
     height: auto;
-    border-radius: 70px;
+    border-radius: 50px;
     align-items: center;
-    padding: 10% 0 10% 0;
-    gap: 15px;
+    padding: 20px 0 20px 0;
+    gap: 10px;
+}
+
+.ShippingDetails {
+    border: solid;
 }
 
 .OptionLable {
-    font-size: 38px;
+    font-size: x-large;
+    font-weight: bold;
     text-align:center;
 }
 
@@ -113,8 +116,15 @@
     width: 85%;
     padding: 2%;  
     align-items: center;
-    border-radius: 15px;
+    border-radius: 5px;
     background-color: white;
+    margin: 0;
+}
+
+.ShippingType:hover,
+.PaymentType:hover {
+    background-color: #001845;
+    color: white;
 }
 
 .ShippingType.fast,
@@ -140,28 +150,16 @@
 }
 
 .InformationLable {
-    font-size: 20px;
     margin-right: auto;
     padding-left: 50px;
+    font-weight: 100;
 }
 
-input[type=ShippingAddress],
-input[type=ShippingAddressOptional],
-input[type=ShippingCity],
-input[type=ShippingPostcode],
-input[type=ShippingState],
-input[type=ShippingContactNumber],
-input[type=ShippingNotes],
-input[type=CardNumber],
-input[type=CardHolderName],
-input[type=CardED],
-input[type=CardCVV] {
-    width: 85%;
+input[type=text] {
+    width: 87%;
     height: 40px;
-    margin-top: -10px;
-    border-radius: 20px;
-    padding-left: 15px;
-    padding-right: 15px;
+    margin-top: -5px;
+    border-radius: 10px;
 }
 
 .CheckoutNav {

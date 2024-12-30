@@ -13,7 +13,7 @@
 }
 
 .NotSelected {
-    background-color: none;
+    background-color: rgba(239, 239, 239, 0.704);
     border-radius: 30px;
     font-size: 100%;
     width: 40px;
@@ -33,8 +33,8 @@
 }
 
 .CartItemPhoto img {
-    width: 100%;
-    height: 100%;
+    width: 90%;
+    height: 90%;
     object-fit: contain;
 }
 
@@ -44,11 +44,11 @@
     border-style: solid;
     width: 150px;
     height: 150px;
-    align-items: center;
-    vertical-align: middle;
     border-radius: 10px;
     min-width: 150px;
     min-height: 150px;
+    align-content: center;
+    vertical-align: middle;
 }
 
 .CartItemDetials {
@@ -101,7 +101,12 @@
     color: white;
     font-weight: bold;
     font-size: large;
-    border-width: 0;
+    margin: 0;
+    border-radius: 0%;
+}
+
+.SubCart:hover, .AddCart:hover {
+    background-color: #33415C ;
 }
 
 .RemoveCart {
@@ -111,6 +116,10 @@
     border-radius: 25px;
     text-align: center;
     justify-content: baseline;
+}
+
+.RemoveCart:hover {
+    background-color: rgb(255, 0, 0);
 }
 
 .CartItemPrice {
