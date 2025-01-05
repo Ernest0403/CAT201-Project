@@ -1,0 +1,11 @@
+.AboutUsContainer {
+    display: flex;
+    flex-direction: column;
+    font-family: Inter;
+    text-align: justify;
+}
+
+.AboutUsTitle {
+    font-size: xx-large;
+    text-decoration: underline;
+}

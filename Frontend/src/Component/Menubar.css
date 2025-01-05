@@ -1,0 +1,88 @@
+.Menubar-flex {
+    margin: 0px;
+    padding: 2px 40px 2px 40px;
+    display: flex;
+    flex-wrap: wrap;
+    font-family:Inter;
+    font-size: larger;
+}
+
+.Menubar-flex .Searchbar {
+    width: 46%;
+    position: relative;
+    min-width: 240px;
+}
+
+.TextLogo {
+    background: linear-gradient(to right, #0466C8, #001233, #0466C8);
+    -webkit-text-fill-color: transparent;
+    background-size: 200%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    animation: animate-gradient 1.5s linear infinite;
+    font-weight: bold;
+}
+
+@keyframes animate-gradient {
+    to {
+        background-position: 200%;
+    }
+}
+
+.Searchbar [type=text] {
+    width: 100%;
+    min-width: 170px;
+    font-family:Inter;
+}
+
+.Searchbar .SearchIcon{
+    width: 30px;
+ }
+
+.Searchbar .SearchIcon img {
+   position: absolute; 
+   top: 0px;
+   right: 0.5%;
+   width: 30px;
+   height: 30px;
+   object-fit: contain;
+}
+
+.MenuLoginButton {
+    background-color: white;
+    border: solid;
+    border-width: 2px;
+    &:hover{
+        background-color: lightgray;
+        border-color: #0466C8;
+    }
+    font-family:Inter;
+    padding: 5px;
+}
+
+.LoginIcon {
+    display: flex;
+    background-color: none;
+    min-width: 100px;
+    gap: 3px;
+    align-items: center;
+}
+
+.LoginIcon img {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+    border-radius: 5px;
+}
+
+
+.Button img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+}
+
+.Button {
+    background-color: white;
+    border: none;
+}

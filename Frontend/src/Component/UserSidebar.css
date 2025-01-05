@@ -1,0 +1,32 @@
+.SidebarNav {
+    display: flex;
+    flex-direction: column;
+    border-right: 1px;
+    border-left: 0cap;
+    border-top: 0cap;
+    border-bottom: 0cap;
+    border-style: solid;
+    max-width: 250px;
+    text-align: center;
+    flex-grow: 1;
+}
+
+.SidebarNav-collapsed {
+    background: linear-gradient(white,lightblue);
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.SidebarNav-collapsed:hover {
+    background: linear-gradient(white, blue);
+}
+
+.SidebarButton {
+    padding: 10px 20px 10px 20px;
+    background-color: white;
+    border-width: 0cap;
+}
+
+.SidebarButton:hover {
+    background: linear-gradient(45deg, #00d4ff,#5959ff);
+}
+

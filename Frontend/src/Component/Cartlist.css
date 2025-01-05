@@ -1,0 +1,128 @@
+.CartCard {
+    display: flex;
+    /* grid-template-columns: 1fr 3fr 5fr 3fr; */
+    align-items: center;
+    padding: 10px 20px 10px 20px;
+    min-width: 320;
+    border-width: 1px;
+    border-style: solid;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    gap: 20px;
+    height: auto;
+    flex-wrap: wrap;
+}
+
+.NotSelected {
+    background-color: rgba(239, 239, 239, 0.704);
+    border-radius: 30px;
+    font-size: 100%;
+    width: 40px;
+    height: 40px; 
+    line-height: 1; 
+    cursor: pointer; 
+}
+
+.Selected, .NotSelected:hover {
+    background-color: greenyellow;
+    border-radius: 30px;
+    font-size: 100%;
+    width: 40px;
+    height: 40px; 
+    line-height: 1; 
+    cursor: pointer; 
+}
+
+.CartItemPhoto img {
+    width: 90%;
+    height: 90%;
+    object-fit: contain;
+}
+
+.CartItemPhoto {
+    border-color: black;
+    border-width: 1px;
+    border-style: solid;
+    width: 150px;
+    height: 150px;
+    border-radius: 10px;
+    min-width: 150px;
+    min-height: 150px;
+    align-content: center;
+    vertical-align: middle;
+}
+
+.CartItemDetials {
+    gap: 100px;
+}
+
+.CartItemName,
+.CartTagGroup,
+.CartItemQuantity,
+.RemoveCart {
+    margin-bottom: 8px; 
+    justify-content: left;
+}
+
+.CartItemName {
+    font-size: 120%;
+    font-weight: bold;
+}
+
+.CartTagGroup {
+    display: flex;
+    gap: 2px;
+}
+
+.CartTag {
+    background-color: rgb(238, 238, 238);
+    padding: 5px 10px 5px 10px;
+    border-radius: 50px;
+}
+
+.CartItemQuantity {
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+}
+
+.CartAmountOption {
+    display: flex;
+    border-style: solid;
+    align-items: baseline;
+}
+
+.CartCurrentAmount {
+    min-width: 50px;
+    text-align: center;
+}
+
+.SubCart, .AddCart {
+    background-color: #979DAC;
+    color: white;
+    font-weight: bold;
+    font-size: large;
+    margin: 0;
+    border-radius: 0%;
+}
+
+.SubCart:hover, .AddCart:hover {
+    background-color: #33415C ;
+}
+
+.RemoveCart {
+    background-color: rgba(255, 0, 0, 0.3);
+    padding: 5px 10px 5px 10px;
+    border-style: none;
+    border-radius: 25px;
+    text-align: center;
+    justify-content: baseline;
+}
+
+.RemoveCart:hover {
+    background-color: rgb(255, 0, 0);
+}
+
+.CartItemPrice {
+    text-align: right;
+    margin-left: auto;
+}

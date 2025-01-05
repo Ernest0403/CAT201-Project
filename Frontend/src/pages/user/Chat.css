@@ -1,0 +1,88 @@
+/* 
+  Make the container left-aligned. 
+  We remove margin: 0 auto and can instead just add some left padding 
+  or margin to push the form in from the left edge.
+*/
+.ChatContainer {
+    padding: 20px;
+    /* For example, a small left margin: */
+    margin-left: 40px;
+  }
+  
+  /* Heading aligned left (default behavior) */
+  .ChatHeading {
+    font-size: 1.8rem;
+    margin-bottom: 24px;
+    text-align: left;
+  }
+  
+  /* The form itself, also left-aligned by default.
+     (You could set a max-width if you like, but 
+     removing 'margin: 0 auto' keeps it left-aligned). */
+  .ChatForm {
+    display: flex;
+    flex-direction: column;
+    max-width: 600px; /* optional */
+  }
+  
+  /* Each label+input group */
+  .formGroup {
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .formGroup label {
+    font-weight: bold;
+    margin-bottom: 8px;
+    text-align: left;  /* ensure label text is left-aligned */
+  }
+  
+  .formGroup input,
+  .formGroup textarea {
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+  
+  /* Submit button takes full width of .ChatForm */
+  .SubmitButton {
+    width: 100%; 
+    padding: 10px;
+    background: linear-gradient(to right, #007bff, #0069d9);
+    border: none;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+  
+  /* Success pop-up (centered) */
+  .SuccessPopup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 320px;
+    background-color: #fff; 
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    text-align: center; 
+    z-index: 9999;
+  }
+  
+  .SuccessTitle {
+    color: #28a745;
+    margin-bottom: 10px;
+    font-size: 1.4rem;
+  }
+  
+  .SuccessPopup p {
+    margin: 0;
+    font-size: 1rem;
+    color: #333;
+  }
+  
+  
+  

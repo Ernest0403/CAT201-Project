@@ -1,0 +1,46 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.homepage-container {
+  display: flex;
+  margin: 0 auto;
+  flex-direction: column;
+}
+
+.offer-image {
+  margin: 50px auto;
+  width: 100%;
+  max-width: 1226px;
+  height: 253px;
+  background: #D9D9D9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chat-icon {
+  position: fixed;     
+  bottom: 20px;        
+  right: 20px;         
+  z-index: 9999;     
+  cursor: pointer;
+}
+
+.item-container {
+  width: 100%;
+  max-width: 1200px; 
+  margin: 0 auto;
+  margin-bottom: 50px;
+}
+
+.header {
+  font-size: 40px;
+  font-weight: 400;
+  margin: 0; 
+  text-align: left; 
+  margin-bottom: 20px;
+}

@@ -1,0 +1,80 @@
+.OrderHistory {
+    font-family: Inter;
+    flex-grow: 1;
+}
+
+.order-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.order-item {
+    border-top: 1px solid #0466C8;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    padding: 30px;
+    flex-wrap: wrap;
+}
+
+.order-item:last-child {
+    border-bottom: 1px solid #0466C8;
+}
+
+.status {
+    margin-left: auto;
+    text-align: right;
+}
+
+.ButtonGroup {
+    display: flex;
+    gap: 10px;
+}
+
+.RedButton,
+.BlueButton {
+    border-radius: 25px;
+}
+
+.RedButton {
+    background: linear-gradient(#FFD5D5, #FF0000);
+}
+
+.BlueButton {
+    background: linear-gradient(#CBE5FF, #0466C8);
+}
+
+.smallButton {
+    width: 10rem;
+    height: 2rem;
+    text-align: center;
+}
+
+.orderOperationContainer {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 80%;
+    margin: auto;
+}
+
+.rowContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 3rem;
+    justify-content: center;   
+}
+
+.columnContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    justify-content: center;   
+    align-items: center;
+}
+
+
