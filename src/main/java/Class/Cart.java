@@ -63,4 +63,16 @@ public class Cart {
             }
         }
     }
+
+    public int getProduct_id(int index){
+        return product_list.get(index);
+    }
+
+    public int getProductListSize(){
+        return product_list.size();
+    }
+
+    public int getQuantity(int index){
+        return quantity_list.get(index);
+    }
 }

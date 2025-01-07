@@ -11,7 +11,6 @@ function Cart() {
     ]);
 
   //test backend only, working dy, just need pass whole cart list
-  const [clientId, setClientId] = useState(null);
     useEffect(() => {
         // Fetch clientId from the API
         fetch("http://localhost:8080/cat201_project_war_exploded/Cart-servlet")
@@ -22,10 +21,10 @@ function Cart() {
                 return response.json();
             })
             .then((data) => {
-                setClientId(data.clientId); // Set the clientId in state
+                setCarts(data.cartProducts); // Set the clientId in state
             })
             .catch((error) => {
-                console.error("Error fetching clientId:", error);
+                console.error("Error fetching cartProducts:", error);
             });
     }, []);
 
