@@ -80,9 +80,15 @@ public class CartServlet extends HttpServlet{
             for (Product product : cart_products) {
                 // create JSON object for each item
                 JSONObject jsonObject = new JSONObject();
+                JSONArray tagArray = new JSONArray();
+
                 jsonObject.put("image", product.getProduct_src());
                 jsonObject.put("product", product.getProduct_name());
-                jsonObject.put("tag", "None"); //use single string first
+
+                for(String tag: product.getProduct_tags())
+                    tagArray.put(tag);
+
+                jsonObject.put("tag", tagArray);
                 jsonObject.put("price", product.getProduct_price());
                 if (i < client_cart.getProductListSize()) {
                     jsonObject.put("quantity", client_cart.getQuantity(i));

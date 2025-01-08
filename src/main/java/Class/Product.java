@@ -14,12 +14,17 @@ public class Product {
 
     }
 
-    public Product(int product_id, String product_name, int product_price, int product_quantity, String product_src) {
+    public Product(int product_id, String product_name,
+                   int product_price,
+                   int product_quantity,
+                   String product_src,
+                   ArrayList<String> product_tags) {
         this.product_sku = product_id;
         this.product_name = product_name;
         this.product_price = product_price;
         this.product_quantity = product_quantity;
         this.product_src = product_src;
+        this.product_tags = product_tags;
     }
 
     public int getProduct_sku() {
