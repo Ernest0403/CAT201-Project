@@ -22,8 +22,7 @@ public class CartServlet extends HttpServlet{
     ArrayList<Product> products = Global.getProductList();
     ArrayList<Product> cart_products = new ArrayList<Product>();
 
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //Create a cart for a client, should be modified into reading from csv
+    public void loadCart(){
         for (int i = 0; i <= 7 ; i++){
             carts.add(new Cart(i));
             carts.get(i).addCart(i,1);
@@ -34,6 +33,7 @@ public class CartServlet extends HttpServlet{
                 client_cart = carts.get(i);
             }
         }
+        System.out.println(client_cart.getProduct_id());
 
         //for each cart product in the list
         for (int i = 0; i <= client_cart.getProduct_id().size()-1; i++){
@@ -45,6 +45,18 @@ public class CartServlet extends HttpServlet{
                 }
             }
         }
+    }
+
+    public void destroyCart(){
+        // Need to clear the content so it wont stack on the next request
+        carts = new ArrayList<Cart>();
+        client_cart = null;
+        cart_products = new ArrayList<Product>();
+    }
+
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //Create a cart for a client, should be modified into reading from csv
+        loadCart();
 
         // Enable CORS headers
         response.setHeader("Access-Control-Allow-Origin", "*");
@@ -81,6 +93,7 @@ public class CartServlet extends HttpServlet{
                 i++;
             }
 
+
             // Write JSON to response
             jsonResponse.put("cartProducts", jsonArray);
             System.out.println(jsonResponse.toString());
@@ -91,6 +104,8 @@ public class CartServlet extends HttpServlet{
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().write("{\"error\": \"Internal server error occurred.\"}");
         }
+
+        destroyCart();
     }
 
     public void destroy() {
