@@ -3,28 +3,57 @@ import { useNavigate } from "react-router-dom";
 import "./login.css";
 
 function Login() {
-    const [showPopup, setShowPopup] = useState(false);
+    const [userCredentials, setUserCredentials] = useState({ usernameOrEmail: "", password: "" });
+    const [adminCredentials, setAdminCredentials] = useState({ usernameOrEmail: "", password: "" });
     const [popupMessage, setPopupMessage] = useState("");
+    const [popupType, setPopupType] = useState(""); // To differentiate success and error pop-ups
     const navigate = useNavigate();
 
-    // User login handler
-    const handleUserLogin = () => {
-        setPopupMessage("User login successful!");
-        setShowPopup(true);
-        setTimeout(() => {
-            setShowPopup(false);
-            navigate("/user-dashboard"); // Redirect to User Dashboard after 3 seconds
-        }, 3000);
+    const handleInputChange = (e, setCredentials) => {
+        const { name, value } = e.target;
+        setCredentials((prev) => ({ ...prev, [name]: value }));
     };
 
-    // Admin login handler
-    const handleAdminLogin = () => {
-        setPopupMessage("Admin login successful!");
-        setShowPopup(true);
-        setTimeout(() => {
-            setShowPopup(false);
-            navigate("/dashboard"); // Redirect to Admin Dashboard after 3 seconds
-        }, 3000);
+    const handleLogin = async (credentials, userType) => {
+        if (!credentials.usernameOrEmail || !credentials.password) {
+            setPopupType("error");
+            setPopupMessage("Please fill in all fields.");
+            return;
+        }
+
+        try {
+            const response = await fetch("http://localhost:8080/cat201_project_war/LoginServlet", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams({
+                    usernameOrEmail: credentials.usernameOrEmail,
+                    password: credentials.password,
+                    userType: userType, // Include the userType in the request
+                }),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                if (data.status === "success") {
+                    setPopupType("success");
+                    setPopupMessage(`${userType === "admin" ? "Admin" : "User"} login successful!`);
+                    setTimeout(() => {
+                        setPopupMessage("");
+                        navigate(userType === "admin" ? "/dashboard" : "/user-dashboard");
+                    }, 3000);
+                } else {
+                    setPopupType("error");
+                    setPopupMessage(data.message || "Login failed.");
+                }
+            } else {
+                const errorData = await response.json();
+                setPopupType("error");
+                setPopupMessage(errorData.message || "Invalid credentials.");
+            }
+        } catch (error) {
+            setPopupType("error");
+            setPopupMessage("An error occurred. Please try again.");
+        }
     };
 
     return (
@@ -34,15 +63,29 @@ function Login() {
                 <h2>My Account</h2>
                 <div className="LoginForm">
                     <label>Email address/Username</label>
-                    <input type="text" placeholder="Enter your email or username" />
-
+                    <input
+                        type="text"
+                        name="usernameOrEmail"
+                        placeholder="Enter your email or username"
+                        value={userCredentials.usernameOrEmail}
+                        onChange={(e) => handleInputChange(e, setUserCredentials)}
+                        required
+                    />
                     <label>Password</label>
-                    <input type="password" placeholder="Enter your password" />
-
-                    <p className="ForgotPassword" onClick={() => navigate("/reset-password")}>Forgot your password? Click here</p>
-
-                    <button className="LoginButton" onClick={handleUserLogin}>Login</button>
-
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        value={userCredentials.password}
+                        onChange={(e) => handleInputChange(e, setUserCredentials)}
+                        required
+                    />
+                    <p className="ForgotPassword" onClick={() => navigate("/reset-password")}>
+                        Forgot your password? Click here
+                    </p>
+                    <button className="LoginButton" onClick={() => handleLogin(userCredentials, "user")}>
+                        Login
+                    </button>
                     <p className="RegisterLink">
                         Don’t have an account? <span onClick={() => navigate("/register")}>Register here</span>
                     </p>
@@ -54,22 +97,36 @@ function Login() {
                 <h2>For Administrator Only</h2>
                 <div className="LoginForm">
                     <label>Username</label>
-                    <input type="text" placeholder="Enter admin username" />
-
+                    <input
+                        type="text"
+                        name="usernameOrEmail"
+                        placeholder="Enter admin username"
+                        value={adminCredentials.usernameOrEmail}
+                        onChange={(e) => handleInputChange(e, setAdminCredentials)}
+                        required
+                    />
                     <label>Password</label>
-                    <input type="password" placeholder="Enter admin password" />
-
-                    <button className="LoginButton" onClick={handleAdminLogin}>Login</button>
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Enter admin password"
+                        value={adminCredentials.password}
+                        onChange={(e) => handleInputChange(e, setAdminCredentials)}
+                        required
+                    />
+                    <button className="LoginButton" onClick={() => handleLogin(adminCredentials, "admin")}>
+                        Login
+                    </button>
                 </div>
             </div>
 
-            {/* Popup for success message */}
-            {showPopup && (
+            {/* Popup for success or error message */}
+            {popupMessage && (
                 <div className="PopupOverlay">
-                    <div className="PopupBox">
-                        <h3>Success</h3>
+                    <div className={`PopupBox ${popupType === "error" ? "PopupError" : "PopupSuccess"}`}>
+                        <h3>{popupType === "error" ? "Error" : "Success"}</h3>
                         <p>{popupMessage}</p>
-                        <p>Redirecting...</p>
+                        {popupType === "error" && <button onClick={() => setPopupMessage("")}>Close</button>}
                     </div>
                 </div>
             )}
@@ -78,3 +135,11 @@ function Login() {
 }
 
 export default Login;
+
+
+
+
+
+
+
+
