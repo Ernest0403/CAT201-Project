@@ -31,6 +31,11 @@ public class Cart {
 
     //Add to cart
     public void addCart(int product_id, int quantity) {
+        if(product_list.size() == 0){
+            product_list.add(product_id);
+            quantity_list.add(quantity);
+        }
+
         for(int i = 0; i < product_list.size(); i++)
         {
             if(product_list.get(i) == product_id){
@@ -62,6 +67,10 @@ public class Cart {
                 removeCart(product_id);
             }
         }
+    }
+
+    public ArrayList<Integer> getProduct_id(){
+        return product_list;
     }
 
     public int getProduct_id(int index){

@@ -5,23 +5,24 @@ import { useNavigate } from "react-router-dom";
 
 
 function Cart() {
-  const [Carts , setCarts] = useState([
-    { image: "/Images/cart.jpg",product: "Chair", tag: ["this holiao","this super holiao"], price:"66.66", quantity: 7},
-    { image: "/Images/cart.jpg",product: "Table", tag: ["this holiao"], price:"56.66", quantity: 99},
-    ]);
+  const [Carts , setCarts] = useState([]);
+    // [
+    //     { image: "/Images/cart.jpg",product: "Chair", tag: ["this holiao","this super holiao"], price:"66.66", quantity: 7},
+    //     { image: "/Images/cart.jpg",product: "Table", tag: ["this holiao"], price:"56.66", quantity: 99},
+    // ]
 
   //test backend only, working dy, just need pass whole cart list
     useEffect(() => {
-        // Fetch clientId from the API
         fetch("http://localhost:8080/cat201_project_war_exploded/Cart-servlet")
             .then((response) => {
                 if (!response.ok) {
-                    throw new Error("Network response was not ok");
+                    throw new Error(`Network response was not ok: ${response.status}`);
                 }
-                return response.json();
+                return response.json(); // Parse JSON from response
             })
             .then((data) => {
-                setCarts(data.cartProducts); // Set the clientId in state
+                console.log("Fetched cartProducts:", data); // Log the data to check
+                setCarts(data.cartProducts); // Set the state with the fetched data
             })
             .catch((error) => {
                 console.error("Error fetching cartProducts:", error);
@@ -42,13 +43,13 @@ function Cart() {
   return (
       <div className='CartView'>
           <div className='ItemList'>
-              {Carts.map((cart) => (
+              {Carts.length === 0? "no cart" : Carts.map((cart) => (
                   <Cartlist
                       imageSrc={cart.image}
                       itemName={cart.product}
                       tags={cart.tag}
                       price={cart.price}
-                      quantity={cart.quantity}
+                      quantity={cart.quantity? cart.quantity : "None"}
                       changeQuantity={handleQuantityChange}
                   />
               ))}
