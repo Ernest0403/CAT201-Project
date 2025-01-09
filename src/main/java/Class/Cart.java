@@ -35,13 +35,16 @@ public class Cart {
             product_list.add(product_id);
             quantity_list.add(quantity);
         }
-
-        for(int i = 0; i < product_list.size(); i++)
-        {
-            if(product_list.get(i) == product_id){
-                quantity_list.set(i, quantity_list.get(i) + quantity);
+        else {
+            boolean found = false;
+            for(int i = 0; i < product_list.size(); i++)
+            {
+                if(product_list.get(i) == product_id){
+                    quantity_list.set(i, quantity_list.get(i) + quantity);
+                    found = true;
+                }
             }
-            else{
+            if(!found){
                 product_list.add(product_id);
                 quantity_list.add(quantity);
             }
