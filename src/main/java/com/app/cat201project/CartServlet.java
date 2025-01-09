@@ -46,25 +46,19 @@ public class CartServlet extends HttpServlet{
             if(carts.size() == 0) {
                 carts.add(new Cart(client));
                 carts.get(0).addCart(sku,quantity);
-                System.out.println("Added new 0 cart " + client + " " + sku + " " + quantity);
-                System.out.println(carts.get(0).getClient_id()+" "+carts.get(0).getProduct_id());
             }
             else{
                 boolean found = false;
                 for(int i = 0; i < carts.size(); i++) {
                     if(carts.get(i).getClient_id() == client){
-                        System.out.println("Added cart " + client + " " + sku + " " + quantity);
                         carts.get(i).addCart(sku,quantity);
                         found = true;
-                        System.out.println(carts.get(0).getClient_id()+" "+carts.get(0).getProduct_id());
                         break;
                     }
                 }
                 if(!found) {
                     carts.add(new Cart(client));
                     carts.get(carts.size()-1).addCart(sku,quantity);
-                    System.out.println("Added new cart " + client + " " + sku + " " + quantity);
-                    System.out.println(carts.get(0).getClient_id()+" "+carts.get(0).getProduct_id());
                 }
             }
         }
@@ -72,7 +66,6 @@ public class CartServlet extends HttpServlet{
         for (int i = 0; i < carts.size()-1 ; i++){
             if(carts.get(i).getClient_id() == client_id){
                 client_cart = carts.get(i);
-                System.out.println(client_cart.getClient_id());
                 break;
             }
         }
