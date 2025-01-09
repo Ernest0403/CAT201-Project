@@ -16,12 +16,13 @@ import Class.Global;
 
 @WebServlet(name = "CartServlet", value = "/Cart-servlet")
 public class CartServlet extends HttpServlet{
-    private int client_id = 1;
-    ArrayList<Cart> carts = new ArrayList<Cart>();
-    Cart client_cart = null;
-    ArrayList<Product> products = Global.getProductList();
-    ArrayList<Product> cart_products = new ArrayList<Product>();
+    private int client_id = 1;                                      //Temporarily set the client id to 1, will connect with log in client id
+    ArrayList<Cart> carts = new ArrayList<Cart>();                  //Stores data from Cart list
+    Cart client_cart = null;                                        //Stores data of the logged in client
+    ArrayList<Product> products = Global.getProductList();          //Stores Products data of the system
+    ArrayList<Product> cart_products = new ArrayList<Product>();    //Stores Products that is within the logged in client's cart
 
+    //Load Cart.csv that contains all the clients' cart data
     public void loadCart() throws IOException {
         String filePath = getServletContext().getRealPath("/Database/Cart.csv");
         FileReader fr = new FileReader(filePath);
@@ -88,6 +89,7 @@ public class CartServlet extends HttpServlet{
         }
     }
 
+    //Destroy the carts to prevent stacking of data in repeating request
     public void destroyCart(){
         // Need to clear the content so it wont stack on the next request
         carts = new ArrayList<Cart>();
@@ -95,6 +97,7 @@ public class CartServlet extends HttpServlet{
         cart_products = new ArrayList<Product>();
     }
 
+    //Return logged in client Cart details
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //Create a cart for a client, should be modified into reading from csv
         loadCart();
