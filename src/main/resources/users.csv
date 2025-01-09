@@ -1,0 +1,4 @@
+userType,username,email,password
+admin,admin,admin@example.com,admin123
+user,john,john@example.com,john123
+user,jane,jane@example.com,jane456
