@@ -1,0 +1,10 @@
+"client_id","sku","quantity"
+1,"BRBF0001",2
+1,"BRBF0002",4
+1,"BRBF0003",8
+2,"BRBF0001",6
+2,"BRBF0002",7
+3,"BRBF0003",6
+5,"BRBF0001",1
+5,"BRBF0002",3
+5,"BRBF0003",4
