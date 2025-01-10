@@ -74,14 +74,14 @@ public class CartServlet extends HttpServlet{
         for (int i = 0; i <= client_cart.getProduct_id().size()-1; i++){
             //Search for the respective products in the products
             for (int k = 0; k <= products.size() -1;k++) {
-                if(client_cart.getProduct_id(i) == products.get(k).getProduct_sku()){
+                if(true){
                     Product tempProduct = products.get(k);
                     cart_products.add(tempProduct);
                 }
             }
         }
     }
-
+//client_cart.getProduct_id(i)== products.get(k).getProduct_sku()
     //Destroy the carts to prevent stacking of data in repeating request
     public void destroyCart(){
         // Need to clear the content so it wont stack on the next request
