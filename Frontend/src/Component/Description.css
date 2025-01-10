@@ -4,7 +4,7 @@ body {
 
 .main-container {
   display: flex;
-  margin: 50px auto;
+  margin: 50px;
   flex-direction: column;
 }
 

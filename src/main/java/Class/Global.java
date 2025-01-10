@@ -5,10 +5,10 @@ import java.io.FileReader;
 import java.util.ArrayList;
 
 public class Global {
-    private static ArrayList<Product> ProductList = new ArrayList<Product>();
-    private static final String FILE_PATH = "C:\\Users\\60115\\IdeaProjects\\CAT201-Project\\src\\main\\resources\\catProjectDataset.csv";
+    private static final String FILE_PATH = Global.class.getClassLoader().getResource("catProjectDataset.csv").getPath();
 
     public static ArrayList<Product> getProductList() {
+        ArrayList<Product> ProductList = new ArrayList<Product>();
 
         try (CSVReader reader = new CSVReader(new FileReader(FILE_PATH))) {
             String[] line;

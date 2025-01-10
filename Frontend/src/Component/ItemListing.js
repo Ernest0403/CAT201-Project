@@ -5,9 +5,12 @@ import Footer from './Footer';
 import SortBy from "./SortBy";
 import ItemGrid from "./ItemGrid";
 
-const capitalizeFirstLetter = (string) => {
+const capitalizeWords = (string) => {
   if (!string) return "";
-  return string.charAt(0).toUpperCase() + string.slice(1);
+  return string
+    .split(" ")
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
 };
 
 function ItemListing({ title, categories, roomType, defaultCategory }) {
@@ -24,11 +27,11 @@ function ItemListing({ title, categories, roomType, defaultCategory }) {
   useEffect(() => {
       fetch('http://localhost:8080/cat201-project/Product-servlet')
       .then((response) => response.json())
-      .then((data) => setProducts(data)) // Set products state with fetched data
+      .then((data) => setProducts(data)) 
       .catch((error) => console.error("Error fetching products:", error));
 
       if (category) {
-        const formattedCategory = capitalizeFirstLetter(category.replace("-", " "));
+        const formattedCategory = capitalizeWords(category.replace("-", " "));
         setSelectedCategory(formattedCategory);
         setPageTitle(formattedCategory);
       } else {
