@@ -1,0 +1,4 @@
+userType,username,email,password,firstName,lastName,displayName,billingAddress,shippingAddress
+admin,admin,admin@example.com,admin123,Admin,User,Admin,"123 Admin St","123 Admin St"
+user,john,john@example.com,john123,John,Doe,Johnny,"456 User Rd","456 User Rd"
+user,jane,jane@example.com,jane456,Jane,Doe,Janie,"789 User Ln","789 User Ln"

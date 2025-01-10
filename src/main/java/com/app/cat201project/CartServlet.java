@@ -22,6 +22,7 @@ public class CartServlet extends HttpServlet{
     ArrayList<Product> products = Global.getProductList();          //Stores Products data of the system
     ArrayList<Product> cart_products = new ArrayList<Product>();    //Stores Products that is within the logged in client's cart
 
+
     //Destroy the carts to prevent stacking of data in repeating request
     public void destroyCart(){
         // Need to clear the content so it wont stack on the next request

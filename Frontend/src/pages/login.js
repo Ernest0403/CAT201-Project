@@ -3,18 +3,35 @@ import { useNavigate } from "react-router-dom";
 import "./login.css";
 
 function Login() {
-    const [userCredentials, setUserCredentials] = useState({ usernameOrEmail: "", password: "" });
-    const [adminCredentials, setAdminCredentials] = useState({ usernameOrEmail: "", password: "" });
+    const [userCredentials, setUserCredentials] = useState({
+        usernameOrEmail: "",
+        password: ""
+    });
+    const [adminCredentials, setAdminCredentials] = useState({
+        usernameOrEmail: "",
+        password: ""
+    });
     const [popupMessage, setPopupMessage] = useState("");
-    const [popupType, setPopupType] = useState(""); // To differentiate success and error pop-ups
+    const [popupType, setPopupType] = useState(""); // "success" or "error"
     const navigate = useNavigate();
 
+    /**
+     * Handles changes for either user or admin credential objects.
+     * @param {Event} e - The input change event
+     * @param {Function} setCredentials - state setter for either user or admin
+     */
     const handleInputChange = (e, setCredentials) => {
         const { name, value } = e.target;
-        setCredentials((prev) => ({ ...prev, [name]: value }));
+        setCredentials(prev => ({ ...prev, [name]: value }));
     };
 
+    /**
+     * Attempts to log in a user (or admin) by sending a POST to your LoginServlet.
+     * @param {Object} credentials - { usernameOrEmail, password }
+     * @param {String} userType - "user" or "admin"
+     */
     const handleLogin = async (credentials, userType) => {
+        // Simple client-side validation
         if (!credentials.usernameOrEmail || !credentials.password) {
             setPopupType("error");
             setPopupMessage("Please fill in all fields.");
@@ -28,29 +45,39 @@ function Login() {
                 body: new URLSearchParams({
                     usernameOrEmail: credentials.usernameOrEmail,
                     password: credentials.password,
-                    userType: userType, // Include the userType in the request
+                    userType: userType
                 }),
             });
 
             if (response.ok) {
+                // Attempt to parse JSON response
                 const data = await response.json();
                 if (data.status === "success") {
                     setPopupType("success");
-                    setPopupMessage(`${userType === "admin" ? "Admin" : "User"} login successful!`);
+                    setPopupMessage(
+                        userType === "admin"
+                            ? "Admin login successful!"
+                            : "User login successful!"
+                    );
+
+                    // Automatically navigate after 3s
                     setTimeout(() => {
                         setPopupMessage("");
                         navigate(userType === "admin" ? "/dashboard" : "/user-dashboard");
                     }, 3000);
                 } else {
+                    // The servlet returned a JSON with status != "success"
                     setPopupType("error");
                     setPopupMessage(data.message || "Login failed.");
                 }
             } else {
+                // The servlet returned an error status (e.g., 400, 401, 500)
                 const errorData = await response.json();
                 setPopupType("error");
                 setPopupMessage(errorData.message || "Invalid credentials.");
             }
         } catch (error) {
+            // Network or other unexpected error
             setPopupType("error");
             setPopupMessage("An error occurred. Please try again.");
         }
@@ -58,11 +85,11 @@ function Login() {
 
     return (
         <div className="LoginPage">
-            {/* User Login */}
+            {/* ======== User Login Section ======== */}
             <div className="LoginContainer">
                 <h2>My Account</h2>
                 <div className="LoginForm">
-                    <label>Email address/Username</label>
+                    <label>Email/Username</label>
                     <input
                         type="text"
                         name="usernameOrEmail"
@@ -71,6 +98,7 @@ function Login() {
                         onChange={(e) => handleInputChange(e, setUserCredentials)}
                         required
                     />
+
                     <label>Password</label>
                     <input
                         type="password"
@@ -80,31 +108,39 @@ function Login() {
                         onChange={(e) => handleInputChange(e, setUserCredentials)}
                         required
                     />
+
                     <p className="ForgotPassword" onClick={() => navigate("/reset-password")}>
                         Forgot your password? Click here
                     </p>
-                    <button className="LoginButton" onClick={() => handleLogin(userCredentials, "user")}>
+
+                    <button
+                        className="LoginButton"
+                        onClick={() => handleLogin(userCredentials, "user")}
+                    >
                         Login
                     </button>
+
                     <p className="RegisterLink">
-                        Don’t have an account? <span onClick={() => navigate("/register")}>Register here</span>
+                        Don’t have an account?
+                        <span onClick={() => navigate("/register")}> Register here</span>
                     </p>
                 </div>
             </div>
 
-            {/* Admin Login */}
+            {/* ======== Admin Login Section ======== */}
             <div className="AdminLoginContainer">
-                <h2>For Administrator Only</h2>
+                <h2>Administrator Login</h2>
                 <div className="LoginForm">
-                    <label>Username</label>
+                    <label>Username/Email</label>
                     <input
                         type="text"
                         name="usernameOrEmail"
-                        placeholder="Enter admin username"
+                        placeholder="Enter admin username or email"
                         value={adminCredentials.usernameOrEmail}
                         onChange={(e) => handleInputChange(e, setAdminCredentials)}
                         required
                     />
+
                     <label>Password</label>
                     <input
                         type="password"
@@ -114,19 +150,29 @@ function Login() {
                         onChange={(e) => handleInputChange(e, setAdminCredentials)}
                         required
                     />
-                    <button className="LoginButton" onClick={() => handleLogin(adminCredentials, "admin")}>
+
+                    <button
+                        className="LoginButton"
+                        onClick={() => handleLogin(adminCredentials, "admin")}
+                    >
                         Login
                     </button>
                 </div>
             </div>
 
-            {/* Popup for success or error message */}
+            {/* ======== Popup Overlay ======== */}
             {popupMessage && (
                 <div className="PopupOverlay">
-                    <div className={`PopupBox ${popupType === "error" ? "PopupError" : "PopupSuccess"}`}>
+                    <div
+                        className={`PopupBox ${
+                            popupType === "error" ? "PopupError" : "PopupSuccess"
+                        }`}
+                    >
                         <h3>{popupType === "error" ? "Error" : "Success"}</h3>
                         <p>{popupMessage}</p>
-                        {popupType === "error" && <button onClick={() => setPopupMessage("")}>Close</button>}
+                        {popupType === "error" && (
+                            <button onClick={() => setPopupMessage("")}>Close</button>
+                        )}
                     </div>
                 </div>
             )}
@@ -135,6 +181,7 @@ function Login() {
 }
 
 export default Login;
+
 
 
 
