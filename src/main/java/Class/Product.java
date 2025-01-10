@@ -1,6 +1,5 @@
 package Class;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class Product {
@@ -22,8 +21,9 @@ public class Product {
     private String product_warranty;
     private ArrayList<String> product_tags = new ArrayList<>();
     private float product_discountedPrice;
+    private int product_orderVolume;
 
-    public Product(String sku, String name, String imageURL, String roomCategory, String itemCategory, String brand, String dimension, String weight, String colour, String material, String manufacturer, String arrivalDate, int quantity, float price, float discount, String warranty) {
+    public Product(String sku, String name, String imageURL, String roomCategory, String itemCategory, String brand, String dimension, String weight, String colour, String material, String manufacturer, String arrivalDate, int quantity, float price, float discount, String warranty, int orderVolume) {
         this.product_sku = sku;
         this.product_name = name;
         this.product_src = imageURL;
@@ -41,10 +41,11 @@ public class Product {
         this.product_discount = discount;
         this.product_warranty = warranty;
         this.product_discountedPrice = Float.parseFloat(String.format("%.2f", price * (1 - discount)));
+        this.product_orderVolume = orderVolume;
     }
 
     public Product(String product_id, String product_name,
-                   float product_price, // Corrected
+                   float product_price,
                    int product_quantity,
                    String product_src,
                    ArrayList<String> product_tags) {
@@ -118,6 +119,14 @@ public class Product {
 
     public void setDiscountedPrice(float discountedPrice) {
         this.product_discountedPrice = discountedPrice;
+    }
+
+    public int getOrderVolume() {
+        return product_orderVolume;
+    }
+
+    public void setProduct_orderVolume(int orderVolume) {
+        this.product_orderVolume = orderVolume;
     }
 
 }
