@@ -11,10 +11,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Global {
-    private static ArrayList<Product> ProductList = new ArrayList<Product>();
     private static final String FILE_PATH = Global.class.getClassLoader().getResource("catProjectDataset.csv").getPath();
 
     public static ArrayList<Product> getProductList() {
+        ArrayList<Product> ProductList = new ArrayList<Product>();
 
         try (CSVReader reader = new CSVReader(new FileReader(FILE_PATH))) {
             String[] line;
