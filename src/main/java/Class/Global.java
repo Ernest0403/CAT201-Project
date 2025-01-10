@@ -15,7 +15,7 @@ public class Global {
             reader.readNext();
 
             while ((line = reader.readNext()) != null) {
-                if (line.length == 16) {
+                if (line.length == 17) {
                     String sku = line[0];
                     String name = line[1];
                     String imageURL = line[2];
@@ -32,8 +32,9 @@ public class Global {
                     float price = Float.parseFloat(line[13].replace("RM", "").trim());
                     float discount = parseDiscount(line[14]);
                     String warranty = line[15];
+                    int orderVolume = Integer.parseInt(line[16]);
 
-                    Product product = new Product(sku, name, imageURL, roomCategory, itemCategory, brand, dimension, weight, colour, material, manufacturingCountry, arrivalDate, quantity, price, discount, warranty);
+                    Product product = new Product(sku, name, imageURL, roomCategory, itemCategory, brand, dimension, weight, colour, material, manufacturingCountry, arrivalDate, quantity, price, discount, warranty, orderVolume);
                     ProductList.add(product);
                 }
             }

@@ -11,12 +11,12 @@ import java.util.ArrayList;
 import Class.Product;
 import Class.Global;
 
-@WebServlet(name = "ProductServlet", value = "/Product-servlet")  // Define your servlet endpoint
+@WebServlet(name = "ProductServlet", value = "/Product-servlet")
 public class ProductServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.setHeader("Access-Control-Allow-Origin", "*"); // This allows all origins
+        response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
@@ -26,7 +26,7 @@ public class ProductServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
 
         Gson gson = new Gson();
-        String json = gson.toJson(products);  // Convert the list of products to JSON
-        response.getWriter().write(json);  // Send the JSON response
+        String json = gson.toJson(products);
+        response.getWriter().write(json);
     }
 }

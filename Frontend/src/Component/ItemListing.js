@@ -51,7 +51,7 @@ function ItemListing({ title, categories, roomType, defaultCategory }) {
       case "new-arrivals":
         return items.sort((a, b) => new Date(b.product_arrivalDate) - new Date(a.product_arrivalDate));
       case "popularity":
-        return items.sort((a, b) => b.popularity - a.popularity);
+        return items.sort((a, b) => b.product_orderVolume - a.product_orderVolume);
       default:
         return items;
     }
