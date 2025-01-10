@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import "./Description.css";
 import ItemGrid from "./ItemGrid";
-import mockItems from './mockItems';
 
 const ItemPage = () => {
   const { id } = useParams();
@@ -12,16 +11,32 @@ const ItemPage = () => {
   const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
-    const selectedItem = mockItems.find(item => item.id === parseInt(id));
-    setItem(selectedItem);
+    const fetchProductData = async () => {
+      try {
+          const response = await fetch(`http://localhost:8080/cat201-project/Product-servlet?id=${id}`);
+          const data = await response.json();
 
-    if (selectedItem) {
-      const related = mockItems
-        .filter((i) => i.category === selectedItem.category && i.id !== selectedItem.id) 
-        .sort(() => Math.random() - 0.5) 
-        .slice(0, 5); 
-      setRelatedItems(related);
-    }
+          const selectedProduct = data.find((product) => product.product_sku === id);
+              if (selectedProduct) {
+                setItem(selectedProduct);
+
+                const relatedResponse = await fetch(`http://localhost:8080/cat201-project/Product-servlet?roomCategory=${selectedProduct.product_roomCategory}`);
+                const relatedData = await relatedResponse.json();
+
+                const relatedFiltered = relatedData.filter(
+                  (product) => product.product_sku !== selectedProduct.product_sku
+                ).slice(0, 5);
+
+                setRelatedItems(relatedFiltered);
+              } else {
+                console.error("Product not found");
+              }
+      } catch (error) {
+         console.error("Error fetching product data:", error);
+      }
+    };
+
+    fetchProductData();
   }, [id]);
 
   if (!item) {
@@ -31,12 +46,19 @@ const ItemPage = () => {
   const renderTabContent = () => {
     switch (activeTab) {
       case "Description":
-        return <p>This is the description of the product.</p>;
+        return(
+          <ul>
+            <li>{item.product_name}</li>
+            <li>Product overall size {item.product_dimension}</li>
+            <li>{item.product_material}</li>
+            <li>Made in {item.product_manufacturer}</li>
+          </ul>
+        );
       case "Additional Information":
         return (
           <div>
-            <p><strong>Weight:</strong> 500g</p>
-            <p><strong>Colour:</strong> Red</p>
+            <p><strong>Weight:</strong> {item.product_weight}</p>
+            <p><strong>Colour:</strong> {item.product_colour}</p>
           </div>
         );
       case "Reviews":
@@ -60,11 +82,19 @@ const ItemPage = () => {
     <div className="main-container">
     <div className="main-container">
       <div className="desc-container">
-        <img src={item.image} alt= {item.name} className="product-image"/>
+        <img src={item.product_src} alt= {item.product_name} className="product-image"/>
         <div className="product-details">
-          <h1>{item.name}</h1>
-          <h2>RM {item.discountedPrice} </h2>
-          <p>Description: </p>
+          <h1>{item.product_name}</h1>
+          <div className="price-container">
+            <h2 className="original-price">RM {item.product_price}</h2>
+            <h2>RM {item.product_discountedPrice.toFixed(2)}</h2>
+          </div>
+          <ul>
+            <li>{item.product_name}</li>
+            <li>Product overall size {item.product_dimension}</li>
+            <li>{item.product_material}</li>
+            <li>Made in {item.product_manufacturer}</li>
+          </ul>
           <div className="quantity">
             <button onClick={handleDecrease}>-</button>
             <span>{quantity}</span>
@@ -74,10 +104,10 @@ const ItemPage = () => {
             <button>Add to cart</button>
           </div>
           <div className="product-meta">
-            <p>SKU:</p>
-            <p>Categories:</p>
-            <p>Tag:</p>
-            <p>Brand:</p>
+            <p><strong>SKU:</strong> {item.product_sku}</p>
+            <p><strong>Categories:</strong> {item.product_roomCategory}</p>
+            <p><strong>Brand:</strong> {item.product_brand}</p>
+            <p><strong>Warranty:</strong> {item.product_warranty}</p>
           </div>
         </div>
       </div>

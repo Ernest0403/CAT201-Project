@@ -16,7 +16,6 @@ const BedroomPage = () => {
   return(
     <ItemListing
       title="Bedroom"
-      dataEndpoint="https://example.com/api/living-room-products"
       categories={BedroomCategories}
       roomType="Bedroom"
       defaultCategory={category ? category.replace("-", " ") : ""}
