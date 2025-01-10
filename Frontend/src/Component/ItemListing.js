@@ -1,30 +1,67 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import "./ItemListing.css";
 import Footer from './Footer';
 import SortBy from "./SortBy";
 import ItemGrid from "./ItemGrid";
-import mockItems from "./mockItems";
 
-function ItemListing({ title, categories, roomType }) {
+const capitalizeFirstLetter = (string) => {
+  if (!string) return "";
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};
+
+function ItemListing({ title, categories, roomType, defaultCategory }) {
   const [filterPrice, setFilterPrice] = useState([0, 5000]);
   const [appliedPrice, setAppliedPrice] = useState([0, 5000]);
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState(defaultCategory || "");
   const [pageTitle, setPageTitle] = useState(title);
-  const [setSortOption] = useState("default");
+  const [sortOption, setSortOption] = useState("default");
+  const [products, setProducts] = useState([]);
 
+  const { category } = useParams();
   const navigate = useNavigate();
 
-  const roomItems = mockItems.filter((item) => item.roomType === roomType);
+  useEffect(() => {
+      fetch('http://localhost:8080/cat201-project/Product-servlet')
+      .then((response) => response.json())
+      .then((data) => setProducts(data)) // Set products state with fetched data
+      .catch((error) => console.error("Error fetching products:", error));
+
+      if (category) {
+        const formattedCategory = capitalizeFirstLetter(category.replace("-", " "));
+        setSelectedCategory(formattedCategory);
+        setPageTitle(formattedCategory);
+      } else {
+        setSelectedCategory("");
+        setPageTitle(title);
+      }
+    }, [category, title]);
+
+  const roomItems = products.filter((item) => item.product_roomCategory === roomType);
+
+  const sortItems = (items) => {
+    switch (sortOption) {
+      case "price-low-high":
+        return items.sort((a, b) => a.product_discountedPrice - b.product_discountedPrice);
+      case "price-high-low":
+        return items.sort((a, b) => b.product_discountedPrice - a.product_discountedPrice);
+      case "new-arrivals":
+        return items.sort((a, b) => new Date(b.product_arrivalDate) - new Date(a.product_arrivalDate));
+      case "popularity":
+        return items.sort((a, b) => b.popularity - a.popularity);
+      default:
+        return items;
+    }
+  };
 
   const filteredItems = roomItems.filter((item) => {
     const matchesCategory = selectedCategory
-      ? item.category === selectedCategory
+      ? item.product_itemCategory === selectedCategory
       : true;
 
     const matchesPrice =
-      item.discountedPrice >= appliedPrice[0] &&
-      item.discountedPrice <= appliedPrice[1];
+      item.product_discountedPrice >= appliedPrice[0] &&
+      item.product_discountedPrice <= appliedPrice[1];
 
     return matchesCategory && matchesPrice;
   });
@@ -34,14 +71,16 @@ function ItemListing({ title, categories, roomType }) {
   };
 
   const handleCategoryClick = (category) => {
-      setSelectedCategory(category);
-      setPageTitle(category);
-      navigate(`/${roomType.toLowerCase().replace(" ", "-")}/${category.toLowerCase().replace(" ", "-")}`);
+    setSelectedCategory(category);
+    setPageTitle(category);
+    navigate(`/${roomType.toLowerCase().replace(" ", "-")}/${category.toLowerCase().replace(" ", "-")}`);
   };
 
   const handleSortChange = (value) => {
     setSortOption(value);
   };
+
+  const sortedItems = sortItems(filteredItems);
 
   return (
     <div className="product-container">
@@ -66,7 +105,7 @@ function ItemListing({ title, categories, roomType }) {
         </div>
 
         <div className="categories-section">
-          <h3>item Categories</h3>
+          <h3>Item Categories</h3>
           <ul>
             {categories.map((category, index) => (
               <li key={index} onClick={() => handleCategoryClick(category)}>
@@ -78,7 +117,7 @@ function ItemListing({ title, categories, roomType }) {
       </div>
       <div className="wrap-content">
       <SortBy onSortChange={handleSortChange} />
-      <ItemGrid items={filteredItems} />
+      <ItemGrid items={sortedItems} />
       </div>
     </div>
     <Footer />

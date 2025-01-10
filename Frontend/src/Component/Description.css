@@ -24,18 +24,33 @@ body {
 
 .product-details {
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
 }
 
 .product-details h1,
 .product-details h2 {
-  margin: 0 0 10px;
+  margin: 0 20px 20px 0;
   text-align: left;
 }
 
-.product-details p {
-  margin: 0 0 10px;
-  font-size: 14px;
+.price-container {
+  display: flex;
+  align-items: center;
+}
+
+.original-price {
+    text-decoration: line-through;
+    color: #888;
+}
+
+ul{
+  list-style-type: disc;
+  padding-left: 20px;
+  color: #838080;
+}
+
+li {
+  margin-bottom: 10px;
 }
 
 .quantity {

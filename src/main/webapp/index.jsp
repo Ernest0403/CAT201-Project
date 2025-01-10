@@ -10,5 +10,6 @@
 <br/>
 <a href="hello-servlet">Hello Servlet</a>
 <a href="Cart-servlet">Cart Servlet</a>
+<a href="Product-servlet">Product Servlet</a>
 </body>
 </html>
