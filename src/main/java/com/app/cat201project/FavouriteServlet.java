@@ -1,44 +1,41 @@
 package com.app.cat201project;
 
-import java.io.*;
-import java.util.ArrayList;
-
 import com.opencsv.exceptions.CsvValidationException;
-import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.*;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import Class.Cart;
-import Class.Product;
-import Class.Global;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 
-@WebServlet(name = "CartServlet", value = "/Cart-servlet")
-public class CartServlet extends HttpServlet{
+import Class.*;
 
-    private int client_id = 1;                                      //Temporarily set the client id to 1, will connect with log in client id
-    ArrayList<Cart> carts = new ArrayList<Cart>();                  //Stores data from Cart list
-    Cart client_cart = new Cart();                                        //Stores data of the logged in client
+@WebServlet(name = "FavouriteServlet", value = "/Favourite-servlet")
+public class FavouriteServlet extends HttpServlet {
+    private int client_id = 1;
+    ArrayList<Favourite> favouriteList = new ArrayList<Favourite>();                  //Stores data from Cart list
+    Favourite client_fav = new Favourite();                                        //Stores data of the logged in client
     ArrayList<Product> products = Global.getProductList();          //Stores Products data of the system
-    ArrayList<Product> cart_products = new ArrayList<Product>();    //Stores Products that is within the logged in client's cart
+    ArrayList<Product> fav_products = new ArrayList<Product>();//Temporarily set the client id to 1, will connect with log in client id
     String realPath;
 
     public void init() throws ServletException {
         super.init();
-        realPath = getServletContext().getRealPath("Database/Cart.csv");
-        Cart.setExternalCsvPath(realPath);
-        System.out.println("Resolved File Path: " + realPath);
-
+        realPath = getServletContext().getRealPath("Database/Favourite.csv");
+        Favourite.setExternalCsvPath(realPath);
     }
 
     //Destroy the carts to prevent stacking of data in repeating request
     public void destroyCart(){
-        // Need to clear the content so it wont stack on the next request
-        carts = new ArrayList<Cart>();
-        client_cart = new Cart();
-        cart_products = new ArrayList<Product>();
+        favouriteList = new ArrayList<Favourite>();
+        client_fav = new Favourite();
+        fav_products = new ArrayList<Product>();
     }
 
     //Return logged in client Cart details
@@ -55,12 +52,12 @@ public class CartServlet extends HttpServlet{
 
         //Create a cart for a client, should be modified into reading from csv
         try {
-            Cart.loadCart(products, carts, client_cart, cart_products, client_id, realPath);
+            Favourite.loadFav(products, favouriteList, client_fav, fav_products, client_id);
         } catch (CsvValidationException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("client_cart list shown." + client_cart.getProduct_id());
-        System.out.println("client_product list added." + cart_products);
+        System.out.println("client_fav list shown." + client_fav.getProduct_list());
+        System.out.println("fav_product list added." + fav_products);
 
         // Set response type to JSON
         response.setContentType("application/json");
@@ -71,9 +68,8 @@ public class CartServlet extends HttpServlet{
         JSONArray jsonArray = new JSONArray();
 
         try {
-
             int i = 0;
-            for (Product product : cart_products) {
+            for (Product product : fav_products) {
                 // create JSON object for each item
                 JSONObject jsonObject = new JSONObject();
 
@@ -84,17 +80,13 @@ public class CartServlet extends HttpServlet{
                 jsonObject.put("tag", product.getProduct_itemCategory());
                 jsonObject.put("price", product.getProduct_price());
 
-                if (i < client_cart.getProductListSize()) {
-                    jsonObject.put("quantity", client_cart.getQuantity(i));
-                }
-
                 // append it to your JSON array.
                 jsonArray.put(jsonObject);
                 i++;
             }
 
             // Write JSON to response
-            jsonResponse.put("cartProducts", jsonArray);
+            jsonResponse.put("favProducts", jsonArray);
             System.out.println(jsonResponse.toString());
             response.setStatus(HttpServletResponse.SC_OK);
             response.getWriter().write(jsonResponse.toString());
@@ -123,32 +115,6 @@ public class CartServlet extends HttpServlet{
 
         while ((line = reader.readLine()) != null) {
             json.append(line);
-        }
-
-        try {
-            JSONObject jsonObject = new JSONObject(json.toString());
-            String action = jsonObject.getString("action"); // Get the action identifier
-            System.out.println("Received JSON: " + jsonObject);
-            switch (action) {
-                case "updateQuantity":
-                    client_cart.updateCart(
-                            jsonObject.getString("productId"),
-                            jsonObject.getInt("quantity"),
-                            carts,
-                            client_cart,
-                            realPath
-                    );
-
-                    break;
-
-                default:
-                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                    response.getWriter().write("Invalid action!");
-                    break;
-            }
-        } catch (Exception e) {
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            response.getWriter().write("Error processing request!");
         }
 
     }

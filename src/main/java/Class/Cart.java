@@ -4,10 +4,7 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -15,6 +12,7 @@ public class Cart {
     private int client_id;
     private ArrayList<String> product_list = new ArrayList<>();
     private ArrayList<Integer> quantity_list = new ArrayList<>();
+    private static String externalCsvPath;
 
     //Constructor
     public Cart() {
@@ -23,6 +21,10 @@ public class Cart {
 
     public Cart(int client_id) {
         this.client_id = client_id;
+    }
+
+    public static void setExternalCsvPath(String realPath) {
+        externalCsvPath = realPath;
     }
 
     public void setCart(Cart cart) {
@@ -129,7 +131,7 @@ public class Cart {
         CSVReader reader;
         try {
             reader = new CSVReader(
-                    new FileReader(realPath)
+                    new FileReader(externalCsvPath)
             );
             System.out.println("File found"); //Found
         } catch (FileNotFoundException e) {
@@ -189,33 +191,38 @@ public class Cart {
     }
 
     public void updateCartCSV(ArrayList<Cart> carts, Cart client_cart, String realPath){
-        try (CSVWriter writer = new CSVWriter(
+        try (BufferedWriter writer = new BufferedWriter(
                 new FileWriter(
-                        realPath, false)
+                        externalCsvPath, true)
             )
         ) {
-            writer.writeNext(new String[]{"client_id", "sku", "quantity"});
+//            writer.write(",");
             for (Cart cart : carts) {
                 if (cart.getClient_id() == client_cart.getClient_id()) {
                     cart.setCart(client_cart);
                     int i = 0;
                     for(String product_id : cart.getProduct_id()){
-                        writer.writeNext(new String[]{
+                        writer.write(String.join(",",
+                                new String[]{
                                 String.valueOf(client_cart.getClient_id()),
-                                "\"" + product_id + "\"",
-                                String.valueOf(client_cart.getQuantity(0))
+                                product_id,
+                                String.valueOf(client_cart.getQuantity(i))
                             }
-                        );
+                        ));
+                        i++;
                     }
                 }
                 else{
+                    int i = 0;
                     for(String product_id : cart.getProduct_id()){
-                        writer.writeNext(new String[]{
+                        writer.write(String.join(",",
+                                new String[]{
                                         String.valueOf(client_cart.getClient_id()),
-                                        "\"" + product_id + "\"",
-                                        String.valueOf(client_cart.getQuantity(0))
+                                        product_id,
+                                        String.valueOf(client_cart.getQuantity(i))
                                 }
-                        );
+                        ));
+                        i++;
                     }
                 }
             }

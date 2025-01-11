@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 function Cart() {
   const [Carts , setCarts] = useState([]);
 
-  //test backend only, working dy, just need pass whole cart list
+  //backend  pass whole cart list
     useEffect(() => {
         fetch("http://localhost:8080/cat201_project_war_exploded/Cart-servlet")
             .then((response) => {
