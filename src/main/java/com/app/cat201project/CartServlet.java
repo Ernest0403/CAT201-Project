@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.ArrayList;
 
 import com.opencsv.exceptions.CsvValidationException;
+import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
@@ -16,12 +17,13 @@ import Class.Global;
 
 @WebServlet(name = "CartServlet", value = "/Cart-servlet")
 public class CartServlet extends HttpServlet{
+    String realPath = getServletContext().getRealPath("Database/Cart.csv");
+
     private int client_id = 1;                                      //Temporarily set the client id to 1, will connect with log in client id
     ArrayList<Cart> carts = new ArrayList<Cart>();                  //Stores data from Cart list
     Cart client_cart = new Cart();                                        //Stores data of the logged in client
     ArrayList<Product> products = Global.getProductList();          //Stores Products data of the system
     ArrayList<Product> cart_products = new ArrayList<Product>();    //Stores Products that is within the logged in client's cart
-
 
     //Destroy the carts to prevent stacking of data in repeating request
     public void destroyCart(){
@@ -44,7 +46,7 @@ public class CartServlet extends HttpServlet{
 
         //Create a cart for a client, should be modified into reading from csv
         try {
-            Global.loadCart(products, carts, client_cart, cart_products, client_id);
+            Cart.loadCart(products, carts, client_cart, cart_products, client_id);
         } catch (CsvValidationException e) {
             throw new RuntimeException(e);
         }
@@ -60,18 +62,15 @@ public class CartServlet extends HttpServlet{
         JSONArray jsonArray = new JSONArray();
 
         try {
+
             int i = 0;
             for (Product product : cart_products) {
-
                 // create JSON object for each item
                 JSONObject jsonObject = new JSONObject();
-                JSONArray tagArray = new JSONArray();
 
+                jsonObject.put("productID", product.getProduct_sku().trim());
                 jsonObject.put("image", product.getProduct_src());
                 jsonObject.put("product", product.getProduct_name());
-
-                for(String tag: product.getProduct_tags())
-                    tagArray.put(tag);
 
                 jsonObject.put("tag", product.getProduct_itemCategory());
                 jsonObject.put("price", product.getProduct_price());
@@ -97,6 +96,62 @@ public class CartServlet extends HttpServlet{
         }
 
         destroyCart();
+    }
+
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // CORS headers
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+
+        response.setContentType("application/json");
+        PrintWriter out = response.getWriter();
+
+        //read request and store in temporary string
+        BufferedReader reader = request.getReader();
+        StringBuilder json = new StringBuilder();
+        String line;
+
+        while ((line = reader.readLine()) != null) {
+            json.append(line);
+        }
+
+        try {
+            JSONObject jsonObject = new JSONObject(json.toString());
+            String action = jsonObject.getString("action"); // Get the action identifier
+            System.out.println("Received JSON: " + jsonObject);
+            switch (action) {
+                case "updateQuantity":
+                    client_cart.updateCart(
+                            jsonObject.getString("productId"),
+                            jsonObject.getInt("quantity"),
+                            carts,
+                            client_cart
+                    );
+
+                    break;
+
+                default:
+                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                    response.getWriter().write("Invalid action!");
+                    break;
+            }
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("Error processing request!");
+        }
+
+    }
+
+    @Override
+    protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Allow CORS from localhost:3001
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+
+        // Respond with status OK for preflight request
+        response.setStatus(HttpServletResponse.SC_OK);
     }
 
     public void destroy() {

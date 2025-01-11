@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import './Cartlist.css';
 
 
-const Cartlist = ({imageSrc, itemName, tags, price, quantity, changeQuantity}) => {
+const Cartlist = ({productID, imageSrc, itemName, tags, price, quantity, changeQuantity}) => {
     //setStatus function for button
     const [SelectedStatus, setStatus] = useState("NotSelected");
 
@@ -19,11 +19,11 @@ const Cartlist = ({imageSrc, itemName, tags, price, quantity, changeQuantity}) =
 
     //Add and Subtract Quantity
     const SubCart = () => {
-        changeQuantity(itemName, quantity-1);
+        changeQuantity(productID, itemName, quantity-1);
     }
 
     const AddCart = () => {
-        changeQuantity(itemName, quantity+1);
+        changeQuantity(productID, itemName, quantity+1);
     }
     
     return (

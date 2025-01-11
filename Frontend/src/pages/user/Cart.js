@@ -6,10 +6,6 @@ import { useNavigate } from "react-router-dom";
 
 function Cart() {
   const [Carts , setCarts] = useState([]);
-    // [
-    //     { image: "/Images/cart.jpg",product: "Chair", tag: ["this holiao","this super holiao"], price:"66.66", quantity: 7},
-    //     { image: "/Images/cart.jpg",product: "Table", tag: ["this holiao"], price:"56.66", quantity: 99},
-    // ]
 
   //test backend only, working dy, just need pass whole cart list
     useEffect(() => {
@@ -30,14 +26,28 @@ function Cart() {
     }, []);
 
   //To handle change in cart quantity
-  const handleQuantityChange = (product, newQuantity) => {
+  const handleQuantityChange = async (id, product, newQuantity) => {
     setCarts((initialCarts) =>
       initialCarts.map((cart) =>
         cart.product === product ? { ...cart, quantity: newQuantity } : cart
       )
     );
+
+    //Update the cart quantity in backend
+      const response = await fetch('http://localhost:8080/cat201_project_war_exploded/Cart-servlet', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+              action: 'updateQuantity',
+              productId: id,
+              quantity: newQuantity,
+          }),
+      }
+    );
   };
-  
+
   const navigate = useNavigate();
 
   return (
@@ -45,6 +55,7 @@ function Cart() {
           <div className='ItemList'>
               {Carts.length === 0? "no cart" : Carts.map((cart) => (
                   <Cartlist
+                      productID={cart.productID}
                       imageSrc={cart.image}
                       itemName={cart.product}
                       tags={cart.tag}
