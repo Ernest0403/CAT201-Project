@@ -1,4 +1,5 @@
 import './ManageProducts.css';
+import Validation from "../../utils/Validation";
 import { useState, useEffect } from 'react';
 
 const ManageProducts = () => {
@@ -30,7 +31,7 @@ const ManageProducts = () => {
   const [displayTable, setDisplayTable] = useState(true);
   const [isAddingProduct, setIsAddingProduct] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [editingItemId, setEditingItemId] = useState(null);
+  const [editingItemSku, setEditingItemSku] = useState(null);
 
   useEffect(() => {
     fetch('http://localhost:8080/cat201_project_war/AdminProduct-servlet')
@@ -50,20 +51,20 @@ const ManageProducts = () => {
       : items;
 
   const handleQuantityEditClick = (item) => {
-    setEditingItemId(item.id);
+    setEditingItemSku(item.product_sku);
   };
 
   const handleQuantityChange = (e, itemId) => {
     const updatedQuantity = e.target.value;
     setItems((prevItems) =>
         prevItems.map((item) =>
-            item.id === itemId ? { ...item, quantity: updatedQuantity } : item
+            item.product_sku === itemId ? { ...item, product_quantity: updatedQuantity } : item
         )
     );
   };
 
   const handleQuantityBlur = () => {
-    setEditingItemId(null);
+    setEditingItemSku(null);
   };
 
   const handleEditClick = (item) => {
@@ -85,6 +86,12 @@ const ManageProducts = () => {
   };
 
   const handleSave = async () => {
+    if (Validation.validateProduct(editFormData)) {
+      console.log("Product data is valid!");
+    } else {
+      console.log("Product validation failed.");
+      return;
+    }
 
     const isSkuUnique = items.every(item => item.product_sku !== editFormData.product_sku || item.product_sku === originalSku);
 
@@ -151,7 +158,13 @@ const ManageProducts = () => {
   };
 
   const handleAdd = async () => {
-    console.log(editFormData.toString());
+    if (Validation.validateProduct(editFormData)) {
+      console.log("Product data is valid!");
+    } else {
+      console.log("Product validation failed.");
+      return;
+    }
+
     if(editFormData.product_sku == null || editFormData.product_sku === '')
     {
       alert("Please enter SKU value");
@@ -223,18 +236,18 @@ const ManageProducts = () => {
                           <td>{item.product_name}</td>
                           <td>
                             Stock:{' '}
-                            {editingItemId === item.id ? (
+                            {editingItemSku === item.product_sku ? (
                                 <input
                                     type="number"
-                                    value={item.quantity}
-                                    onChange={(e) => handleQuantityChange(e, item.id)}
+                                    value={item.product_quantity}
+                                    onChange={(e) => handleQuantityChange(e, item.product_sku)}
                                     onBlur={handleQuantityBlur}
                                     autoFocus
                                     className="quantityInput"
                                 />
                             ) : (
                                 <>
-                                  {item.quantity}{' '}
+                                  {item.product_quantity}{' '}
                                   <input
                                       type="button"
                                       value="+/-"
