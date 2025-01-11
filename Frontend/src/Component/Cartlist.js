@@ -39,15 +39,18 @@ const Cartlist = ({imageSrc, itemName, tags, price, quantity, changeQuantity}) =
             <div className="CartItemDetails">
                 <div className="CartItemName">{itemName}</div>
                 <div className="CartTagGroup">
-                {tags.map((tag, index) => (
-                    <div className="CartTag" key={index}>
-                        {tag}
+                    {/*{tags.map((tag, index) => (*/}
+                    {/*    <div className="CartTag" key={index}>*/}
+                    {/*        {tag}*/}
+                    {/*    </div>*/}
+                    {/*    ))}*/}
+                    <div className="CartTag">
+                        {tags}
                     </div>
-                    ))}
                 </div>
                 <div className="CartItemQuantity">
                     <div>
-                        Quantity:
+                    Quantity:
                     </div>
                     <div className="CartAmountOption">
                         <button className="SubCart" onClick={SubCart}>-</button>

@@ -73,7 +73,7 @@ public class CartServlet extends HttpServlet{
                 for(String tag: product.getProduct_tags())
                     tagArray.put(tag);
 
-                jsonObject.put("tag", tagArray);
+                jsonObject.put("tag", product.getProduct_itemCategory());
                 jsonObject.put("price", product.getProduct_price());
 
                 if (i < client_cart.getProductListSize()) {
