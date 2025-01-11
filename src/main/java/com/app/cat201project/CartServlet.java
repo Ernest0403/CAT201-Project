@@ -17,13 +17,19 @@ import Class.Global;
 
 @WebServlet(name = "CartServlet", value = "/Cart-servlet")
 public class CartServlet extends HttpServlet{
-    String realPath = getServletContext().getRealPath("Database/Cart.csv");
 
     private int client_id = 1;                                      //Temporarily set the client id to 1, will connect with log in client id
     ArrayList<Cart> carts = new ArrayList<Cart>();                  //Stores data from Cart list
     Cart client_cart = new Cart();                                        //Stores data of the logged in client
     ArrayList<Product> products = Global.getProductList();          //Stores Products data of the system
     ArrayList<Product> cart_products = new ArrayList<Product>();    //Stores Products that is within the logged in client's cart
+    String realPath;
+
+    public void init() throws ServletException {
+        super.init();
+
+        realPath = getServletContext().getRealPath("Database/Cart.csv");
+    }
 
     //Destroy the carts to prevent stacking of data in repeating request
     public void destroyCart(){
@@ -46,7 +52,7 @@ public class CartServlet extends HttpServlet{
 
         //Create a cart for a client, should be modified into reading from csv
         try {
-            Cart.loadCart(products, carts, client_cart, cart_products, client_id);
+            Cart.loadCart(products, carts, client_cart, cart_products, client_id, realPath);
         } catch (CsvValidationException e) {
             throw new RuntimeException(e);
         }
@@ -126,7 +132,8 @@ public class CartServlet extends HttpServlet{
                             jsonObject.getString("productId"),
                             jsonObject.getInt("quantity"),
                             carts,
-                            client_cart
+                            client_cart,
+                            realPath
                     );
 
                     break;

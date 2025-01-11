@@ -91,7 +91,7 @@ public class Cart {
     }
 
     //Update cart if add and subtract are handled in frontend
-    public void updateCart(String product_id, int newQuantity, ArrayList<Cart> carts, Cart client_cart) {
+    public void updateCart(String product_id, int newQuantity, ArrayList<Cart> carts, Cart client_cart, String realPath) {
         for (int i = 0; i < product_list.size(); i++) {
             if (product_list.get(i) == product_id) {
                 quantity_list.set(i, newQuantity);
@@ -100,7 +100,7 @@ public class Cart {
                 removeCart(product_id);
             }
         }
-        updateCartCSV(carts, client_cart);
+        updateCartCSV(carts, client_cart, realPath);
     }
 
     public ArrayList<String> getProduct_id(){
@@ -124,13 +124,12 @@ public class Cart {
                                 ArrayList<Cart> carts,
                                 Cart client_cart,
                                 ArrayList<Product> cart_products,
-                                int client_id) throws IOException, CsvValidationException {
+                                int client_id,
+                                String realPath) throws IOException, CsvValidationException {
         CSVReader reader;
         try {
             reader = new CSVReader(
-                    new FileReader(
-                            Global.class.getClassLoader().getResource("Cart.csv").getPath()
-                    )
+                    new FileReader(realPath)
             );
             System.out.println("File found"); //Found
         } catch (FileNotFoundException e) {
@@ -189,10 +188,10 @@ public class Cart {
         System.out.println("client_cart list shown." + client_cart);
     }
 
-    public void updateCartCSV(ArrayList<Cart> carts, Cart client_cart){
+    public void updateCartCSV(ArrayList<Cart> carts, Cart client_cart, String realPath){
         try (CSVWriter writer = new CSVWriter(
                 new FileWriter(
-                        Global.class.getClassLoader().getResource("Cart2.csv").getPath(), false)
+                        realPath, false)
             )
         ) {
             writer.writeNext(new String[]{"client_id", "sku", "quantity"});
