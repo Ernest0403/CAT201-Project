@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import './Cartlist.css';
 
 
-const Cartlist = ({imageSrc, itemName, tags, price, quantity, changeQuantity}) => {
+const Cartlist = ({productID, imageSrc, itemName, tags, price, quantity, changeQuantity}) => {
     //setStatus function for button
     const [SelectedStatus, setStatus] = useState("NotSelected");
 
@@ -19,11 +19,11 @@ const Cartlist = ({imageSrc, itemName, tags, price, quantity, changeQuantity}) =
 
     //Add and Subtract Quantity
     const SubCart = () => {
-        changeQuantity(itemName, quantity-1);
+        changeQuantity(productID, itemName, quantity-1);
     }
 
     const AddCart = () => {
-        changeQuantity(itemName, quantity+1);
+        changeQuantity(productID, itemName, quantity+1);
     }
     
     return (
@@ -39,15 +39,18 @@ const Cartlist = ({imageSrc, itemName, tags, price, quantity, changeQuantity}) =
             <div className="CartItemDetails">
                 <div className="CartItemName">{itemName}</div>
                 <div className="CartTagGroup">
-                {tags.map((tag, index) => (
-                    <div className="CartTag" key={index}>
-                        {tag}
+                    {/*{tags.map((tag, index) => (*/}
+                    {/*    <div className="CartTag" key={index}>*/}
+                    {/*        {tag}*/}
+                    {/*    </div>*/}
+                    {/*    ))}*/}
+                    <div className="CartTag">
+                        {tags}
                     </div>
-                    ))}
                 </div>
                 <div className="CartItemQuantity">
                     <div>
-                        Quantity:
+                    Quantity:
                     </div>
                     <div className="CartAmountOption">
                         <button className="SubCart" onClick={SubCart}>-</button>
