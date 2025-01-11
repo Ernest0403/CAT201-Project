@@ -1,42 +1,53 @@
 import './ManageProducts.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const ManageProducts = () => {
-  const [items, setItems] = useState([
-    { id: 1, name: 'Item 1', image: 'delete.png', category: 'Category 1', quantity: 10, brand: '', dimension: '', weight: '', color: '', material: '', country: '', arrivalDate: '', warranty: '' },
-    { id: 2, name: 'Item 2', image: 'edit.png', category: 'Category 2', quantity: 5, brand: '', dimension: '', weight: '', color: '', material: '', country: '', arrivalDate: '', warranty: '' },
-  ]);
 
   const emptyProduct = {
-    id: '',
-    name: '',
-    category: '',
-    quantity: 0,
-    brand: '',
-    dimension: '',
-    weight: '',
-    color: '',
-    material: '',
-    country: '',
-    arrivalDate: '',
-    warranty: ''
+    product_sku: '',
+    product_name: '',
+    product_src: '',
+    product_roomCategory: '',
+    product_itemCategory: '',
+    product_brand: '',
+    product_dimension: '',
+    product_weight: '',
+    product_colour: '',
+    product_material: '',
+    product_manufacturer: '',
+    product_arrivalDate: '',
+    product_quantity: 0,
+    product_price: 0.0,
+    product_discount: 0.0,
+    product_warranty: '',
+    product_discountedPrice: '',
+    product_orderVolume: 0
   };
 
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [displayTable, setDisplayTable] = useState(true);
-  const [editingItemId, setEditingItemId] = useState(null);
+  const [items, setItems] = useState([]);
   const [editFormData, setEditFormData] = useState(emptyProduct);
+  const [originalSku, setOriginalSku] = useState(null); // To store the original SKU
+  const [displayTable, setDisplayTable] = useState(true);
   const [isAddingProduct, setIsAddingProduct] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [editingItemId, setEditingItemId] = useState(null);
 
-  const categories = [...new Set(items.map((item) => item.category)), 'Full List'];
+  useEffect(() => {
+    fetch('http://localhost:8080/cat201_project_war/AdminProduct-servlet')
+        .then(response => response.json())
+        .then(data => { console.log(data); setItems(data); })
+        .catch(error => console.error('Error fetching products:', error));
+  }, []);
+
+  const categories = [...new Set(items.map(item => item.product_roomCategory)), 'Full List'];
 
   const handleCategoryClick = (category) => {
     setSelectedCategory(category === 'Full List' ? null : category);
   };
 
   const filteredItems = selectedCategory
-    ? items.filter((item) => item.category === selectedCategory)
-    : items;
+      ? items.filter(item => item.product_roomCategory === selectedCategory)
+      : items;
 
   const handleQuantityEditClick = (item) => {
     setEditingItemId(item.id);
@@ -45,9 +56,9 @@ const ManageProducts = () => {
   const handleQuantityChange = (e, itemId) => {
     const updatedQuantity = e.target.value;
     setItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === itemId ? { ...item, quantity: updatedQuantity } : item
-      )
+        prevItems.map((item) =>
+            item.id === itemId ? { ...item, quantity: updatedQuantity } : item
+        )
     );
   };
 
@@ -57,169 +68,258 @@ const ManageProducts = () => {
 
   const handleEditClick = (item) => {
     setEditFormData(item);
+    setOriginalSku(item.product_sku); // Store the original SKU when editing
     setDisplayTable(false);
   };
-
-  const handleDeleteClick = (id) => {
-    const newItems = items.filter(item => item.id !== id);
-    setItems(newItems);
-  }
-
-  const handleAddProductClick = () => {
-    setIsAddingProduct(true);
-    setEditFormData(emptyProduct); 
-    setDisplayTable(false); 
-  }
 
   const handleFormInputChange = (e) => {
     const { name, value } = e.target;
     setEditFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const handleAddItemClick = () => {
-    if (items.some(item => item.id === editFormData.id)) {
-      alert('This ID already exists. Please choose a different ID.');
-      return;
-    }
-  
-    setItems((prevItems) => [...prevItems, editFormData]);
-  
-    setEditFormData(emptyProduct);
-    setDisplayTable(true);
-    setIsAddingProduct(false);
-  }
-
-  const handleSave = () => {
-    setItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === editFormData.id ? { ...editFormData } : item
-      ));
-    setEditFormData(emptyProduct);
-    setDisplayTable(true);
-  };
-
   const handleCancel = () => {
     setEditFormData(emptyProduct);
+    setOriginalSku(null); // Reset original SKU on cancel
     setDisplayTable(true);
     setIsAddingProduct(false);
   };
 
+  const handleSave = async () => {
+
+    const isSkuUnique = items.every(item => item.product_sku !== editFormData.product_sku || item.product_sku === originalSku);
+
+    if (!isSkuUnique) {
+      alert("SKU must be unique. Please provide a different SKU.");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:8080/cat201_project_war/AdminProduct-servlet", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          originalSku: originalSku, // Send the original SKU
+          updatedProduct: editFormData // Send the updated product details
+        })
+      });
+      console.log(originalSku);
+      if (!response.ok) {
+        throw new Error("Failed to update product.");
+      }
+
+      // Update the local state only if the request was successful
+      const updatedItems = items.map((item) =>
+          item.product_sku === originalSku ? { ...editFormData } : item
+      );
+      setItems(updatedItems);
+      setEditFormData(emptyProduct);
+      setOriginalSku(null); // Reset the original SKU after save
+      setDisplayTable(true);
+    } catch (error) {
+      console.error("Error updating product:", error);
+    }
+  };
+
+  const handleDeleteClick = async (sku) => {
+    try {
+      const response = await fetch(`http://localhost:8080/cat201_project_war/AdminProduct-servlet?product_sku=${sku}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+
+        if (!response.ok) {
+          throw new Error('Failed to delete product.');
+        }
+
+        // Remove the product from the local state
+        const updatedItems = items.filter((item) => item.product_sku !== sku);
+        setItems(updatedItems);
+      } catch (error) {
+        console.error('Error deleting product:', error);
+      }
+
+  };
+
+  const handleAddProductClick = async () => {
+      setIsAddingProduct(true);  // Show the form to add a new product
+      setEditFormData(emptyProduct);  // Reset the form data for the new product
+      setDisplayTable(false);  // Hide the table while adding a new product
+  };
+
+  const handleAdd = async () => {
+    console.log(editFormData.toString());
+    if(editFormData.product_sku == null || editFormData.product_sku === '')
+    {
+      alert("Please enter SKU value");
+      return;
+    }
+
+    const isSkuUnique = items.every(item => item.product_sku !== editFormData.product_sku || item.product_sku === originalSku);
+
+    if (!isSkuUnique) {
+      alert("SKU must be unique. Please provide a different SKU.");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:8080/cat201_project_war/AdminProduct-servlet", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(editFormData)
+      });
+      if (!response.ok) {
+        throw new Error("Failed to add product.");
+      }
+
+      setItems((prevItems) => [...prevItems, editFormData]);
+      setEditFormData(emptyProduct);
+      setDisplayTable(true);
+      setIsAddingProduct(false);
+
+    } catch (error) {
+      console.error("Error adding new product:", error);
+    }
+  }
+
+
   return (
-    <div className='manageContainer'>
-      {displayTable ? (
-        <>
-          <table>
-            <thead>
-              <tr>
-                <td colSpan='5'>
-                <div>
-                  {categories.map((category) => (
-                    <button
-                      key={category}
-                      type="button"
-                      onClick={() => handleCategoryClick(category)}
-                      className={selectedCategory === category ? 'selected-category' : ''}
-                    >
-                      {category}
-                    </button>
-                  ))}
-                </div>
-                </td>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredItems.length === 0 ? (
+      <div className='manageContainer'>
+        {displayTable ? (
+            <>
+              <table>
+                <thead>
                 <tr>
-                  <td colSpan="5">No items available in this category.</td>
+                  <td colSpan='5'>
+                    <div>
+                      {categories.map((category) => (
+                          <button
+                              key={category}
+                              type="button"
+                              onClick={() => handleCategoryClick(category)}
+                              className={selectedCategory === category ? 'selected-category' : ''}
+                          >
+                            {category}
+                          </button>
+                      ))}
+                    </div>
+                  </td>
                 </tr>
-              ) : (
-                filteredItems.map((item) => (
-                  <tr key={item.id}>
-                    <td className='border-left'>{item.id}</td>
-                    <td>{item.name}</td>
-                    <td>
-                      Stock:{' '}
-                      {editingItemId === item.id ? (
-                        <input
-                          type="number"
-                          value={item.quantity}
-                          onChange={(e) => handleQuantityChange(e, item.id)}
-                          onBlur={handleQuantityBlur}
-                          autoFocus
-                          className="quantityInput"
-                        />
-                      ) : (
-                        <>
-                          {item.quantity}{' '}
-                          <input
-                            type="button"
-                            value="+/-"
-                            className="quantityButton"
-                            onClick={() => handleQuantityEditClick(item)}
-                          />
-                        </>
-                      )}
-                    </td>
-                    <td>
-                      <button type="button" onClick={() => handleEditClick(item)}>
-                        <img src="/Images/edit.png" alt="Edit" />
-                      </button>
-                    </td>
-                    <td className='border-right'>
-                      <button type="button" onClick={() => handleDeleteClick(item.id)} >
-                        <img src="/Images/delete.png" alt="Delete" />
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-          <button className='btnContainer' type='button' onClick={handleAddProductClick}>
-            Add Product
-          </button>
-        </>
-      ) : (
-        <div className="edit-form">
-          <form>
-            {Object.entries(editFormData).map(([key, value]) => (
-              <div key={key} className="selection-container">
-                <label htmlFor={key}>{key}:</label>
-                <input
-                  type={key === 'arrivalDate' ? 'date' : key === 'image' ? 'file' : 'text'}
-                  id={key}
-                  name={key}
-                  value={key !== 'image' ? value : undefined}
-                  onChange={handleFormInputChange}
-                />
-                {key === 'dimension' ? (
-                  <label>cm</label>
-                ) : key === 'weight' ? (
-                  <label>kg</label>
-                ) : key === 'warranty' ? (
-                  <label>year</label>
+                </thead>
+                <tbody>
+                {filteredItems.length === 0 ? (
+                    <tr>
+                      <td colSpan="5">No items available in this category.</td>
+                    </tr>
                 ) : (
-                  ''
+                    filteredItems.map((item) => (
+                        <tr key={item.product_sku}>
+                          <td className='border-left'>{item.product_sku}</td>
+                          <td>{item.product_name}</td>
+                          <td>
+                            Stock:{' '}
+                            {editingItemId === item.id ? (
+                                <input
+                                    type="number"
+                                    value={item.quantity}
+                                    onChange={(e) => handleQuantityChange(e, item.id)}
+                                    onBlur={handleQuantityBlur}
+                                    autoFocus
+                                    className="quantityInput"
+                                />
+                            ) : (
+                                <>
+                                  {item.quantity}{' '}
+                                  <input
+                                      type="button"
+                                      value="+/-"
+                                      className="quantityButton"
+                                      onClick={() => handleQuantityEditClick(item)}
+                                  />
+                                </>
+                            )}
+                          </td>
+                          <td>
+                            <button type="button" onClick={() => handleEditClick(item)}>
+                              <img src="/Images/edit.png" alt="Edit"/>
+                            </button>
+                          </td>
+                          <td className='border-right'>
+                            <button type="button" onClick={() => handleDeleteClick(item.product_sku)}>
+                              <img src="/Images/delete.png" alt="Delete"/>
+                            </button>
+                          </td>
+                        </tr>
+                    ))
                 )}
-              </div>
-            ))}
-            <div className="form-actions">
-            {isAddingProduct ?
-             <button type="button" onClick={handleAddItemClick} className="saveorcancelbtn">
+                </tbody>
+              </table>
+              <button className='btnContainer' type='button' onClick={handleAddProductClick}>
                 Add Product
               </button>
-               : <button type="button" onClick={handleSave} className="saveorcancelbtn">
-               Save Changes
-             </button>}
-              
-              <button type="button" onClick={handleCancel} className="saveorcancelbtn">
-                Cancel
-              </button>
+            </>
+        ) : (
+            <div className="edit-form">
+            <form>
+              {Object.entries(editFormData).map(([key, value]) => (
+                  <div key={key} className="selection-container">
+                    <label htmlFor={key}>{key}:</label>
+                    {key === 'product_src' ? (
+                        <input
+                            type="file"
+                            id={key}
+                            name={key}
+                            onChange={handleFormInputChange} // handle file change separately
+                        />
+                    ) : key === 'product_arrivalDate' ? (
+                        <input
+                            type="date"
+                            id={key}
+                            name={key}
+                            value={value}
+                            onChange={handleFormInputChange}
+                        />
+                    ) : (
+                        <input
+                            type="text"
+                            id={key}
+                            name={key}
+                            value={value}
+                            onChange={handleFormInputChange}
+                        />
+                    )}
+                    {key === 'product_dimension' ? (
+                        <label>cm</label>
+                    ) : key === 'product_weight' ? (
+                        <label>kg</label>
+                    ) : key === 'product_warranty' ? (
+                        <label>year</label>
+                    ) : null}
+                  </div>
+              ))}
+
+              <div className="form-actions">
+                <button
+                    type="button"
+                    onClick={isAddingProduct ? handleAdd : handleSave}
+                    className="saveorcancelbtn"
+                >
+                  {isAddingProduct ? "Add Product" : "Save Changes"}
+                </button>
+
+                <button type="button" onClick={handleCancel} className="saveorcancelbtn">
+                  Cancel
+                </button>
+              </div>
+            </form>
             </div>
-          </form>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
   );
 };
 
