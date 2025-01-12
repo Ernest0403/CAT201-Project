@@ -16,7 +16,27 @@ public class CheckSessionServlet extends HttpServlet {
             throws IOException {
         response.setContentType("application/json");
         response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Methods", "GET");
+        response.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type");
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+
+        HttpSession session = request.getSession(false);
+        PrintWriter out = response.getWriter();
+
+        if (session == null || session.getAttribute("username") == null) {
+            out.write("{\"status\":\"error\",\"message\":\"User not logged in.\"}");
+        } else {
+            String username = (String) session.getAttribute("username");
+            out.write("{\"status\":\"success\",\"username\":\"" + username + "\"}");
+        }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+        response.setContentType("application/json");
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type");
         response.setHeader("Access-Control-Allow-Credentials", "true");
 
