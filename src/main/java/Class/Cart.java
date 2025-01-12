@@ -7,6 +7,7 @@ import com.opencsv.exceptions.CsvValidationException;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 
 public class Cart {
     private int client_id;
@@ -49,7 +50,7 @@ public class Cart {
         }
     }
 
-    //Add to cart
+    //add changes to cart
     public void addCart(String product_id, int quantity) {
         if(product_list.size() == 0){
             product_list.add(product_id);
@@ -75,34 +76,34 @@ public class Cart {
     public void removeCart(String product_id) {
         for(int i = 0; i < product_list.size(); i++)
         {
-            product_list.remove(i);
-            quantity_list.remove(i);
+            if(product_list.get(i).equals(product_id)){
+                product_list.remove(i);
+                quantity_list.remove(i);
+            }
         }
     }
 
-    //Subtract from cart
-    public void subtractCart(String product_id, int quantity) {
-        for (int i = 0; i < product_list.size(); i++) {
-            if (product_list.get(i) == product_id) {
-                quantity_list.set(i, quantity_list.get(i) - quantity);
-            }
-            if (quantity_list.get(i) == 0) {
-                removeCart(product_id);
-            }
-        }
-    }
 
     //Update cart if add and subtract are handled in frontend
-    public void updateCart(String product_id, int newQuantity, ArrayList<Cart> carts, Cart client_cart, String realPath) {
-        for (int i = 0; i < product_list.size(); i++) {
-            if (product_list.get(i) == product_id) {
-                quantity_list.set(i, newQuantity);
-            }
-            if (quantity_list.get(i) == 0) {
-                removeCart(product_id);
+    public void updateCart(String product_id, int newQuantity, ArrayList<Cart> carts, Cart client_cart) {
+        System.out.println("Update product_id" + product_id);
+        System.out.println("New quantity from JSON" + newQuantity);
+
+        for (int i = 0; i < client_cart.product_list.size(); i++) {
+            System.out.println("Looping product_id" + client_cart.product_list.get(i));
+            //This if not executed
+            if (Objects.equals(client_cart.product_list.get(i), product_id)) {
+                int quantityDiff = newQuantity - client_cart.quantity_list.get(i) ;
+                client_cart.addCart(product_list.get(i), quantityDiff);
+
+                if (newQuantity == 0) {
+                    removeCart(product_id);
+                }
+                break;
             }
         }
-        updateCartCSV(carts, client_cart, realPath);
+
+        updateCartCSV(carts, client_cart);
     }
 
     public ArrayList<String> getProduct_id(){
@@ -128,6 +129,9 @@ public class Cart {
                                 ArrayList<Product> cart_products,
                                 int client_id,
                                 String realPath) throws IOException, CsvValidationException {
+        carts.clear();
+        cart_products.clear();
+
         CSVReader reader;
         try {
             reader = new CSVReader(
@@ -190,25 +194,35 @@ public class Cart {
         System.out.println("client_cart list shown." + client_cart);
     }
 
-    public void updateCartCSV(ArrayList<Cart> carts, Cart client_cart, String realPath){
+    //Need to refresh the cart once its quantity is zero
+    public void updateCartCSV(ArrayList<Cart> carts, Cart client_cart){
         try (BufferedWriter writer = new BufferedWriter(
                 new FileWriter(
-                        externalCsvPath, true)
+                        externalCsvPath, false)
             )
         ) {
-//            writer.write(",");
+            writer.write("\"client_id\",\"sku\",\"quantity\"");
+            writer.newLine();
+            writer.flush();
+
+            System.out.println(carts.get(1).getClient_id());
             for (Cart cart : carts) {
+                System.out.println("Total of client carts");
                 if (cart.getClient_id() == client_cart.getClient_id()) {
                     cart.setCart(client_cart);
                     int i = 0;
                     for(String product_id : cart.getProduct_id()){
                         writer.write(String.join(",",
                                 new String[]{
-                                String.valueOf(client_cart.getClient_id()),
+                                String.valueOf(cart.getClient_id()),
                                 product_id,
-                                String.valueOf(client_cart.getQuantity(i))
-                            }
-                        ));
+                                String.valueOf(cart.getQuantity(i))
+                            })
+
+                        );
+                        writer.newLine();
+                        writer.flush();
+                        System.out.println("Current login client carts");
                         i++;
                     }
                 }
@@ -217,11 +231,14 @@ public class Cart {
                     for(String product_id : cart.getProduct_id()){
                         writer.write(String.join(",",
                                 new String[]{
-                                        String.valueOf(client_cart.getClient_id()),
+                                        String.valueOf(cart.getClient_id()),
                                         product_id,
-                                        String.valueOf(client_cart.getQuantity(i))
+                                        String.valueOf(cart.getQuantity(i))
                                 }
                         ));
+                        writer.newLine();
+                        writer.flush();
+                        System.out.println("Other client carts");
                         i++;
                     }
                 }
