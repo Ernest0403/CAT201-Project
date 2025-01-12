@@ -21,21 +21,16 @@ public class FavouriteServlet extends HttpServlet {
     private int client_id = 1;
     ArrayList<Favourite> favouriteList = new ArrayList<Favourite>();                  //Stores data from Cart list
     Favourite client_fav = new Favourite();                                        //Stores data of the logged in client
-    ArrayList<Product> products = Global.getProductList();          //Stores Products data of the system
+    ArrayList<Product> products;          //Stores Products data of the system
     ArrayList<Product> fav_products = new ArrayList<Product>();//Temporarily set the client id to 1, will connect with log in client id
     String realPath;
 
     public void init() throws ServletException {
         super.init();
+        String productRealPath = getServletContext().getRealPath("Database/catProjectDataset.csv");
+        products = Global.getProductList(productRealPath);
         realPath = getServletContext().getRealPath("Database/Favourite.csv");
         Favourite.setExternalCsvPath(realPath);
-    }
-
-    //Destroy the carts to prevent stacking of data in repeating request
-    public void destroyCart(){
-        favouriteList = new ArrayList<Favourite>();
-        client_fav = new Favourite();
-        fav_products = new ArrayList<Product>();
     }
 
     //Return logged in client Cart details
@@ -87,7 +82,7 @@ public class FavouriteServlet extends HttpServlet {
 
             // Write JSON to response
             jsonResponse.put("favProducts", jsonArray);
-            System.out.println(jsonResponse.toString());
+            System.out.println(jsonResponse);
             response.setStatus(HttpServletResponse.SC_OK);
             response.getWriter().write(jsonResponse.toString());
         } catch (Exception e) {
@@ -96,7 +91,6 @@ public class FavouriteServlet extends HttpServlet {
             response.getWriter().write("{\"error\": \"Internal server error occurred.\"}");
         }
 
-        destroyCart();
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -106,7 +100,6 @@ public class FavouriteServlet extends HttpServlet {
         response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
         response.setContentType("application/json");
-        PrintWriter out = response.getWriter();
 
         //read request and store in temporary string
         BufferedReader reader = request.getReader();
@@ -116,6 +109,29 @@ public class FavouriteServlet extends HttpServlet {
         while ((line = reader.readLine()) != null) {
             json.append(line);
         }
+
+        try {
+            JSONObject jsonObject = new JSONObject(json.toString());
+            String action = jsonObject.getString("action").trim(); // Get the action identifier
+            System.out.println("Received JSON: " + jsonObject);
+            switch (action) {
+                case "removeFav":
+                    Favourite.removeFavCSV(favouriteList,
+                            client_fav,
+                            jsonObject.getString("productId").trim());
+                    System.out.println("Favourite removed");
+                    break;
+
+                default:
+                    response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                    response.getWriter().write("Invalid action!");
+                    break;
+            }
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("Error processing request!");
+        }
+
 
     }
 

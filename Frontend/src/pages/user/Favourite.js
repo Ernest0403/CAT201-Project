@@ -4,27 +4,43 @@ import React, {useEffect, useState} from 'react';
 function Favourite() {
     const [Favourites, setFavourites] = useState([]);
 
-    // [
-    //     { product: "Chair", tag: ["this holiao","this super holiao"], price:"RM 66.66"},
-    //     { product: "Noob Chair", tag: ["this soso","dun buy this"], price:"RM 87.87"},
-    // ]
-
-    useEffect(() => {
-        fetch("http://localhost:8080/cat201_project_war_exploded/Favourite-servlet")
+    const fetchFavData = () => {
+        fetch("http://localhost:8080/cat201_project_war/Favourite-servlet")
             .then((response) => {
                 if (!response.ok) {
                     throw new Error(`Network response was not ok: ${response.status}`);
                 }
-                return response.json(); // Parse JSON from response
+                return response.json();
             })
             .then((data) => {
-                console.log("Fetched favProducts:", data); // Log the data to check
-                setFavourites(data.favProducts); // Set the state with the fetched data
+                console.log("Fetched favProducts:", data);
+                setFavourites(data.favProducts);
             })
             .catch((error) => {
                 console.error("Error fetching favProducts:", error);
             });
+    }
+
+    //Fetch data from csv
+    useEffect(() => {
+        fetchFavData();
     }, []);
+
+    //fetch data to csv (remove fav)
+    const removeFav = async (id) => {
+        await fetch('http://localhost:8080/cat201_project_war/Favourite-servlet', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    action: 'removeFav',
+                    productId: id,
+                }),
+            }
+        );
+        fetchFavData();
+    }
 
     return (
         <div>
@@ -45,7 +61,7 @@ function Favourite() {
                                 {fav.tag}
                             </div>
                         </div>
-                        <button className="RemoveCart">Remove</button>
+                        <button className="RemoveCart" onClick={() => removeFav(fav.productID)}>Remove</button>
                     </div>
                 <div className="CartItemPrice">
                         <div>Price</div>

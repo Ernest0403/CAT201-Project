@@ -3,9 +3,7 @@ package Class;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -67,6 +65,9 @@ public class Favourite {
                                 Favourite client_fav,
                                 ArrayList<Product> fav_products,
                                 int client_id) throws IOException, CsvValidationException {
+        favList.clear();
+        fav_products.clear();
+
         CSVReader reader;
         try {
             reader = new CSVReader(
@@ -127,4 +128,55 @@ public class Favourite {
         System.out.println("client_fav list shown." + client_fav);
     }
 
+    public static void writeFav(ArrayList<Favourite> favList, Favourite client_fav){
+        try (BufferedWriter writer = new BufferedWriter(
+                new FileWriter(
+                        externalCsvPath, false)
+            )
+        ){
+            writer.write("\"client_id\",\"sku\"");
+            writer.newLine();
+
+            for (Favourite fav : favList) {
+                System.out.println("Total of client favs");
+                if (fav.getClient_id() == client_fav.getClient_id()) {
+                    fav.setFavourite(client_fav);
+                    int i = 0;
+                    for(String product_id : fav.getProduct_list()){
+                        writer.write(String.join(",",
+                                new String[]{
+                                        String.valueOf(fav.getClient_id()),
+                                        product_id
+                                })
+
+                        );
+                        writer.newLine();
+                        System.out.println("Current login client favs");
+                        i++;
+                    }
+                }
+                else{
+                    int i = 0;
+                    for(String product_id : fav.getProduct_list()){
+                        writer.write(String.join(",",
+                                new String[]{
+                                        String.valueOf(fav.getClient_id()),
+                                        product_id
+                                }
+                        ));
+                        writer.newLine();
+                        System.out.println("Other client favs");
+                        i++;
+                    }
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void removeFavCSV(ArrayList<Favourite> favList, Favourite client_fav, String product_id){
+        client_fav.removeFavourite(product_id);
+        writeFav(favList, client_fav);
+    }
 }

@@ -35,14 +35,6 @@ public class CartServlet extends HttpServlet{
 
     }
 
-    //Destroy the carts to prevent stacking of data in repeating request
-    public void destroyCart(){
-        // Need to clear the content so it wont stack on the next request
-        carts = new ArrayList<Cart>();
-        client_cart = new Cart();
-        cart_products = new ArrayList<Product>();
-    }
-
     //Return logged in client Cart details
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Enable CORS headers
