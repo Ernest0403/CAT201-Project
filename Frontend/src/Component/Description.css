@@ -153,13 +153,18 @@ li {
   object-fit: cover;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     .related-products-grid {
         justify-content: center;
     }
 
     .desc-container {
         justify-content: center;
+        flex-direction: column;
+    }
+
+    .product-image {
+        width: 100%;
     }
 }
   

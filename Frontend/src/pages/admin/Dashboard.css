@@ -1,0 +1,86 @@
+.dashboard {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+p {
+    color: #555;
+    margin-bottom: 20px;
+}
+
+/* Notifications */
+.notifications h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.notifications ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.notification-item {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.notification-item.read {
+    background: #e8f5e9;
+    color: #4caf50;
+}
+
+.mark-as-read-btn {
+    background: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.mark-as-read-btn:hover {
+    background: #45a049;
+}
+
+.read-label {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #4caf50;
+}
+
+/* Chart Section */
+.chart-section {
+    margin: 20px 0;
+}
+
+.chart-controls {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.chart-controls label {
+    margin-right: 10px;
+}
+
+.chart-container {
+    height: 400px; /* Set a larger height for 12 months */
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+

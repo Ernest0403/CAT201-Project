@@ -1,7 +1,7 @@
 // Sidebar.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './Sidebar.css'; 
+import './Sidebar.css';
 
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -21,29 +21,29 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="admin-sidebar">
-      <ul>
-        <li><button onClick={() => navigate('/dashboard')}>Dashboard</button></li>
-        <li><button onClick={() => navigate('/manage-products')}>Manage Product</button></li>
-        <li><button onClick={() => navigate('/manage-orders')}>Manage Orders</button></li>
-        <li><button onClick={() => navigate('/promotions')}>Setting Promotions or Discounts</button></li>
-        <li><button onClick={() => navigate('/customer-service')}>Handling Customer Service Requests</button></li>
-        <li><button className="logout" onClick={handleLogout}>Log Out</button></li>
-      </ul>
+      <div className="admin-sidebar">
+        <ul>
+          <li><button onClick={() => navigate('/dashboard')}>Dashboard</button></li>
+          <li><button onClick={() => navigate('/manage-products')}>Manage Product</button></li>
+          <li><button onClick={() => navigate('/manage-orders')}>Manage Orders</button></li>
+          <li><button onClick={() => navigate('/promotions')}>Setting Promotions or Discounts</button></li>
+          <li><button onClick={() => navigate('/customer-service')}>Handling Customer Service Requests</button></li>
+          <li><button className="logout" onClick={handleLogout}>Log Out</button></li>
+        </ul>
 
-      {showPopup && (
-        <div className="PopupOverlay">
-          <div className="PopupBox">
-            <h3>Confirm Logout</h3>
-            <p>Are you sure you want to log out?</p>
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
-              <button className="confirm-button" onClick={confirmLogout}>Yes</button>
-              <button className="cancel-button" onClick={cancelLogout}>No</button>
+        {showPopup && (
+            <div className="PopupOverlay">
+              <div className="PopupBox">
+                <h3>Confirm Logout</h3>
+                <p>Are you sure you want to log out?</p>
+                <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
+                  <button className="confirm-button" onClick={confirmLogout}>Yes</button>
+                  <button className="cancel-button" onClick={cancelLogout}>No</button>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
   );
 };
 

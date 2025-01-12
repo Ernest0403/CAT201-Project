@@ -28,6 +28,22 @@
   position: sticky;
 }
 
+.sidebar-button {
+  display: inline-flex;
+  background-color: white;
+  color: white;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  align-items: center;
+}
+
+.filter-icon {
+  width: 30px;
+  height: 30px;
+}
+
 .sidebar::-webkit-scrollbar {
   display: none; 
 }
@@ -91,5 +107,18 @@
 
   .sidebar{
     display: none;
+    position: absolute;
+    z-index: 10;
+    top: 510px;
+    left: 110px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* Add shadow here */
+    border-radius: 8px; /* Optional: Add rounded corners */
+  }
+
+  .filter-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
   }
 }

@@ -20,12 +20,14 @@ function ItemListing({ title, categories, roomType, defaultCategory }) {
   const [pageTitle, setPageTitle] = useState(title);
   const [sortOption, setSortOption] = useState("default");
   const [products, setProducts] = useState([]);
+  const [sidebarVisible, setSidebarVisible] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
   const { category } = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
-      fetch('http://localhost:8080/cat201-project/Product-servlet')
+      fetch('http://localhost:8080/cat201_project_war_exploded/Product-servlet')
       .then((response) => response.json())
       .then((data) => setProducts(data)) 
       .catch((error) => console.error("Error fetching products:", error));
@@ -38,6 +40,14 @@ function ItemListing({ title, categories, roomType, defaultCategory }) {
         setSelectedCategory("");
         setPageTitle(title);
       }
+
+      const handleResize = () => {
+        setIsMobile(window.innerWidth <= 768);
+      };
+      window.addEventListener('resize', handleResize);
+      return () => {
+        window.removeEventListener('resize', handleResize);
+      };
     }, [category, title]);
 
   const roomItems = products.filter((item) => item.product_roomCategory === roomType);
@@ -85,11 +95,15 @@ function ItemListing({ title, categories, roomType, defaultCategory }) {
 
   const sortedItems = sortItems(filteredItems);
 
+  const toggleSidebar = () => {
+    setSidebarVisible(!sidebarVisible);
+  };
+
   return (
     <div className="product-container">
       <h1 className="page-title">{pageTitle}</h1>
       <div className="listing-container">
-      <div className="sidebar">
+      <div className="sidebar" style={{ display: (sidebarVisible || !isMobile) ? 'block' : 'none',}}>
         <div className="filter-section">
           <h3>Filter by Price</h3>
           <input
@@ -119,7 +133,17 @@ function ItemListing({ title, categories, roomType, defaultCategory }) {
         </div>
       </div>
       <div className="wrap-content">
+      <div className="filter-container">
+      {isMobile && (
+        <button
+          className="sidebar-button"
+          onClick={toggleSidebar}
+        >
+          <img src="./Images/filter.png" alt="Filter" className="filter-icon" />
+        </button>
+      )}
       <SortBy onSortChange={handleSortChange} />
+      </div>
       <ItemGrid items={sortedItems} />
       </div>
     </div>

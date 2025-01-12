@@ -82,7 +82,6 @@ public class CartServlet extends HttpServlet{
                 jsonObject.put("productID", product.getProduct_sku().trim());
                 jsonObject.put("image", product.getProduct_src());
                 jsonObject.put("product", product.getProduct_name());
-
                 jsonObject.put("tag", product.getProduct_itemCategory());
                 jsonObject.put("price", product.getProduct_price());
 

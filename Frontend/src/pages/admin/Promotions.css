@@ -66,8 +66,15 @@
     background-color: #4caf50; 
     color: white;
   }
-  
-  button.add-button:hover,
+.form-buttons {
+  display: flex;
+  justify-content: flex-start; /* Align buttons to the left */
+  gap: 20px; /* Add spacing between the buttons */
+  margin-top: 15px; /* Optional: Add space above the button group */
+}
+
+
+button.add-button:hover,
   button.save-button:hover {
     background-color: #45a049; 
   }

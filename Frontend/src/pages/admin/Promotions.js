@@ -32,9 +32,9 @@ const Promotions = () => {
   const handleSave = () => {
     if (isEditing !== null) {
       setPromotions(
-        promotions.map((promo) =>
-          promo.id === isEditing ? { ...promo, ...formData } : promo
-        )
+          promotions.map((promo) =>
+              promo.id === isEditing ? { ...promo, ...formData } : promo
+          )
       );
     } else {
       const newPromotion = {
@@ -81,97 +81,99 @@ const Promotions = () => {
   };
 
   return (
-    <div className="promotions">
-      <h1>Promotions</h1>
-      {!isAdding ? (
-        <div>
-          <button className="add-button" onClick={() => setIsAdding(true)}>
-            Add New Promotion
-          </button>
-          <ul className="promotion-list">
-            {promotions.map((promo) => (
-              <li key={promo.id} className="promotion-item">
-                <img src={promo.photo || 'https://via.placeholder.com/150'} alt="Promotion" className="promotion-photo" />
-                <div className="promotion-details">
-                  <h3>{promo.title}</h3>
-                  <p>{promo.description}</p>
-                  <p><strong>Promo Code:</strong> {promo.promoCode}</p>
-                  <p><strong>Expiry Date:</strong> {promo.expiryDate}</p>
-                </div>
-                <div className="promotion-actions">
-                  <button className="edit-button" onClick={() => handleEdit(promo.id)}>Edit</button>
-                  <button className="delete-button" onClick={() => handleDelete(promo.id)}>Delete</button>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ) : (
-        <div className="promotion-form">
-          <label>
-            Photos:
-            <input type="file" onChange={handlePhotoChange} />
-          </label>
-          <label>
-            Promotion Title:
-            <input
-              type="text"
-              name="title"
-              value={formData.title}
-              onChange={handleInputChange}
-            />
-          </label>
-          <label>
-            Description:
-            <textarea
-              name="description"
-              value={formData.description}
-              onChange={handleInputChange}
-            ></textarea>
-          </label>
-          <label>
-            Promo Code:
-            <input
-              type="text"
-              name="promoCode"
-              value={formData.promoCode}
-              onChange={handleInputChange}
-            />
-          </label>
-          <label>
-            Expiry Date:
-            <input
-              type="date"
-              name="expiryDate"
-              value={formData.expiryDate}
-              onChange={handleInputChange}
-            />
-          </label>
-          <button className="save-button" onClick={handleSave}>Save</button>
-          <button className="cancel-button" onClick={() => { setIsAdding(false); setIsEditing(null); }}>Cancel</button>
-        </div>
-      )}
-
-      {confirmation.visible && (
-        <div className="confirmation-popup">
-          <div className="confirmation-popup-content">
-            <p>Are you sure you want to delete the promotion "{confirmation.promoTitle}"?</p>
-            <div className="confirmation-actions" style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
-              <button className="yes-button" onClick={confirmAction}>Yes</button>
-              <button className="no-button" onClick={cancelAction}>No</button>
+      <div className="promotions">
+        <h1>Promotions</h1>
+        {!isAdding ? (
+            <div>
+              <button className="add-button" onClick={() => setIsAdding(true)}>
+                Add New Promotion
+              </button>
+              <ul className="promotion-list">
+                {promotions.map((promo) => (
+                    <li key={promo.id} className="promotion-item">
+                      <img src={promo.photo || 'https://via.placeholder.com/150'} alt="Promotion" className="promotion-photo" />
+                      <div className="promotion-details">
+                        <h3>{promo.title}</h3>
+                        <p>{promo.description}</p>
+                        <p><strong>Promo Code:</strong> {promo.promoCode}</p>
+                        <p><strong>Expiry Date:</strong> {promo.expiryDate}</p>
+                      </div>
+                      <div className="promotion-actions">
+                        <button className="edit-button" onClick={() => handleEdit(promo.id)}>Edit</button>
+                        <button className="delete-button" onClick={() => handleDelete(promo.id)}>Delete</button>
+                      </div>
+                    </li>
+                ))}
+              </ul>
             </div>
-          </div>
-        </div>
-      )}
+        ) : (
+            <div className="promotion-form">
+              <div className="form-group">
+                <label>Photos:</label>
+                <input type="file" onChange={handlePhotoChange} />
+              </div>
+              <div className="form-group">
+                <label>Promotion Title:</label>
+                <input
+                    type="text"
+                    name="title"
+                    value={formData.title}
+                    onChange={handleInputChange}
+                />
+              </div>
+              <div className="form-group">
+                <label>Description:</label>
+                <textarea
+                    name="description"
+                    value={formData.description}
+                    onChange={handleInputChange}
+                ></textarea>
+              </div>
+              <div className="form-group">
+                <label>Promo Code:</label>
+                <input
+                    type="text"
+                    name="promoCode"
+                    value={formData.promoCode}
+                    onChange={handleInputChange}
+                />
+              </div>
+              <div className="form-group">
+                <label>Expiry Date:</label>
+                <input
+                    type="date"
+                    name="expiryDate"
+                    value={formData.expiryDate}
+                    onChange={handleInputChange}
+                />
+              </div>
+              <div className="form-buttons">
+                <button className="save-button" onClick={handleSave}>Save</button>
+                <button className="cancel-button" onClick={() => { setIsAdding(false); setIsEditing(null); }}>Cancel</button>
+              </div>
+            </div>
+        )}
 
-      {message && (
-        <div className="message-popup">
-          <div className="message-popup-content" style={{ textAlign: 'center' }}>
-            <p>{message}</p>
-          </div>
-        </div>
-      )}
-    </div>
+        {confirmation.visible && (
+            <div className="confirmation-popup">
+              <div className="confirmation-popup-content">
+                <p>Are you sure you want to delete the promotion "{confirmation.promoTitle}"?</p>
+                <div className="confirmation-actions" style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
+                  <button className="yes-button" onClick={confirmAction}>Yes</button>
+                  <button className="no-button" onClick={cancelAction}>No</button>
+                </div>
+              </div>
+            </div>
+        )}
+
+        {message && (
+            <div className="message-popup">
+              <div className="message-popup-content" style={{ textAlign: 'center' }}>
+                <p>{message}</p>
+              </div>
+            </div>
+        )}
+      </div>
   );
 };
 
