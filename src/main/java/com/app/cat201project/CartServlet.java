@@ -21,12 +21,14 @@ public class CartServlet extends HttpServlet{
     private int client_id = 1;                                      //Temporarily set the client id to 1, will connect with log in client id
     ArrayList<Cart> carts = new ArrayList<Cart>();                  //Stores data from Cart list
     Cart client_cart = new Cart();                                        //Stores data of the logged in client
-    ArrayList<Product> products = Global.getProductList();          //Stores Products data of the system
+    ArrayList<Product> products;          //Stores Products data of the system
     ArrayList<Product> cart_products = new ArrayList<Product>();    //Stores Products that is within the logged in client's cart
     String realPath;
 
     public void init() throws ServletException {
         super.init();
+        String productRealPath = getServletContext().getRealPath("Database/catProjectDataset.csv");
+        products = Global.getProductList(productRealPath);
         realPath = getServletContext().getRealPath("Database/Cart.csv");
         Cart.setExternalCsvPath(realPath);
         System.out.println("Resolved File Path: " + realPath);
@@ -43,15 +45,15 @@ public class CartServlet extends HttpServlet{
 
     //Return logged in client Cart details
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
         // Enable CORS headers
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type");
-
+        response.setHeader("Access-Control-Allow-Credentials", "true");
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         response.setHeader("Pragma", "no-cache");
         response.setDateHeader("Expires", 0);
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
         //Create a cart for a client, should be modified into reading from csv
         try {
@@ -103,7 +105,9 @@ public class CartServlet extends HttpServlet{
             response.getWriter().write("{\"error\": \"Internal server error occurred.\"}");
         }
 
-        destroyCart();
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            response.setStatus(HttpServletResponse.SC_OK);
+        }
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -126,18 +130,17 @@ public class CartServlet extends HttpServlet{
 
         try {
             JSONObject jsonObject = new JSONObject(json.toString());
-            String action = jsonObject.getString("action"); // Get the action identifier
+            String action = jsonObject.getString("action").trim(); // Get the action identifier
             System.out.println("Received JSON: " + jsonObject);
             switch (action) {
                 case "updateQuantity":
                     client_cart.updateCart(
-                            jsonObject.getString("productId"),
+                            jsonObject.getString("productId").trim(),
                             jsonObject.getInt("quantity"),
                             carts,
-                            client_cart,
-                            realPath
+                            client_cart
                     );
-
+                    System.out.println("Quantity updated");
                     break;
 
                 default:

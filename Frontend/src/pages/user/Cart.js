@@ -8,8 +8,8 @@ function Cart() {
   const [Carts , setCarts] = useState([]);
 
   //backend  pass whole cart list
-    useEffect(() => {
-        fetch("http://localhost:8080/cat201_project_war_exploded/Cart-servlet")
+    const fetchCartData = () => {
+        fetch("http://localhost:8080/cat201_project_war/Cart-servlet")
             .then((response) => {
                 if (!response.ok) {
                     throw new Error(`Network response was not ok: ${response.status}`);
@@ -23,6 +23,10 @@ function Cart() {
             .catch((error) => {
                 console.error("Error fetching cartProducts:", error);
             });
+    };
+
+    useEffect(() => {
+        fetchCartData(); // Fetch data on component mount
     }, []);
 
   //To handle change in cart quantity
@@ -31,10 +35,11 @@ function Cart() {
       initialCarts.map((cart) =>
         cart.product === product ? { ...cart, quantity: newQuantity } : cart
       )
+
     );
 
     //Update the cart quantity in backend
-      const response = await fetch('http://localhost:8080/cat201_project_war_exploded/Cart-servlet', {
+      const response = await fetch('http://localhost:8080/cat201_project_war/Cart-servlet', {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json',
@@ -46,6 +51,10 @@ function Cart() {
           }),
       }
     );
+
+      if (newQuantity === 0) {
+          fetchCartData(); // Trigger fetch if quantity is 0
+      }
   };
 
   const navigate = useNavigate();
