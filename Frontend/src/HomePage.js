@@ -9,7 +9,7 @@ function HomePage() {
   const [items, setItems] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:8080/cat201-project/Product-servlet')
+    fetch('http://localhost:8080/cat201_project_war_exploded/Product-servlet')
       .then((response) => response.json())
       .then((data) => setItems(data))
       .catch((error) => console.error("Error fetching items:", error));
