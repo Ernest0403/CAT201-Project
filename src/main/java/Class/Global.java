@@ -61,3 +61,4 @@ public class Global {
         return discount;
     }
     }
+

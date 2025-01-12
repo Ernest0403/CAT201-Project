@@ -1,6 +1,6 @@
 package Class;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class Product {
     private String product_sku;
@@ -19,9 +19,30 @@ public class Product {
     private float product_price;
     private float product_discount;
     private String product_warranty;
-    private ArrayList<String> product_tags = new ArrayList<>();
     private float product_discountedPrice;
     private int product_orderVolume;
+
+    public Product() {};
+
+    public Product(List<String> values) {
+        this.product_sku = values.get(0);  // SKU
+        this.product_name = values.get(1);  // Product name
+        this.product_src = values.get(2);  // Image URL
+        this.product_roomCategory = values.get(3);  // Room Category
+        this.product_itemCategory = values.get(4);  // Item Category
+        this.product_brand = values.get(5);  // Brand
+        this.product_dimension = values.get(6);  // Dimension
+        this.product_weight = values.get(7);  // Weight
+        this.product_colour = values.get(8);  // Colour
+        this.product_material = values.get(9);  // Material
+        this.product_manufacturer = values.get(10);  // Manufacturer
+        this.product_arrivalDate = values.get(11);  // Arrival Date
+        this.product_quantity = Integer.parseInt(values.get(12));  // Quantity (converted to int)
+        this.product_price = Float.parseFloat(values.get(13).replace("RM", "").trim());  // Price (converted to float)
+        this.product_discount = Float.parseFloat(values.get(14));  // Discount (converted to float)
+        this.product_warranty = values.get(15);  // Warranty
+        this.product_orderVolume = Integer.parseInt(values.get(16));  // Order Volume (converted to int)
+    }
 
     public Product(String sku, String name, String imageURL, String roomCategory, String itemCategory, String brand, String dimension, String weight, String colour, String material, String manufacturer, String arrivalDate, int quantity, float price, float discount, String warranty, int orderVolume) {
         this.product_sku = sku;
@@ -47,14 +68,13 @@ public class Product {
     public Product(String product_id, String product_name,
                    float product_price,
                    int product_quantity,
-                   String product_src,
-                   ArrayList<String> product_tags) {
+                   String product_src
+                  ) {
         this.product_sku = product_id;
         this.product_name = product_name;
         this.product_price = product_price;
         this.product_quantity = product_quantity;
         this.product_src = product_src;
-        this.product_tags = product_tags;
     }
 
     public String getProduct_sku() { return product_sku; }
@@ -105,23 +125,17 @@ public class Product {
     public String getProduct_warranty() { return product_warranty; }
     public void setProduct_warranty(String product_warranty) { this.product_warranty = product_warranty; }
 
-    public ArrayList<String> getProduct_tags() { return product_tags; }
-    public void addProduct_tag(String product_tag) {
-        if (product_tags == null) {
-            product_tags = new ArrayList<>();
-        }
-        product_tags.add(product_tag);
-    }
 
-    public float getDiscountedPrice() {
+
+    public float getProduct_discountedPrice() {
         return product_discountedPrice;
     }
 
-    public void setDiscountedPrice(float discountedPrice) {
+    public void setProduct_discountedPrice(float discountedPrice) {
         this.product_discountedPrice = discountedPrice;
     }
 
-    public int getOrderVolume() {
+    public int getProduct_orderVolume() {
         return product_orderVolume;
     }
 
