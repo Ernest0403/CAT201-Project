@@ -13,14 +13,14 @@ const ItemPage = () => {
   useEffect(() => {
     const fetchProductData = async () => {
       try {
-          const response = await fetch(`http://localhost:8080/cat201-project/Product-servlet?id=${id}`);
+          const response = await fetch(`http://localhost:8080/cat201_project_war_exploded/Product-servlet?id=${id}`);
           const data = await response.json();
 
           const selectedProduct = data.find((product) => product.product_sku === id);
               if (selectedProduct) {
                 setItem(selectedProduct);
 
-                const relatedResponse = await fetch(`http://localhost:8080/cat201-project/Product-servlet?roomCategory=${selectedProduct.product_roomCategory}`);
+                const relatedResponse = await fetch(`http://localhost:8080/cat201_project_war_exploded/Product-servlet?roomCategory=${selectedProduct.product_roomCategory}`);
                 const relatedData = await relatedResponse.json();
 
                 const relatedFiltered = relatedData.filter(
