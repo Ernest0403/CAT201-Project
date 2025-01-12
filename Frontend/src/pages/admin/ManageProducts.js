@@ -1,6 +1,6 @@
+import React, { useState, useEffect } from 'react';
 import './ManageProducts.css';
 import Validation from "../../utils/Validation";
-import { useState, useEffect } from 'react';
 
 const ManageProducts = () => {
 
@@ -27,7 +27,7 @@ const ManageProducts = () => {
 
   const [items, setItems] = useState([]);
   const [editFormData, setEditFormData] = useState(emptyProduct);
-  const [originalSku, setOriginalSku] = useState(null); // To store the original SKU
+  const [originalSku, setOriginalSku] = useState(null);
   const [displayTable, setDisplayTable] = useState(true);
   const [isAddingProduct, setIsAddingProduct] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -69,7 +69,7 @@ const ManageProducts = () => {
 
   const handleEditClick = (item) => {
     setEditFormData(item);
-    setOriginalSku(item.product_sku); // Store the original SKU when editing
+    setOriginalSku(item.product_sku);
     setDisplayTable(false);
   };
 
@@ -80,7 +80,7 @@ const ManageProducts = () => {
 
   const handleCancel = () => {
     setEditFormData(emptyProduct);
-    setOriginalSku(null); // Reset original SKU on cancel
+    setOriginalSku(null);
     setDisplayTable(true);
     setIsAddingProduct(false);
   };
@@ -107,8 +107,8 @@ const ManageProducts = () => {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          originalSku: originalSku, // Send the original SKU
-          updatedProduct: editFormData // Send the updated product details
+          originalSku: originalSku,
+          updatedProduct: editFormData
         })
       });
       console.log(originalSku);
@@ -116,13 +116,14 @@ const ManageProducts = () => {
         throw new Error("Failed to update product.");
       }
 
-      // Update the local state only if the request was successful
+      // update the local state
       const updatedItems = items.map((item) =>
           item.product_sku === originalSku ? { ...editFormData } : item
       );
+
       setItems(updatedItems);
       setEditFormData(emptyProduct);
-      setOriginalSku(null); // Reset the original SKU after save
+      setOriginalSku(null);
       setDisplayTable(true);
     } catch (error) {
       console.error("Error updating product:", error);
@@ -142,7 +143,7 @@ const ManageProducts = () => {
           throw new Error('Failed to delete product.');
         }
 
-        // Remove the product from the local state
+        // remove the product from the local state
         const updatedItems = items.filter((item) => item.product_sku !== sku);
         setItems(updatedItems);
       } catch (error) {
@@ -152,9 +153,9 @@ const ManageProducts = () => {
   };
 
   const handleAddProductClick = async () => {
-      setIsAddingProduct(true);  // Show the form to add a new product
-      setEditFormData(emptyProduct);  // Reset the form data for the new product
-      setDisplayTable(false);  // Hide the table while adding a new product
+      setIsAddingProduct(true);
+      setEditFormData(emptyProduct);
+      setDisplayTable(false);
   };
 
   const handleAdd = async () => {
@@ -199,7 +200,6 @@ const ManageProducts = () => {
       console.error("Error adding new product:", error);
     }
   }
-
 
   return (
       <div className='manageContainer'>
@@ -287,7 +287,7 @@ const ManageProducts = () => {
                             type="file"
                             id={key}
                             name={key}
-                            onChange={handleFormInputChange} // handle file change separately
+                            onChange={handleFormInputChange}
                         />
                     ) : key === 'product_arrivalDate' ? (
                         <input

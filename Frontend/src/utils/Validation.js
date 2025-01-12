@@ -12,7 +12,7 @@ const Validation = {
     },
 
     isValidPositiveNumber: (value) => {
-        return value !== null && value !== undefined && !isNaN(value) && Number(value) > 0;
+        return value !== null && value !== undefined && !isNaN(value) && Number(value) >= 0;
     },
 
     isValidNumber: (value) => {
@@ -24,9 +24,9 @@ const Validation = {
     },
 
     /**
-     * Validate an object based on predefined rules
-     * @param {Object} data - Object containing the fields to validate
-     * @returns {boolean} - Returns true if all fields are valid, otherwise false
+     * validate an object based on predefined rules
+     * @param {Object} data object containing the fields to validate
+     * @returns {boolean} returns true if all fields are valid, otherwise false
      */
     validateProduct: (data) => {
         const rules = {
@@ -62,7 +62,25 @@ const Validation = {
         }
 
         return true;
+    },
+
+    validateOrder: (data) => {
+        const rules = {
+            order_id: "isValidNumber",
+            order_orderNumber: "isValidString",
+            order_status: "isValidString",
+            order_orderDate: "isValidDate",
+        };
+
+        for (const field in rules) {
+            if (!Validation[rules[field]](data[field])) {
+                alert(`Invalid input: ${field.replace(/_/g, ' ')} is not valid.`);
+                return false;
+            }
+        }
+        return true;
     }
+
 };
 
 export default Validation;

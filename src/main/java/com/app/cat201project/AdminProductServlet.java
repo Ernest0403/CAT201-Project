@@ -7,19 +7,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.databind.SerializationFeature;
+
 import java.io.*;
-import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.fasterxml.jackson.databind.SerializationFeature;
-
 import Class.Product;
-
 
 @WebServlet(name = "AdminProductServlet", value = "/AdminProduct-servlet")
 
@@ -35,45 +32,23 @@ public class AdminProductServlet  extends HttpServlet {
     }
 
     public Map<String, Product> importProducts() {
-
-        try {
-
-            // Read the file using BufferedReader
-            BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH));
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
             String line;
-
             reader.readLine();
-
             while ((line = reader.readLine()) != null) {
                 List<String> values = parseCsvLine(line);
-
+                System.out.println(values);
                 if (values.size() == 17) {
-                    String sku = values.get(0);
-                    String name = values.get(1);
-                    String imageURL = values.get(2);
-                    String roomCategory = values.get(3);
-                    String itemCategory = values.get(4);
-                    String brand = values.get(5);
-                    String dimension = values.get(6);
-                    String weight = values.get(7);
-                    String colour = values.get(8);
-                    String material = values.get(9);
-                    String manufacturer = values.get(10);
-                    String arrivalDate = values.get(11);
-                    int quantity = Integer.parseInt(values.get(12));
-                    float price = Float.parseFloat(values.get(13).replace("RM", "").trim());
-                    float discount = Float.parseFloat(values.get(14));
-                    String warranty = values.get(15);
-                    int orderVolume = Integer.parseInt(values.get(16));
 
-                    productMap.put(sku, new Product(sku, name, imageURL, roomCategory, itemCategory, brand, dimension, weight, colour, material, manufacturer, arrivalDate, quantity, price, discount, warranty,orderVolume));
+                    Product product = new Product(values);
+                    productMap.put(product.getProduct_sku(), product);
                 }
             }
             if (productMap.isEmpty()) {
                 System.out.println("No products found in the CSV file.");
             }
         } catch (IOException e) {
-            System.out.println("Error reading the file");
+            System.out.println("Error reading the file: " + e.getMessage());
         }
         return productMap;
     }
@@ -103,7 +78,6 @@ public class AdminProductServlet  extends HttpServlet {
                 ));
             }
             System.out.println("Current working directory: " + System.getProperty("user.dir"));
-
 
         } catch (IOException e) {
             System.out.println("Error writing to the file");
@@ -141,21 +115,9 @@ public class AdminProductServlet  extends HttpServlet {
         return data.replace("\"", "\"\"");
     }
 
-    private static LocalDate parseDate(String dateStr) {
-        if (dateStr == null || dateStr.isEmpty() || dateStr.equals("-")) {
-            return null;
-        }
-        try {
-            return LocalDate.parse(dateStr);
-        } catch (DateTimeParseException e) {
-            System.out.println("Invalid date format: ");
-            return null;
-        }
-    }
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Add CORS headers
+        // add CORS headers
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
@@ -165,51 +127,52 @@ public class AdminProductServlet  extends HttpServlet {
 
         Map<String, Product> products = importProducts(); // Call importProducts directly
 
-        // Convert it to JSON
+        // convert it to JSON
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());  // Register JavaTimeModule
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);  // Disable writing dates as timestamps
         String jsonResponse = objectMapper.writeValueAsString(products.values());
 
-        // Send the JSON response to the frontend of the project
+        // send the JSON response to the frontend
         response.getWriter().write(jsonResponse);
     }
 
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // add CORS headers
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type");
-        response.setContentType("application/json"); // Set the response content type as JSON
+        response.setContentType("application/json");
 
         try {
-            // Read JSON from request body
+            // read JSON from request
             BufferedReader reader = request.getReader();
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.registerModule(new JavaTimeModule()); // Supports LocalDate
 
-            // Parse incoming JSON with originalSku and updatedProduct
+            // parse incoming JSON with originalSku and updatedProduct
             Map<String, Object> incomingData = objectMapper.readValue(reader, Map.class);
             String originalSku = (String) incomingData.get("originalSku");
             Product updatedProduct = objectMapper.convertValue(incomingData.get("updatedProduct"), Product.class);
 
-            // Check if the product exists
+            // check if the product exists
             if (!productMap.containsKey(originalSku)) {
                 response.setStatus(HttpServletResponse.SC_NOT_FOUND);
                 response.getWriter().write("{\"error\": \"Product with SKU " + originalSku + " not found.\"}");
                 return;
             }
 
-            // If SKU is changed, remove the old product and add the new one
+            // if SKU is changed, remove the old product and add the new one
             if (!originalSku.equals(updatedProduct.getProduct_sku())) {
                 productMap.remove(originalSku);  // Remove the product with the original SKU
             }
 
-            // Insert or update the product in the map
+            //  update the product in the map
             productMap.put(updatedProduct.getProduct_sku(), updatedProduct);
             exportProducts(productMap); // Save changes to CSV
 
-            // Return success response
+            // return success response
             response.setStatus(HttpServletResponse.SC_OK);
             response.getWriter().write("{\"message\": \"Product updated successfully.\"}");
         } catch (Exception e) {
@@ -227,18 +190,18 @@ public class AdminProductServlet  extends HttpServlet {
         response.setContentType("application/json"); // Set the response content type as JSON
 
         try {
-            // Read JSON from request body
+            // read JSON from request
             BufferedReader reader = request.getReader();
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.registerModule(new JavaTimeModule());
 
             Product newProduct = objectMapper.readValue(reader, Product.class);
 
-            // Insert or update the product in the map
+            // update the product in the map
             productMap.put(newProduct.getProduct_sku(), newProduct);
             exportProducts(productMap); // Save changes to CSV
 
-            // Return success response
+            // return success response
             response.setStatus(HttpServletResponse.SC_OK);
             response.getWriter().write("{\"message\": \"Product added successfully.\"}");
         } catch (Exception e) {
@@ -250,13 +213,13 @@ public class AdminProductServlet  extends HttpServlet {
 
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // add CORS headers
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type");
         response.setContentType("application/json"); // Set the response content type as JSON
 
         try {
-            // Extract the SKU from the request URL (e.g., /AdminProduct-servlet?sku=12345)
             String sku = request.getParameter("product_sku");
 
             if (sku == null || sku.isEmpty()) {
@@ -265,11 +228,9 @@ public class AdminProductServlet  extends HttpServlet {
                 return;
             }
 
-            // Find and remove the product from the map or database
             Product removedProduct = productMap.remove(sku);
 
             if (removedProduct == null) {
-                // If the product was not found
                 response.setStatus(HttpServletResponse.SC_NOT_FOUND);
                 response.getWriter().write("{\"error\": \"Product not found\"}");
             } else {
@@ -277,7 +238,7 @@ public class AdminProductServlet  extends HttpServlet {
                 System.out.println(productMap);
                 exportProducts(productMap);
 
-                // Send a success response
+                // send a success response
                 response.setStatus(HttpServletResponse.SC_OK);
                 response.getWriter().write("{\"message\": \"Product deleted successfully\"}");
             }
@@ -290,11 +251,11 @@ public class AdminProductServlet  extends HttpServlet {
 
     @Override
     protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Allow cross-origin preflight requests
+        // add CORS headers
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type");
-        response.setStatus(HttpServletResponse.SC_OK); // Status OK for preflight request
+        response.setStatus(HttpServletResponse.SC_OK);
     }
 
 }

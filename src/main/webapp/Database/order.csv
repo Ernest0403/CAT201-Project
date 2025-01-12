@@ -1,0 +1,5 @@
+id,orderNumber,customer_username,customer_contactNumber,customer_address,productIds,quantities,totalItems,productPrice,deliveryFee,assemblyFee,sst,total,paymentType,paymentStatus,cancellationReason,cancellationDate,status,orderDate
+1,ORD001,customer1,123-456-7890,"123 Main St, City, Country","1|2","10|5",2,200,15,10,12,237,Credit Card,Completed,,,"Pending","2024-12-26"
+2,ORD002,customer2,987-654-3210,"456 Elm St, City, Country","3","3",1,75,10,5,7.5,97.5,PayPal,Completed,Item not want i want.,"2024-12-24",Cancelled,"2024-12-25"
+3,ORD003,customer3,212-456-7890,"789 Main St, City, Country",6|7,3|3,2,3000,150,100,12,3262,Credit Card,Completed,,,"Pending","2024-12-26"
+4,ORD004,customer1,123-456-7890,"123 Main St, City, Country",8,1,1,500,100,100,20,720,Credit Card,Completed,Wrong item.,2024-12-24,Pending,2024-12-26
