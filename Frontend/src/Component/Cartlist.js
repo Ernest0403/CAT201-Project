@@ -1,10 +1,16 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import './Cartlist.css';
 
 
 const Cartlist = ({productID, imageSrc, itemName, tags, price, quantity, changeQuantity, setSelected}) => {
     //setStatus function for button
-    const [SelectedStatus, setStatus] = useState("NotSelected");
+    //Use localStorage to keep track on the state changes even after refresh
+    const [SelectedStatus, setStatus] = useState(
+        localStorage.getItem(`SelectedStatus_${productID}`) || "NotSelected");
+
+    useEffect(() => {
+        localStorage.setItem(`SelectedStatus_${productID}`, SelectedStatus);
+    }, [SelectedStatus]);
 
     const changeStatus = async () => {
         if (SelectedStatus !== "NotSelected") {

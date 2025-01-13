@@ -3,7 +3,7 @@
     /* grid-template-columns: 1fr 3fr 5fr 3fr; */
     align-items: center;
     padding: 10px 20px 10px 20px;
-    min-width: 320;
+    min-width: 320px;
     border-width: 1px;
     border-style: solid;
     font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
@@ -115,7 +115,7 @@
     border-style: none;
     border-radius: 25px;
     text-align: center;
-    justify-content: baseline;
+    /*justify-content: baseline;*/
 }
 
 .RemoveCart:hover {
