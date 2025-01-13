@@ -59,6 +59,17 @@ function Cart() {
       }
   };
 
+  //Flag to refresh once an cart is selected or unselected
+    const [newSelected, setNewSelected] = useState(false);
+    const toggleSelected = () => {
+        setNewSelected(true);
+    };
+
+  if(newSelected){
+    setNewSelected(false);
+    fetchCartData();
+  }
+
   const navigate = useNavigate();
 
   return (
@@ -73,6 +84,7 @@ function Cart() {
                       price={cart.price}
                       quantity={cart.quantity? cart.quantity : "None"}
                       changeQuantity={handleQuantityChange}
+                      setSelected={toggleSelected}
                   />
               ))}
           </div>

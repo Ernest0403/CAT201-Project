@@ -14,6 +14,8 @@ public class Cart {
     private ArrayList<String> product_list = new ArrayList<>();
     private ArrayList<Integer> quantity_list = new ArrayList<>();
     private static String externalCsvPath;
+    private static ArrayList<String> selectedItems = new ArrayList<>();
+    private float assemblyFee = 30;
 
     //Constructor
     public Cart() {
@@ -120,6 +122,54 @@ public class Cart {
 
     public int getQuantity(int index){
         return quantity_list.get(index);
+    }
+
+    public void addSelected(String product_id){
+        selectedItems.add(product_id);
+    }
+
+    public void removeSelected(String product_id){
+        selectedItems.remove(product_id);
+    }
+
+    public void updateSelected(String product_id){
+        if(selectedItems.contains(product_id)){
+            selectedItems.remove(product_id);
+        }
+        else {
+            selectedItems.add(product_id);
+        }
+    }
+
+    public int getSelectedItemSize(){
+        return selectedItems.size();
+    }
+
+    public float getSubPrice(ArrayList<Product> ProductList){
+        float SubPrice = 0;
+        for(String product_id : selectedItems){
+            for(Product product : ProductList){
+                if(product.getProduct_sku().equals(product_id)){
+                    SubPrice += product.getProduct_discountedPrice();
+                }
+            }
+        }
+        return SubPrice;
+    }
+
+    public float getAssemblyFee(){
+        if(selectedItems.isEmpty())
+            return 0;
+        else{
+            return assemblyFee;
+        }
+    }
+
+    public float getSubTotal(ArrayList<Product> ProductList){
+        float subTotal = 0;
+        subTotal += getSubPrice(ProductList);
+        subTotal += getAssemblyFee();
+        return subTotal;
     }
 
     //Load Cart.csv that contains all the clients' cart data

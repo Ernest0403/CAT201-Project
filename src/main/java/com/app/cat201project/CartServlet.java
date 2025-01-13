@@ -87,10 +87,10 @@ public class CartServlet extends HttpServlet{
             }
 
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("SelectedQuantity", 2);
-            jsonObject.put("SubPrice", 100);
-            jsonObject.put("AssemblyFee", 30);
-            jsonObject.put("Subtotal", 130);
+            jsonObject.put("SelectedQuantity", client_cart.getSelectedItemSize());
+            jsonObject.put("SubPrice", client_cart.getSubPrice(products));
+            jsonObject.put("AssemblyFee", client_cart.getAssemblyFee());
+            jsonObject.put("Subtotal", client_cart.getSubTotal(products));
 
             // Write JSON to response
             jsonResponse.put("cartProducts", jsonArray);
@@ -140,6 +140,10 @@ public class CartServlet extends HttpServlet{
                             client_cart
                     );
                     System.out.println("Quantity updated");
+                    break;
+                case "updateSelected":
+                    client_cart.updateSelected(jsonObject.getString("productId").trim());
+                    System.out.println("Selected Item updated");
                     break;
 
                 default:
