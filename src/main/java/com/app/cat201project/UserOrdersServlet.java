@@ -2,6 +2,8 @@ package com.app.cat201project;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.opencsv.exceptions.CsvValidationException;
 import jakarta.servlet.ServletConfig;
@@ -15,17 +17,11 @@ import Class.*;
 
 @WebServlet(name = "UserOrdersServlet", value = "/UserOrders-servlet")
 public class UserOrdersServlet extends HttpServlet{
-    String client_username = "customer1";
-    ArrayList<Order> orders = new ArrayList<Order>();
-    ArrayList<Product> products;//Temporarily set the client id to 1, will connect with log in client id
-    Order client_order = new Order();
-    ArrayList<Product> order_products = new ArrayList<Product>();    //Stores Products that is within the logged in client's cart
+    private static Map<Integer, Order> orderMap = new HashMap<>();  //Stores Products that is within the logged in client's cart
     String realPath;
 
     public void init() throws ServletException {
         super.init();
-        String productRealPath = getServletContext().getRealPath("Database/catProjectDataset.csv");
-        products = Global.getProductList(productRealPath);
         realPath = getServletContext().getRealPath("Database/order.csv");
         Order.setExternalCsvPath(realPath);
         System.out.println("Resolved File Path: " + realPath);
@@ -43,11 +39,7 @@ public class UserOrdersServlet extends HttpServlet{
         response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
         //Create a cart for a client, should be modified into reading from csv
-        try {
-            Order.loadOrderCSV(products, orders, client_order, order_products, client_username);
-        } catch (CsvValidationException e) {
-            throw new RuntimeException(e);
-        }
+        orderMap = Order.importOrders();
 
         // Set response type to JSON
         response.setContentType("application/json");
