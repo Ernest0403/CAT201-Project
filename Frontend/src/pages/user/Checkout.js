@@ -1,10 +1,36 @@
 import './Checkout.css';
-import React from 'react';
+import React, {useEffect} from 'react';
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 
 function Checkout() {
+    const [Carts , setCarts] = useState([]);
+    const [Summary, setSummary] = useState({});
+
+    //backend  pass whole cart details and summary
+    const fetchCartData = () => {
+        fetch("http://localhost:8080/cat201_project_war/Checkout-servlet")
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`Network response was not ok: ${response.status}`);
+                }
+                return response.json(); // Parse JSON from response
+            })
+            .then((data) => {
+                console.log("Fetched cartProducts:", data); // Log the data to check
+                setCarts(data.cartProducts); // Set the state with the fetched data
+                setSummary(data.fullSummary);
+            })
+            .catch((error) => {
+                console.error("Error fetching cartProducts:", error);
+            });
+    };
+
+    useEffect(() => {
+        fetchCartData(); // Fetch data on component mount
+    }, []);
+
     //Codes below are used to toggle between shipping options button
     const [
         selectedShip,
@@ -183,38 +209,30 @@ function Checkout() {
                 </div>
                 <div className='SummaryBreakdown'>
                   <div className='SubDetails'>Selected Item:</div>
-                  <div className='SubPrices'>2</div>
+                  <div className='SubPrices'>{Summary.SelectedQuantity}</div>
                   <div className='SubDetails'>Product Price:</div>
-                  <div className='SubPrices'>106.35</div>
+                  <div className='SubPrices'>{Summary.SubPrice}</div>
                   <div className='SubDetails'>Assembly Fee:</div>
-                  <div className='SubPrices'>30.00</div>
+                  <div className='SubPrices'>{Summary.AssemblyFee}</div>
                   <div className='SubDetails'>Delivery:</div>
-                  <div className='SubPrices'>20.00</div>
+                  <div className='SubPrices'>{Summary.Delivery}</div>
                   <div className='SubDetails'>6% SST:</div>
-                  <div className='SubPrices'>9.38</div>
+                  <div className='SubPrices'>{Summary.SST}</div>
                 </div>
                 <div className='line'></div>
                 <div className='SummaryBreakdown'>
-                  <div className='SubTotalWord'>Subtotal:</div>
+                  <div className='SubTotalWord'>Total:</div>
                   <div className='SubTotal'>
                     <span style={{ fontSize: 'small',verticalAlign: 'top' }}>
                         RM
                     </span>
-                    135.73
+                      {Summary.Total}
                     </div>
                 </div>
                 <div className='line'></div>
-                <div className='SummaryBreakdown'>
-                  <div className='SubDetails'>Item List:</div>
-                  <div className='SubPrices'></div>
-                  <div className='SubDetails'>Item Name 1</div>
-                  <div className='SubPrices'>1</div>
-                  <div className='SubDetails'>Item Name 2</div>
-                  <div className='SubPrices'>2</div>
-                </div>
+                <div className='SummaryBreakdown'></div>
             </div>
           </div>
-          
         </div>
       </>
     );
