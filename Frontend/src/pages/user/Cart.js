@@ -54,9 +54,8 @@ function Cart() {
       }
     );
 
-      if (newQuantity === 0) {
-          fetchCartData(); // Trigger fetch if quantity is 0
-      }
+      fetchCartData();
+
   };
 
   //Flag to refresh once an cart is selected or unselected

@@ -136,17 +136,25 @@ public class Cart {
     }
 
     public int getSelectedItemSize(){
-        return selectedItems.size();
+        int size = 0;
+        int i = 0;
+        for(String product_id : selectedItems){
+            size += getQuantity(i);
+            i++;
+        }
+        return size;
     }
 
     public float getSubPrice(ArrayList<Product> ProductList){
         float SubPrice = 0;
+        int i = 0;
         for(String product_id : selectedItems){
             for(Product product : ProductList){
                 if(product.getProduct_sku().equals(product_id)){
-                    SubPrice += product.getProduct_discountedPrice();
+                    SubPrice += product.getProduct_discountedPrice() * getQuantity(i);
                 }
             }
+            i++;
         }
         return SubPrice;
     }
