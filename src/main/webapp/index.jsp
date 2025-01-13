@@ -11,6 +11,7 @@
 <a href="hello-servlet">Hello Servlet</a>
 <a href="Cart-servlet">Cart Servlet</a>
 <a href="Checkout-servlet">Checkout Servlet</a>
+<a href="UserOrders-servlet">User Orders Servlet</a>
 <a href="Favourite-servlet">Favourite Servlet</a>
 <a href="Product-servlet">Product Servlet</a>
 <a href="LoginServlet">Login Servlet</a>

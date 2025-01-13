@@ -139,6 +139,9 @@ public class CheckoutServlet extends HttpServlet {
             System.out.println("Received JSON: " + jsonObject);
             switch (action) {
                 case "createOrder":
+                    String orderPath = getServletContext().getRealPath("Database/order.csv");
+                    Order.setExternalCsvPath(orderPath);
+
                     break;
 
                 default:

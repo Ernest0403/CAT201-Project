@@ -1,5 +1,11 @@
 package Class;
 
+import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvValidationException;
+
+import java.io.*;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -13,6 +19,9 @@ public class Order {
     private CancellationDetails order_cancellationDetails;
     private String order_status;
     private String order_orderDate;
+
+    private static String externalCsvPath;
+    private static int ordersCount;
 
     public Order() {};
 
@@ -69,6 +78,19 @@ public class Order {
     public CancellationDetails getOrder_cancellationDetails() { return order_cancellationDetails; }
     public String getOrder_status() { return order_status; }
     public String getOrder_orderDate() { return order_orderDate; }
+
+    public void setOrder(Order order){
+        this.order_id = order.getOrder_id();
+        this.order_orderNumber = order.getOrder_orderNumber();
+        this.order_customer = order.getOrder_customer();
+        this.order_products = order.getOrder_products();
+        this.order_orderDetails = order.getOrder_orderDetails();
+        this.order_paymentDetails = order.getOrder_paymentDetails();
+        this.order_cancellationDetails = order.getOrder_cancellationDetails();
+        this.order_status = order.getOrder_status();
+        this.order_orderDate = order.getOrder_orderDate();
+    }
+    public static void setExternalCsvPath(String externalPath) { externalCsvPath = externalPath; }
 
     public static class Customer {
         private String username;
@@ -158,5 +180,94 @@ public class Order {
 
         public String getCancellationReason() { return cancellationReason; }
         public String getCancellationDate() { return cancellationDate; }
+    }
+
+    public static void loadOrderCSV(ArrayList<Product> products,
+                                    ArrayList<Order> orderList,
+                                    Order client_order,
+                                    ArrayList<Product> order_products,
+                                    String client_username) throws CsvValidationException, IOException {
+        orderList.clear();
+        order_products.clear();
+        ordersCount = 0;
+
+        CSVReader reader;
+        try {
+            reader = new CSVReader(
+                    new FileReader(externalCsvPath)
+            );
+            System.out.println("File found"); //Found
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        String[] line;
+        reader.readNext();
+        System.out.println("Reader read");
+
+        while ((line = reader.readNext()) != null) {
+            System.out.println(Arrays.toString(line));
+            Order order = new Order(List.of(line));
+            orderList.add(order);
+            ordersCount++;
+        }
+        System.out.println("End of file reached.");
+
+        for (int i = 0; i < orderList.size() - 1; i++) {
+            if (orderList.get(i).getOrder_customer().getUsername().equals(client_username)) {
+                client_order.setOrder(orderList.get(i));
+                System.out.println("client_order added.");
+                break;
+            }
+        }
+    }
+
+    //Need to define a new order first
+    //Load order to know the next value
+    //then exec this function
+    public void writeOrderCSV(){
+        try (BufferedWriter writer = new BufferedWriter(
+                new FileWriter(
+                        externalCsvPath, true)
+        )
+        ) {
+            //Get product IDs
+            String productID = new String();
+            for(int i = 0; i < getOrder_products().size(); i++){
+                productID += getOrder_products().get(i).getProductId();
+                productID += '|';
+            }
+
+            //Get quantities
+            String quantity = new String();
+            for(int i = 0; i < getOrder_products().size(); i++){
+                quantity += getOrder_products().get(i).getQuantity();
+                quantity += '|';
+            }
+            writer.write(String.join(",",
+                            new String[]{
+                                    String.valueOf(ordersCount+1),
+                                    getOrder_customer().getUsername(),
+                                    getOrder_customer().getContactNumber(),
+                                    getOrder_customer().getAddress(),
+                                    productID,
+                                    quantity,
+                                    String.valueOf(getOrder_orderDetails().getTotalItems()),
+                                    String.valueOf(getOrder_orderDetails().getProductPrice()),
+                                    String.valueOf(getOrder_orderDetails().getDeliveryFee()),
+                                    String.valueOf(getOrder_orderDetails().getAssemblyFee()),
+                                    String.valueOf(getOrder_orderDetails().getSst()),
+                                    String.valueOf(getOrder_orderDetails().getTotal()),
+                                    getOrder_paymentDetails().getPaymentType(),
+                                    getOrder_paymentDetails().getPaymentStatus(),
+                                    getOrder_cancellationDetails().getCancellationReason(),
+                                    getOrder_cancellationDetails().getCancellationDate(),
+                                    getOrder_status(),
+                                    getOrder_orderDate()
+                            }));
+            System.out.println("CSV file written successfully!");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

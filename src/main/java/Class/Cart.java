@@ -209,7 +209,7 @@ public class Cart {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-        carts.clear();
+
         String[] line;
         reader.readNext();
         System.out.println("Reader read");
