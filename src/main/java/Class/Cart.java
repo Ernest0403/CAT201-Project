@@ -124,14 +124,6 @@ public class Cart {
         return quantity_list.get(index);
     }
 
-    public void addSelected(String product_id){
-        selectedItems.add(product_id);
-    }
-
-    public void removeSelected(String product_id){
-        selectedItems.remove(product_id);
-    }
-
     public void updateSelected(String product_id){
         if(selectedItems.contains(product_id)){
             selectedItems.remove(product_id);

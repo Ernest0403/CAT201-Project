@@ -75,7 +75,7 @@ public class CartServlet extends HttpServlet{
                 jsonObject.put("image", product.getProduct_src());
                 jsonObject.put("product", product.getProduct_name());
                 jsonObject.put("tag", product.getProduct_itemCategory());
-                jsonObject.put("price", product.getProduct_price());
+                jsonObject.put("price", product.getProduct_discountedPrice());
 
                 if (i < client_cart.getProductListSize()) {
                     jsonObject.put("quantity", client_cart.getQuantity(i));
