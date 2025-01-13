@@ -1,15 +1,38 @@
 import './Checkout.css';
-import React from 'react';
+import React, {useEffect} from 'react';
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 
 function Checkout() {
+    const [Carts , setCarts] = useState([]);
+    const [Summary, setSummary] = useState({});
+
+    //backend  pass whole cart details and summary
+    const fetchCartData = () => {
+        fetch("http://localhost:8080/cat201_project_war/Checkout-servlet")
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`Network response was not ok: ${response.status}`);
+                }
+                return response.json(); // Parse JSON from response
+            })
+            .then((data) => {
+                console.log("Fetched cartProducts:", data); // Log the data to check
+                setCarts(data.cartProducts); // Set the state with the fetched data
+                setSummary(data.fullSummary);
+            })
+            .catch((error) => {
+                console.error("Error fetching cartProducts:", error);
+            });
+    };
+
+    useEffect(() => {
+        fetchCartData(); // Fetch data on component mount
+    }, []);
+
     //Codes below are used to toggle between shipping options button
-    const [
-        selectedShip,
-        setSelectedShip,
-    ] = useState("fast");
+    const [selectedShip, setSelectedShip] = useState("fast");
 
     const handleShipOption = (
         value
@@ -47,6 +70,64 @@ function Checkout() {
         if(selectedPlatform !== value){
             setSelectedPlatform(value);
         }
+    };
+
+    const [shippingDetails, setShippingDetails] = useState({
+        recipientName: '',
+        address: '',
+        addressOptional: '',
+        city: '',
+        postcode: '',
+        state: '',
+        contactNumber: '',
+        notes: '',
+        cardNumber: '',
+        cardHolderName: '',
+        cardED: '',
+        cardCVV: ''
+    });
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setShippingDetails({
+            ...shippingDetails,
+            [name]: value,
+        });
+    };
+
+    //Create order upon payment done
+    const createOrder = async () => {
+        //Update the order in backend
+        const response = await fetch('http://localhost:8080/cat201_project_war/Checkout-servlet', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    action: 'createOrder',
+                    TotalPayment: Summary.Total,
+                    ShippingRecipientName: shippingDetails.recipientName,
+                    ShippingAddress: shippingDetails.address,
+                    ShippingAddressOptional: shippingDetails.addressOptional,
+                    ShippingCity: shippingDetails.city,
+                    ShippingPostcode: shippingDetails.postcode,
+                    ShippingState: shippingDetails.state,
+                    ShippingContactNumber: shippingDetails.contactNumber,
+                    ShippingNotes: shippingDetails.notes,
+                    ShippingType: selectedShip,
+                    PaymentType: selectedPayment,
+                    PaymentPlatform: selectedPlatform,
+                    CardNumber: shippingDetails.cardNumber,
+                    CardHolderName: shippingDetails.cardHolderName,
+                    CardED: shippingDetails.cardED,
+                    CardCVV: shippingDetails.cardCVV,
+                    items: Carts.map(product => ({
+                        productSKU: product.productID,
+                        productQuantity: product.quantity,
+                    })),
+                }),
+            }
+        );
     };
 
     const navigate = useNavigate();
@@ -95,21 +176,21 @@ function Checkout() {
                             DETAILS AND INFORMATION
                     </div>
                     <lable className='InformationLable'>Recipient Name</lable>
-                    <input type="text" id="ShippingRecipientName" name="ShippingRecipientNameInput" />                    
+                    <input type="text" value={shippingDetails.recipientName} name="ShippingRecipientNameInput" onChange={handleChange}/>
                     <lable className='InformationLable'>Shipping Address Details</lable>
-                    <input type="text" id="ShippingAddress" name="ShippingAddressInput" />                    
+                    <input type="text" value={shippingDetails.address} name="ShippingAddressInput" onChange={handleChange}/>
                     <lable className='InformationLable'>Shipping Address Details (Optional)</lable>
-                    <input type="text" id = "ShippingAddressOptional" name= "ShippingAddressOptionalInput" /> 
+                    <input type="text" value = {shippingDetails.addressOptional} name= "ShippingAddressOptionalInput" onChange={handleChange}/>
                     <lable className='InformationLable'>City</lable>
-                    <input type="text" id = "ShippingCity" name= "ShippingCityInput" /> 
+                    <input type="text" value = {shippingDetails.city} name= "ShippingCityInput" onChange={handleChange}/>
                     <lable className='InformationLable'>Postcode</lable>
-                    <input type="text" id = "ShippingPostcode" name= "ShippingPostcodeInput" /> 
+                    <input type="text" value = {shippingDetails.postcode} name= "ShippingPostcodeInput" onChange={handleChange}/>
                     <lable className='InformationLable'>State</lable>
-                    <input type="text" id = "ShippingState" name= "ShippingStateInput" /> 
+                    <input type="text" value = {shippingDetails.state} name= "ShippingStateInput" onChange={handleChange}/>
                     <lable className='InformationLable'>Contact Number</lable>
-                    <input type="text" id = "ShippingContactNumber" name= "ShippingContactNumberInput" /> 
+                    <input type="text" value = {shippingDetails.contactNumber} name= "ShippingContactNumberInput" onChange={handleChange}/>
                     <lable className='InformationLable'>Notes/Messages</lable>
-                    <input type="text" id = "ShippingNotes" name= "ShippingNotesInput" />  
+                    <input type="text" value = {shippingDetails.notes} name= "ShippingNotesInput" onChange={handleChange}/>
                 </div>
                 <div className='PaymentMethod'>
                 <div className='OptionLable'>
@@ -161,20 +242,20 @@ function Checkout() {
                     {selectedPayment === "card" ?
                         <div className='ShippingDetails'>
                             <div className='InformationLable'>Card Number</div>
-                            <input type="text" id = "CardNumber" name= "CardNumberInput" />
+                            <input type="text" value = {shippingDetails.cardNumber} name= "CardNumberInput" onChange={handleChange}/>
                             <div className='InformationLable'>Card's Holder Name</div>
-                            <input type="text" id = "CardHolderName" name= "CardHolderNameInput" />
+                            <input type="text" value = {shippingDetails.cardHolderName} name= "CardHolderNameInput" onChange={handleChange}/>
                             <div className='InformationLable'>Card Expiry Date</div>
-                            <input type="text" id = "CardED" name= "CardEDInput" />
+                            <input type="text" value = {shippingDetails.cardED} name= "CardEDInput" onChange={handleChange}/>
                             <div className='InformationLable'>CVV</div>
-                            <input type="text" id = "CardCVV" name= "CardCVVInput" /> 
+                            <input type="text" value = {shippingDetails.cardCVV} name= "CardCVVInput" onChange={handleChange}/>
                         </div>
                         : <></>
                     }
                 </div>
                 <div className='CheckoutNav'>
                     <button className='BackToCart' onClick={() => navigate('/cart')}>Back to Cart</button>
-                    <button className='ProceedPayment' onClick={() => navigate('/payment-success')}>Proceed to Payment</button>
+                    <button className='ProceedPayment' onClick={() => {navigate('/payment-success'); createOrder()}}>Proceed to Payment</button>
                 </div>
             </div>
             <div className='CheckoutSummary'>
@@ -183,38 +264,30 @@ function Checkout() {
                 </div>
                 <div className='SummaryBreakdown'>
                   <div className='SubDetails'>Selected Item:</div>
-                  <div className='SubPrices'>2</div>
+                  <div className='SubPrices'>{Summary.SelectedQuantity}</div>
                   <div className='SubDetails'>Product Price:</div>
-                  <div className='SubPrices'>106.35</div>
+                  <div className='SubPrices'>{Summary.SubPrice}</div>
                   <div className='SubDetails'>Assembly Fee:</div>
-                  <div className='SubPrices'>30.00</div>
+                  <div className='SubPrices'>{Summary.AssemblyFee}</div>
                   <div className='SubDetails'>Delivery:</div>
-                  <div className='SubPrices'>20.00</div>
+                  <div className='SubPrices'>{Summary.Delivery}</div>
                   <div className='SubDetails'>6% SST:</div>
-                  <div className='SubPrices'>9.38</div>
+                  <div className='SubPrices'>{Summary.SST}</div>
                 </div>
                 <div className='line'></div>
                 <div className='SummaryBreakdown'>
-                  <div className='SubTotalWord'>Subtotal:</div>
+                  <div className='SubTotalWord'>Total:</div>
                   <div className='SubTotal'>
                     <span style={{ fontSize: 'small',verticalAlign: 'top' }}>
                         RM
                     </span>
-                    135.73
+                      {Summary.Total}
                     </div>
                 </div>
                 <div className='line'></div>
-                <div className='SummaryBreakdown'>
-                  <div className='SubDetails'>Item List:</div>
-                  <div className='SubPrices'></div>
-                  <div className='SubDetails'>Item Name 1</div>
-                  <div className='SubPrices'>1</div>
-                  <div className='SubDetails'>Item Name 2</div>
-                  <div className='SubPrices'>2</div>
-                </div>
+                <div className='SummaryBreakdown'></div>
             </div>
           </div>
-          
         </div>
       </>
     );

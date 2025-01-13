@@ -11,12 +11,10 @@ import jakarta.servlet.annotation.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import Class.Cart;
-import Class.Product;
-import Class.Global;
+import Class.*;
 
-@WebServlet(name = "CartServlet", value = "/Cart-servlet")
-public class CartServlet extends HttpServlet{
+@WebServlet(name = "CheckoutServlet", value = "/Checkout-servlet")
+public class CheckoutServlet extends HttpServlet {
 
     private int client_id = 1;                                //Temporarily set the client id to 1, will connect with log in client id
     ArrayList<Cart> carts = new ArrayList<Cart>();               //Stores data from Cart list
@@ -32,11 +30,17 @@ public class CartServlet extends HttpServlet{
         realPath = getServletContext().getRealPath("Database/Cart.csv");
         Cart.setExternalCsvPath(realPath);
         System.out.println("Resolved File Path: " + realPath);
-
     }
 
-    //Return logged in client Cart details
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            response.setHeader("Access-Control-Allow-Origin", "*");
+            response.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
+            response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+            response.setHeader("Access-Control-Allow-Credentials", "true");
+            response.setStatus(HttpServletResponse.SC_OK);
+        }
+
         // Enable CORS headers
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
@@ -72,16 +76,11 @@ public class CartServlet extends HttpServlet{
                 JSONObject jsonObject = new JSONObject();
 
                 jsonObject.put("productID", product.getProduct_sku().trim());
-                jsonObject.put("image", product.getProduct_src());
                 jsonObject.put("product", product.getProduct_name());
-                jsonObject.put("tag", product.getProduct_itemCategory());
                 jsonObject.put("price", product.getProduct_discountedPrice());
-
                 if (i < client_cart.getProductListSize()) {
                     jsonObject.put("quantity", client_cart.getQuantity(i));
                 }
-
-                // append it to your JSON array.
                 jsonArray.put(jsonObject);
                 i++;
             }
@@ -91,10 +90,13 @@ public class CartServlet extends HttpServlet{
             jsonObject.put("SubPrice", client_cart.getSubPrice(products));
             jsonObject.put("AssemblyFee", client_cart.getAssemblyFee());
             jsonObject.put("Subtotal", client_cart.getSubTotal(products));
+            jsonObject.put("Delivery", 10); //Temporary fixed value
+            jsonObject.put("SST", client_cart.getTaxFee(products)); //Temporary fixed value
+            jsonObject.put("Total", client_cart.getTaxTotal(products));
 
             // Write JSON to response
             jsonResponse.put("cartProducts", jsonArray);
-            jsonResponse.put("Summary", jsonObject);
+            jsonResponse.put("fullSummary", jsonObject);
             System.out.println(jsonResponse.toString());
             response.setStatus(HttpServletResponse.SC_OK);
             response.getWriter().write(jsonResponse.toString());
@@ -113,6 +115,11 @@ public class CartServlet extends HttpServlet{
         // CORS headers
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type");
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        response.setHeader("Pragma", "no-cache");
+        response.setDateHeader("Expires", 0);
         response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
         response.setContentType("application/json");
@@ -126,24 +133,12 @@ public class CartServlet extends HttpServlet{
         while ((line = reader.readLine()) != null) {
             json.append(line);
         }
-
-        try {
+        try{
             JSONObject jsonObject = new JSONObject(json.toString());
             String action = jsonObject.getString("action").trim(); // Get the action identifier
             System.out.println("Received JSON: " + jsonObject);
             switch (action) {
-                case "updateQuantity":
-                    client_cart.updateCart(
-                            jsonObject.getString("productId").trim(),
-                            jsonObject.getInt("quantity"),
-                            carts,
-                            client_cart
-                    );
-                    System.out.println("Quantity updated");
-                    break;
-                case "updateSelected":
-                    client_cart.updateSelected(jsonObject.getString("productId").trim());
-                    System.out.println("Selected Item updated");
+                case "createOrder":
                     break;
 
                 default:
@@ -151,25 +146,21 @@ public class CartServlet extends HttpServlet{
                     response.getWriter().write("Invalid action!");
                     break;
             }
-        } catch (Exception e) {
+        } catch(Exception e)
+
+        {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.getWriter().write("Error processing request!");
         }
-
     }
 
     @Override
     protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
         // Respond with status OK for preflight request
         response.setStatus(HttpServletResponse.SC_OK);
-    }
-
-    public void destroy() {
-
     }
 }

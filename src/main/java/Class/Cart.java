@@ -16,6 +16,8 @@ public class Cart {
     private static String externalCsvPath;
     private static ArrayList<String> selectedItems = new ArrayList<>();
     private float assemblyFee = 30;
+    private String shippingType;
+    private int SSTpercent = 6;
 
     //Constructor
     public Cart() {
@@ -134,17 +136,25 @@ public class Cart {
     }
 
     public int getSelectedItemSize(){
-        return selectedItems.size();
+        int size = 0;
+        int i = 0;
+        for(String product_id : selectedItems){
+            size += getQuantity(i);
+            i++;
+        }
+        return size;
     }
 
     public float getSubPrice(ArrayList<Product> ProductList){
         float SubPrice = 0;
+        int i = 0;
         for(String product_id : selectedItems){
             for(Product product : ProductList){
                 if(product.getProduct_sku().equals(product_id)){
-                    SubPrice += product.getProduct_discountedPrice();
+                    SubPrice += product.getProduct_discountedPrice() * getQuantity(i);
                 }
             }
+            i++;
         }
         return SubPrice;
     }
@@ -162,6 +172,22 @@ public class Cart {
         subTotal += getSubPrice(ProductList);
         subTotal += getAssemblyFee();
         return subTotal;
+    }
+
+    public float getTaxFee(ArrayList<Product> ProductList){
+        float taxFee = 0;
+        taxFee += getSubTotal(ProductList);
+        taxFee += 10; //Normal shipping
+        taxFee = (float) (taxFee * 0.06);
+        return (float) (Math.round(taxFee * 100.0) / 100.0);
+    }
+
+    public float getTaxTotal(ArrayList<Product> ProductList){
+        float taxTotal = 0;
+        taxTotal += getSubTotal(ProductList);
+        taxTotal += 10;
+        taxTotal = (float) (taxTotal * 1.06);
+        return (float) (Math.round(taxTotal * 100.0) / 100.0);
     }
 
     //Load Cart.csv that contains all the clients' cart data
