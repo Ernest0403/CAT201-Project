@@ -1,6 +1,8 @@
 package com.app.cat201project;
 
 import java.io.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import com.opencsv.exceptions.CsvValidationException;
@@ -141,7 +143,49 @@ public class CheckoutServlet extends HttpServlet {
                 case "createOrder":
                     String orderPath = getServletContext().getRealPath("Database/order.csv");
                     Order.setExternalCsvPath(orderPath);
+                    String orderRecord = "";
+                    orderRecord += String.valueOf(Order.getOrdersCount()); orderRecord += ',';
+                    orderRecord += jsonObject.getString("ShippingRecipientName").trim(); orderRecord += ',';
+                    orderRecord += jsonObject.getString("ShippingContactNumber").trim(); orderRecord += ',';
+                    orderRecord += jsonObject.getString("ShippingAddress").trim(); orderRecord += ',';
 
+                    //Get the productSKU into a string
+                    JSONArray itemsArray = jsonObject.getJSONArray("items");
+                    StringBuilder quantityBuilder = new StringBuilder();
+                    StringBuilder skuBuilder = new StringBuilder();
+                    int quantity = 0;
+                    for (int i = 0; i < itemsArray.length(); i++) {
+                        JSONObject item = itemsArray.getJSONObject(i);
+                        if (!skuBuilder.isEmpty()) {
+                            skuBuilder.append("|");
+                            quantityBuilder.append("|");
+                            i++;
+                        }
+                        skuBuilder.append(item.getString("productSKU"));
+                        quantityBuilder.append(item.getInt("productQuantity"));
+                    }
+
+                    orderRecord += skuBuilder.toString(); orderRecord += ',';
+                    orderRecord += quantityBuilder.toString(); orderRecord += ',';
+                    orderRecord += String.valueOf(quantity); orderRecord += ',';
+                    //product price
+                    //deliveryfee
+                    //assemblyfee
+                    //sst
+                    orderRecord += jsonObject.getInt("TotalPayment"); orderRecord += ',';
+                    orderRecord += jsonObject.getString("PaymentType").trim(); orderRecord += ',';
+                    orderRecord += "Paid"; orderRecord += ',';
+                    orderRecord += ',';orderRecord += ',';orderRecord += ',';
+                    orderRecord += String.valueOf(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+                    System.out.println(orderRecord);
+
+                    //more details to be added
+                    try (BufferedWriter writer = new BufferedWriter(new FileWriter( getServletContext().getRealPath("Database/order.csv"), true))){
+                        writer.newLine();
+                        writer.write(orderRecord);
+                    } catch (IOException e) {
+                        e.printStackTrace(); // Log the error
+                    }
                     break;
 
                 default:
