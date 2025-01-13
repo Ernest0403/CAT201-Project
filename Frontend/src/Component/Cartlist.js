@@ -1,12 +1,18 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import './Cartlist.css';
 
 
-const Cartlist = ({productID, imageSrc, itemName, tags, price, quantity, changeQuantity}) => {
+const Cartlist = ({productID, imageSrc, itemName, tags, price, quantity, changeQuantity, setSelected}) => {
     //setStatus function for button
-    const [SelectedStatus, setStatus] = useState("NotSelected");
+    //Use localStorage to keep track on the state changes even after refresh
+    const [SelectedStatus, setStatus] = useState(
+        localStorage.getItem(`SelectedStatus_${productID}`) || "NotSelected");
 
-    const changeStatus = () => {
+    useEffect(() => {
+        localStorage.setItem(`SelectedStatus_${productID}`, SelectedStatus);
+    }, [SelectedStatus]);
+
+    const changeStatus = async () => {
         if (SelectedStatus !== "NotSelected") {
             setStatus("NotSelected");
             console.log("Not selected");
@@ -15,6 +21,20 @@ const Cartlist = ({productID, imageSrc, itemName, tags, price, quantity, changeQ
             setStatus("Selected");
             console.log("Changed state");
         }
+
+        //Update the selected cart in backend
+        const response = await fetch('http://localhost:8080/cat201_project_war/Cart-servlet', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                action: 'updateSelected',
+                productId: productID
+            }),
+        })
+
+        setSelected();
     };
 
     //Add and Subtract Quantity

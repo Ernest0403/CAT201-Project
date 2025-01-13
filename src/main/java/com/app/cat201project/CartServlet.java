@@ -75,7 +75,7 @@ public class CartServlet extends HttpServlet{
                 jsonObject.put("image", product.getProduct_src());
                 jsonObject.put("product", product.getProduct_name());
                 jsonObject.put("tag", product.getProduct_itemCategory());
-                jsonObject.put("price", product.getProduct_price());
+                jsonObject.put("price", product.getProduct_discountedPrice());
 
                 if (i < client_cart.getProductListSize()) {
                     jsonObject.put("quantity", client_cart.getQuantity(i));
@@ -86,8 +86,15 @@ public class CartServlet extends HttpServlet{
                 i++;
             }
 
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("SelectedQuantity", client_cart.getSelectedItemSize());
+            jsonObject.put("SubPrice", client_cart.getSubPrice(products));
+            jsonObject.put("AssemblyFee", client_cart.getAssemblyFee());
+            jsonObject.put("Subtotal", client_cart.getSubTotal(products));
+
             // Write JSON to response
             jsonResponse.put("cartProducts", jsonArray);
+            jsonResponse.put("Summary", jsonObject);
             System.out.println(jsonResponse.toString());
             response.setStatus(HttpServletResponse.SC_OK);
             response.getWriter().write(jsonResponse.toString());
@@ -133,6 +140,10 @@ public class CartServlet extends HttpServlet{
                             client_cart
                     );
                     System.out.println("Quantity updated");
+                    break;
+                case "updateSelected":
+                    client_cart.updateSelected(jsonObject.getString("productId").trim());
+                    System.out.println("Selected Item updated");
                     break;
 
                 default:

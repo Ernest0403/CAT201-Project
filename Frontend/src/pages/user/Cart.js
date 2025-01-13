@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 function Cart() {
   const [Carts , setCarts] = useState([]);
+  const [Summary, setSummary] = useState({});
 
   //backend  pass whole cart list
     const fetchCartData = () => {
@@ -19,6 +20,7 @@ function Cart() {
             .then((data) => {
                 console.log("Fetched cartProducts:", data); // Log the data to check
                 setCarts(data.cartProducts); // Set the state with the fetched data
+                setSummary(data.Summary);
             })
             .catch((error) => {
                 console.error("Error fetching cartProducts:", error);
@@ -57,6 +59,17 @@ function Cart() {
       }
   };
 
+  //Flag to refresh once an cart is selected or unselected
+    const [newSelected, setNewSelected] = useState(false);
+    const toggleSelected = () => {
+        setNewSelected(true);
+    };
+
+  if(newSelected){
+    setNewSelected(false);
+    fetchCartData();
+  }
+
   const navigate = useNavigate();
 
   return (
@@ -71,6 +84,7 @@ function Cart() {
                       price={cart.price}
                       quantity={cart.quantity? cart.quantity : "None"}
                       changeQuantity={handleQuantityChange}
+                      setSelected={toggleSelected}
                   />
               ))}
           </div>
@@ -80,16 +94,16 @@ function Cart() {
             </div>
             <div className='SummaryBreakdown'>
               <div className='SubDetails'>Selected Item:</div>
-              <div className='SubPrices'>2</div>
+              <div className='SubPrices'>{Summary.SelectedQuantity}</div>
               <div className='SubDetails'>Product Price:</div>
-              <div className='SubPrices'>106.35</div>
+              <div className='SubPrices'>{Summary.SubPrice}</div>
               <div className='SubDetails'>Assembly Fee:</div>
-              <div className='SubPrices'>30.00</div>
+              <div className='SubPrices'>{Summary.AssemblyFee}</div>
             </div>
             <div className='line'></div>
             <div className='SummaryBreakdown'>
               <div className='SubTotalWord'>Subtotal:</div>
-              <div className='SubTotal'><span style={{ fontSize: 'small',verticalAlign: 'top' }}>RM</span>138.35</div>
+              <div className='SubTotal'><span style={{ fontSize: 'small',verticalAlign: 'top' }}>RM</span>{Summary.Subtotal}</div>
             </div>
             <div className='line'></div>
             <button className='Checkout'onClick={() => navigate('/checkout')}>
