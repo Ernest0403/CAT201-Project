@@ -86,8 +86,15 @@ public class CartServlet extends HttpServlet{
                 i++;
             }
 
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("SelectedQuantity", 2);
+            jsonObject.put("SubPrice", 100);
+            jsonObject.put("AssemblyFee", 30);
+            jsonObject.put("Subtotal", 130);
+
             // Write JSON to response
             jsonResponse.put("cartProducts", jsonArray);
+            jsonResponse.put("Summary", jsonObject);
             System.out.println(jsonResponse.toString());
             response.setStatus(HttpServletResponse.SC_OK);
             response.getWriter().write(jsonResponse.toString());
