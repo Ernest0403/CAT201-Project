@@ -13,14 +13,14 @@ const ItemPage = () => {
   useEffect(() => {
     const fetchProductData = async () => {
       try {
-          const response = await fetch(`http://localhost:8080/cat201_project_war_exploded/Product-servlet?id=${id}`);
+          const response = await fetch(`http://localhost:8080/cat201_project_war/Product-servlet?id=${id}`);
           const data = await response.json();
 
           const selectedProduct = data.find((product) => product.product_sku === id);
               if (selectedProduct) {
                 setItem(selectedProduct);
 
-                const relatedResponse = await fetch(`http://localhost:8080/cat201_project_war_exploded/Product-servlet?roomCategory=${selectedProduct.product_roomCategory}`);
+                const relatedResponse = await fetch(`http://localhost:8080/cat201_project_war/Product-servlet?roomCategory=${selectedProduct.product_roomCategory}`);
                 const relatedData = await relatedResponse.json();
 
                 const relatedFiltered = relatedData.filter(
@@ -42,6 +42,30 @@ const ItemPage = () => {
   if (!item) {
     return <p>Loading...</p>;
   }
+
+  const handleAddToCart = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/cat201_project_war/Cart-servlet", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          action: "updateQuantity",
+          productId: item.product_sku,
+          quantity: quantity,
+        }),
+      });
+
+      if (response.ok) {
+        alert("Cart updated successfully!");
+      } else {
+        alert("Failed to update cart.");
+      }
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+    }
+  };
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -101,7 +125,7 @@ const ItemPage = () => {
             <button onClick={handleIncrease}>+</button>
           </div>
           <div className="add-to-cart">
-            <button>Add to cart</button>
+            <button onClick={handleAddToCart}>Add to cart</button>
           </div>
           <div className="product-meta">
             <p><strong>SKU:</strong> {item.product_sku}</p>
