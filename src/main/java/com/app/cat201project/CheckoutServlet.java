@@ -4,6 +4,8 @@ import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.opencsv.exceptions.CsvValidationException;
 import jakarta.servlet.ServletConfig;
@@ -17,7 +19,6 @@ import Class.*;
 
 @WebServlet(name = "CheckoutServlet", value = "/Checkout-servlet")
 public class CheckoutServlet extends HttpServlet {
-
     private int client_id = 1;                                //Temporarily set the client id to 1, will connect with log in client id
     ArrayList<Cart> carts = new ArrayList<Cart>();               //Stores data from Cart list
     Cart client_cart = new Cart();                            //Stores data of the logged in client
@@ -167,14 +168,14 @@ public class CheckoutServlet extends HttpServlet {
 
                     orderRecord += skuBuilder.toString(); orderRecord += ',';
                     orderRecord += quantityBuilder.toString(); orderRecord += ',';
-                    orderRecord += String.valueOf(quantity); orderRecord += ',';
-                    //product price
-                    //deliveryfee
-                    //assemblyfee
-                    //sst
-                    orderRecord += jsonObject.getInt("TotalPayment"); orderRecord += ',';
+                    orderRecord += jsonObject.getInt("quantity"); orderRecord += ',';
+                    orderRecord += jsonObject.getFloat("productPrice"); orderRecord += ',';
+                    orderRecord += jsonObject.getFloat("deliveryFee"); orderRecord += ',';
+                    orderRecord += jsonObject.getFloat("assemblyFee"); orderRecord += ',';
+                    orderRecord += jsonObject.getFloat("sst"); orderRecord += ',';
+                    orderRecord += jsonObject.getFloat("TotalPayment"); orderRecord += ',';
                     orderRecord += jsonObject.getString("PaymentType").trim(); orderRecord += ',';
-                    orderRecord += "Paid"; orderRecord += ',';
+                    orderRecord += "Completed"; orderRecord += ',';
                     orderRecord += ',';orderRecord += ',';orderRecord += ',';
                     orderRecord += String.valueOf(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
                     System.out.println(orderRecord);
