@@ -15,5 +15,9 @@
 <a href="Favourite-servlet">Favourite Servlet</a>
 <a href="Product-servlet">Product Servlet</a>
 <a href="LoginServlet">Login Servlet</a>
+<a href="RegisterServlet">Register Servlet</a>
+<a href="ForgetPasswordServlet">Forget Password Servlet</a>
+<a href="PromotionServlet">Promotion Servlet</a>
+<a href="CustomerServiceServlet">Customer Service Servlet</a>
 </body>
 </html>
