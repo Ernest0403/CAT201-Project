@@ -20,7 +20,7 @@ public class ProductServlet extends HttpServlet {
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-        ArrayList<Product> products = Global.getProductList();
+        ArrayList<Product> products = Global.getProductList(getServletContext());
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");

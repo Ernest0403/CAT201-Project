@@ -2,6 +2,7 @@ package Class;
 
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
+import jakarta.servlet.ServletContext;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -11,11 +12,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Global {
-    private static final String FILE_PATH = Global.class.getClassLoader().getResource("catProjectDataset.csv").getPath();
 
-    //temporary added a file path parameter for another data location
-    public static ArrayList<Product> getProductList() {
+    public static ArrayList<Product> getProductList(ServletContext context) {
         ArrayList<Product> ProductList = new ArrayList<Product>();
+        String FILE_PATH = context.getRealPath("/Database/catProjectDataset.csv");
 
         try (CSVReader reader = new CSVReader(new FileReader(FILE_PATH))) {
             String[] line;

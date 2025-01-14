@@ -27,7 +27,7 @@ function ItemListing({ title, categories, roomType, defaultCategory }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-      fetch('http://localhost:8080/cat201_project_war_exploded/Product-servlet')
+      fetch('http://localhost:8080/cat201_project_war/Product-servlet')
       .then((response) => response.json())
       .then((data) => setProducts(data)) 
       .catch((error) => console.error("Error fetching products:", error));
