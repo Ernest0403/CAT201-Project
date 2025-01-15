@@ -69,9 +69,32 @@ const ItemPage = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          action: "updateQuantity",
+          action: "addToCart",
           productId: item.product_sku,
           quantity: quantity,
+        }),
+      });
+
+      if (response.ok) {
+        alert("Cart updated successfully!");
+      } else {
+        alert("Failed to update cart.");
+      }
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+    }
+  };
+
+  const handleAddToFav = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/cat201_project_war/Favourite-servlet", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          action: "addToFav",
+          productId: item.product_sku,
         }),
       });
 
@@ -145,6 +168,9 @@ const ItemPage = () => {
           <div className="add-to-cart">
             <button onClick={handleAddToCart}>Add to cart</button>
           </div>
+          <div className="add-to-cart">
+            <button onClick={handleAddToFav}>Add to favourite</button>
+          </div>
           <div className="product-meta">
             <p><strong>SKU:</strong> {item.product_sku}</p>
             <p><strong>Categories:</strong> {item.product_roomCategory}</p>
@@ -157,7 +183,7 @@ const ItemPage = () => {
       <div className="tabs">
         <div className="tabs-header">
           <button
-            className={activeTab === "Description" ? "active" : ""}
+              className={activeTab === "Description" ? "active" : ""}
             onClick={() => setActiveTab("Description")}
           >
             Description

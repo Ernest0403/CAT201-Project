@@ -110,6 +110,22 @@ public class Cart {
         updateCartCSV(carts, client_cart);
     }
 
+    public void addToCart(String product_id, int addQuantity, ArrayList<Cart> carts, Cart client_cart) {
+        System.out.println("Update product_id" + product_id);
+        System.out.println("New quantity from JSON" + addQuantity);
+
+        for (int i = 0; i < client_cart.product_list.size(); i++) {
+            System.out.println("Looping product_id" + client_cart.product_list.get(i));
+            //This if not executed
+            if (Objects.equals(client_cart.product_list.get(i), product_id)) {
+                client_cart.addCart(product_list.get(i), addQuantity);
+                break;
+            }
+        }
+
+        updateCartCSV(carts, client_cart);
+    }
+
     public ArrayList<String> getProduct_id(){
         return product_list;
     }
