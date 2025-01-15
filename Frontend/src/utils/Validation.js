@@ -50,18 +50,17 @@ const Validation = {
             product_orderVolume: "isValidNumber"
         };
 
+        let errorMessages = [];
         for (const field in rules) {
             if (!Validation[rules[field]](data[field])) {
                 if (field === "product_sku") {
-                    alert(`Invalid SKU format: The SKU should consist of at least one uppercase letters followed by at least one numbers.`);
+                    errorMessages.push(`Invalid SKU format: The SKU should consist of at least one uppercase letter followed by at least one number.`);
                 } else {
-                    alert(`Invalid input: ${field.replace(/_/g, ' ')} is not valid.`);
+                    errorMessages.push(`Invalid input: ${field.replace(/_/g, ' ')} is not valid.`);
                 }
-                return false;
             }
         }
-
-        return true;
+        return errorMessages.length > 0 ? errorMessages : true;
     },
 
     validateOrder: (data) => {
@@ -72,13 +71,13 @@ const Validation = {
             order_orderDate: "isValidDate",
         };
 
+        let errorMessages = [];
         for (const field in rules) {
             if (!Validation[rules[field]](data[field])) {
-                alert(`Invalid input: ${field.replace(/_/g, ' ')} is not valid.`);
-                return false;
+                errorMessages.push(`Invalid input: ${field.replace(/_/g, ' ')} is not valid.`);
             }
         }
-        return true;
+        return errorMessages.length > 0 ? errorMessages : true;
     }
 
 };
