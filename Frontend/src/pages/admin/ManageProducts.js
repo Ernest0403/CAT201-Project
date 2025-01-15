@@ -32,6 +32,8 @@ const ManageProducts = () => {
   const [isAddingProduct, setIsAddingProduct] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [editingItemSku, setEditingItemSku] = useState(null);
+  const [popupMessage, setPopupMessage] = useState("");
+  const [popupType, setPopupType] = useState("");
 
   useEffect(() => {
     fetch('http://localhost:8080/cat201_project_war/AdminProduct-servlet')
@@ -39,6 +41,17 @@ const ManageProducts = () => {
         .then(data => { console.log(data); setItems(data); })
         .catch(error => console.error('Error fetching products:', error));
   }, []);
+
+  useEffect(() => {
+    if (popupMessage) {
+      const timer = setTimeout(() => {
+        setPopupMessage("");
+        setPopupType("");
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [popupMessage]);
 
   const categories = [...new Set(items.map(item => item.product_roomCategory)), 'Full List'];
 
@@ -86,17 +99,23 @@ const ManageProducts = () => {
   };
 
   const handleSave = async () => {
-    if (Validation.validateProduct(editFormData)) {
+    const validationResults = Validation.validateProduct(editFormData);
+    if (Validation.validateProduct(editFormData) === true) {
       console.log("Product data is valid!");
+      setPopupMessage([]);
+      setPopupType("success")
     } else {
       console.log("Product validation failed.");
+      setPopupMessage(validationResults.join("\n"));
+      setPopupType("error");
       return;
     }
 
     const isSkuUnique = items.every(item => item.product_sku !== editFormData.product_sku || item.product_sku === originalSku);
 
     if (!isSkuUnique) {
-      alert("SKU must be unique. Please provide a different SKU.");
+      setPopupMessage("SKU must be unique. Please provide a different SKU.");
+      setPopupType("error");
       return;
     }
 
@@ -141,7 +160,12 @@ const ManageProducts = () => {
 
         if (!response.ok) {
           throw new Error('Failed to delete product.');
+          setPopupMessage('Failed to delete product.');
+          setPopupType('error')
         }
+
+        setPopupMessage('Product deleted successfully.');
+        setPopupType('sucess')
 
         // remove the product from the local state
         const updatedItems = items.filter((item) => item.product_sku !== sku);
@@ -159,23 +183,30 @@ const ManageProducts = () => {
   };
 
   const handleAdd = async () => {
-    if (Validation.validateProduct(editFormData)) {
+    const validationResults = Validation.validateProduct(editFormData);
+    if (Validation.validateProduct(editFormData) === true) {
       console.log("Product data is valid!");
+      setPopupMessage([]);
+      setPopupType("success")
     } else {
       console.log("Product validation failed.");
+      setPopupMessage(validationResults.join("\n"));
+      setPopupType("error");
       return;
     }
 
     if(editFormData.product_sku == null || editFormData.product_sku === '')
     {
-      alert("Please enter SKU value");
+      setPopupMessage("Please enter SKU value");
+      setPopupType("error");
       return;
     }
 
     const isSkuUnique = items.every(item => item.product_sku !== editFormData.product_sku || item.product_sku === originalSku);
 
     if (!isSkuUnique) {
-      alert("SKU must be unique. Please provide a different SKU.");
+      setPopupMessage("SKU must be unique. Please provide a different SKU.");
+      setPopupType("error");
       return;
     }
 
@@ -202,7 +233,8 @@ const ManageProducts = () => {
   }
 
   return (
-      <div className='manageContainer'>
+      <div className='manageContainer responsive-table'>
+        <h1>Product</h1>
         {displayTable ? (
             <>
               <table>
@@ -235,7 +267,7 @@ const ManageProducts = () => {
                           <td className='border-left'>{item.product_sku}</td>
                           <td>{item.product_name}</td>
                           <td>
-                            Stock:{' '}
+                            <span>Stock:{' '}</span>
                             {editingItemSku === item.product_sku ? (
                                 <input
                                     type="number"
@@ -278,60 +310,83 @@ const ManageProducts = () => {
             </>
         ) : (
             <div className="edit-form">
-            <form>
-              {Object.entries(editFormData).map(([key, value]) => (
-                  <div key={key} className="selection-container">
-                    <label htmlFor={key}>{key}:</label>
-                    {key === 'product_src' ? (
-                        <input
-                            type="file"
-                            id={key}
-                            name={key}
-                            onChange={handleFormInputChange}
-                        />
-                    ) : key === 'product_arrivalDate' ? (
-                        <input
-                            type="date"
-                            id={key}
-                            name={key}
-                            value={value}
-                            onChange={handleFormInputChange}
-                        />
-                    ) : (
-                        <input
-                            type="text"
-                            id={key}
-                            name={key}
-                            value={value}
-                            onChange={handleFormInputChange}
-                        />
-                    )}
-                    {key === 'product_dimension' ? (
-                        <label>cm</label>
-                    ) : key === 'product_weight' ? (
-                        <label>kg</label>
-                    ) : key === 'product_warranty' ? (
-                        <label>year</label>
-                    ) : null}
-                  </div>
-              ))}
+              <form>
+                {Object.entries(editFormData).map(([key, value]) => (
+                    <div key={key} className="selection-container">
+                      <label htmlFor={key}>{key}:</label>
+                      {key === 'product_src' ? (
+                          <input
+                              type="file"
+                              id={key}
+                              name={key}
+                              onChange={handleFormInputChange}
+                          />
+                      ) : key === 'product_arrivalDate' ? (
+                          <input
+                              type="date"
+                              id={key}
+                              name={key}
+                              value={value}
+                              onChange={handleFormInputChange}
+                          />
+                      ) : (
+                          <input
+                              type="text"
+                              id={key}
+                              name={key}
+                              value={value}
+                              onChange={handleFormInputChange}
+                          />
+                      )}
+                      {key === 'product_dimension' ? (
+                          <label>cm</label>
+                      ) : key === 'product_weight' ? (
+                          <label>kg</label>
+                      ) : key === 'product_warranty' ? (
+                          <label>year</label>
+                      ) : null}
+                    </div>
+                ))}
 
-              <div className="form-actions">
-                <button
-                    type="button"
-                    onClick={isAddingProduct ? handleAdd : handleSave}
-                    className="saveorcancelbtn"
-                >
-                  {isAddingProduct ? "Add Product" : "Save Changes"}
-                </button>
+                <div className="form-actions">
+                  <button
+                      type="button"
+                      onClick={isAddingProduct ? handleAdd : handleSave}
+                      className="saveorcancelbtn"
+                  >
+                    {isAddingProduct ? "Add Product" : "Save Changes"}
+                  </button>
 
-                <button type="button" onClick={handleCancel} className="saveorcancelbtn">
-                  Cancel
-                </button>
-              </div>
-            </form>
+                  <button type="button" onClick={handleCancel} className="saveorcancelbtn">
+                    Cancel
+                  </button>
+                </div>
+              </form>
             </div>
         )}
+
+        {popupMessage && (
+            <div
+                className={`PopupBox ${popupType === "error" ? "PopupError" : "PopupSuccess"}`}
+                style={{
+                  position: "fixed",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  textAlign: "center",
+                  zIndex: 1000,
+                  backgroundColor: "#fff",
+                  padding: "20px",
+                  borderRadius: "8px",
+                  boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+                  whiteSpace: "pre-line"
+                }}
+            >
+              <h3>{popupType === "error" ? "Error" : "Success"}</h3>
+              <p>{popupMessage}</p>
+            </div>
+        )}
+
       </div>
   );
 };

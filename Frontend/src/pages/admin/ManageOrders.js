@@ -9,6 +9,9 @@ const ManageOrders = () => {
   const [editOrderData, setEditOrderData] = useState({});
   const [originalId, setOriginalId] = useState(null);
   const [viewOrderDetails, setViewOrderDetails] = useState(null);
+  const [popupMessage, setPopupMessage] = useState("");
+  const [popupType, setPopupType] = useState("");
+
 
   useEffect(() => {
     fetch('http://localhost:8080/cat201_project_war/AdminOrder-servlet')
@@ -16,6 +19,17 @@ const ManageOrders = () => {
         .then(data => { console.log(data); setOrders(data); })
         .catch(error => console.error('Error fetching orders:', error));
   }, []);
+
+  useEffect(() => {
+    if (popupMessage) {
+      const timer = setTimeout(() => {
+        setPopupMessage("");
+        setPopupType("");
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [popupMessage]);
 
   const statuses = ['Pending', 'Shipped', 'Completed', 'Cancelled', 'Full List'];
 
@@ -52,17 +66,23 @@ const ManageOrders = () => {
   };
 
   const handleSave = async () => {
-    if (Validation.validateOrder(editOrderData)) {
+    const validationResults = Validation.validateOrder(editOrderData);
+    if (Validation.validateOrder(editOrderData) === true) {
       console.log("Order data is valid!");
+      setPopupMessage([]);
+      setPopupType("success")
     } else {
       console.log("Order validation failed.");
+      setPopupMessage(validationResults.join("\n"));
+      setPopupType("error");
       return;
     }
 
     const isIdUnique = orders.every(order => order.order_id !== editOrderData.order_id ||  order.order_id === originalId);
 
     if (!isIdUnique) {
-      alert("Id must be unique. Please provide a different Id.");
+      setPopupMessage("Id must be unique. Please provide a different Id.");
+      setPopupType("error");
       return;
     }
 
@@ -98,7 +118,8 @@ const ManageOrders = () => {
   };
 
   return (
-      <div className='manageContainer'>
+      <div className='manageContainer responsive-table'>
+        <h1>Order</h1>
         {displayTable ? (
             <>
               <table>
@@ -150,7 +171,6 @@ const ManageOrders = () => {
         ) : viewOrderDetails ? (
             <>
               <div className='view-order-details'>
-                <h2>Order Details</h2>
                 <table>
                   <tbody>
                   {/* Order Number */}
@@ -327,6 +347,29 @@ const ManageOrders = () => {
               </div>
             </>
         )}
+
+        {popupMessage && (
+            <div
+                className={`PopupBox ${popupType === "error" ? "PopupError" : "PopupSuccess"}`}
+                style={{
+                  position: "fixed",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  textAlign: "center",
+                  zIndex: 1000,
+                  backgroundColor: "#fff",
+                  padding: "20px",
+                  borderRadius: "8px",
+                  boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+                  whiteSpace: "pre-line"
+                }}
+            >
+              <h3>{popupType === "error" ? "Error" : "Success"}</h3>
+              <p>{popupMessage}</p>
+            </div>
+        )}
+
       </div>
   );
 };
