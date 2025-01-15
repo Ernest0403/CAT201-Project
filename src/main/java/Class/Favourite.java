@@ -53,11 +53,34 @@ public class Favourite {
     }
 
     public void addFavourite(String productSku) {
-        product_list.add(productSku);
+        if(!product_list.contains(productSku)) {
+            product_list.add(productSku);
+            System.out.println("Added Fav: " + productSku);
+        }
     }
 
     public void removeFavourite(String productSku) {
         product_list.remove(productSku);
+    }
+
+    public void addFavCSV(String productSku) {
+        try (BufferedWriter writer = new BufferedWriter(
+                new FileWriter(
+                        externalCsvPath, true)
+        )
+        ) {
+            if(!product_list.contains(productSku)) {
+                writer.newLine();
+                writer.write(String.join(",",
+                        new String[]{
+                                String.valueOf(client_id),
+                                productSku,
+                        }));
+            }
+            product_list.add(productSku);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static void loadFav(ArrayList<Product> products,

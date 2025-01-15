@@ -32,6 +32,11 @@ public class CartServlet extends HttpServlet{
         realPath = getServletContext().getRealPath("Database/Cart.csv");
         Cart.setExternalCsvPath(realPath);
         System.out.println("Resolved File Path: " + realPath);
+        try {
+            Cart.loadCart(products, carts, client_cart, cart_products, client_id, realPath);
+        } catch (CsvValidationException | IOException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 
@@ -48,11 +53,7 @@ public class CartServlet extends HttpServlet{
         response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
         //Create a cart for a client, should be modified into reading from csv
-        try {
-            Cart.loadCart(products, carts, client_cart, cart_products, client_id, realPath);
-        } catch (CsvValidationException e) {
-            throw new RuntimeException(e);
-        }
+
         System.out.println("client_cart list shown." + client_cart.getProduct_id());
         System.out.println("client_product list added." + cart_products);
 
@@ -132,6 +133,15 @@ public class CartServlet extends HttpServlet{
             String action = jsonObject.getString("action").trim(); // Get the action identifier
             System.out.println("Received JSON: " + jsonObject);
             switch (action) {
+                case "addToCart":
+                    client_cart.addToCart(
+                            jsonObject.getString("productId").trim(),
+                            jsonObject.getInt("quantity"),
+                            carts,
+                            client_cart);
+                    System.out.println("Cart added");
+                    break;
+
                 case "updateQuantity":
                     client_cart.updateCart(
                             jsonObject.getString("productId").trim(),
@@ -141,6 +151,7 @@ public class CartServlet extends HttpServlet{
                     );
                     System.out.println("Quantity updated");
                     break;
+
                 case "updateSelected":
                     client_cart.updateSelected(jsonObject.getString("productId").trim());
                     System.out.println("Selected Item updated");

@@ -31,6 +31,14 @@ public class FavouriteServlet extends HttpServlet {
         products = Global.getProductList(productRealPath);
         realPath = getServletContext().getRealPath("Database/Favourite.csv");
         Favourite.setExternalCsvPath(realPath);
+        //Create a cart for a client, should be modified into reading from csv
+        try {
+            Favourite.loadFav(products, favouriteList, client_fav, fav_products, client_id);
+        } catch (CsvValidationException | IOException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("client_fav list shown." + client_fav.getProduct_list());
+        System.out.println("fav_product list added." + fav_products);
     }
 
     //Return logged in client Cart details
@@ -44,15 +52,6 @@ public class FavouriteServlet extends HttpServlet {
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         response.setHeader("Pragma", "no-cache");
         response.setDateHeader("Expires", 0);
-
-        //Create a cart for a client, should be modified into reading from csv
-        try {
-            Favourite.loadFav(products, favouriteList, client_fav, fav_products, client_id);
-        } catch (CsvValidationException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println("client_fav list shown." + client_fav.getProduct_list());
-        System.out.println("fav_product list added." + fav_products);
 
         // Set response type to JSON
         response.setContentType("application/json");
@@ -115,6 +114,10 @@ public class FavouriteServlet extends HttpServlet {
             String action = jsonObject.getString("action").trim(); // Get the action identifier
             System.out.println("Received JSON: " + jsonObject);
             switch (action) {
+                case "addToFav":
+                    client_fav.addFavCSV(jsonObject.getString("productId").trim());
+                    break;
+
                 case "removeFav":
                     Favourite.removeFavCSV(favouriteList,
                             client_fav,
