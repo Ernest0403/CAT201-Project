@@ -9,6 +9,24 @@ const ItemPage = () => {
   const [relatedItems, setRelatedItems] = useState([]);
   const [activeTab, setActiveTab] = useState("Description");
   const [quantity, setQuantity] = useState(1);
+  const [sliceRange, setSliceRange] = useState(5);
+
+  useEffect(() => {
+      const updateSliceRange = () => {
+        if (window.innerWidth <= 1024) {
+          setSliceRange(6);
+        } else {
+          setSliceRange(5);
+        }
+      };
+
+      updateSliceRange(); // Initial check
+      window.addEventListener("resize", updateSliceRange);
+
+      return () => {
+        window.removeEventListener("resize", updateSliceRange);
+      };
+  }, []);
 
   useEffect(() => {
     const fetchProductData = async () => {
@@ -25,7 +43,7 @@ const ItemPage = () => {
 
                 const relatedFiltered = relatedData.filter(
                   (product) => product.product_sku !== selectedProduct.product_sku
-                ).slice(0, 5);
+                ).slice(0, sliceRange);
 
                 setRelatedItems(relatedFiltered);
               } else {
@@ -37,7 +55,7 @@ const ItemPage = () => {
     };
 
     fetchProductData();
-  }, [id]);
+  }, [id, sliceRange]);
 
   if (!item) {
     return <p>Loading...</p>;

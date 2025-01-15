@@ -101,9 +101,14 @@ function ItemListing({ title, categories, roomType, defaultCategory }) {
 
   return (
     <div className="product-container">
-      <h1 className="page-title">{pageTitle}</h1>
+      <div className="page-title">
+      <h1>{pageTitle}</h1>
+      </div>
       <div className="listing-container">
       <div className="sidebar" style={{ display: (sidebarVisible || !isMobile) ? 'block' : 'none',}}>
+        <button className="sidebar-close-btn" onClick={toggleSidebar}>
+          Close
+        </button>
         <div className="filter-section">
           <h3>Filter by Price</h3>
           <input

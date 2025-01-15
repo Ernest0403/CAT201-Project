@@ -7,7 +7,7 @@ function Menubar() {
 
     return (
         <div className="Menubar-flex">
-            <div className="TextLogo">ComfortZone</div>
+            <a href="/" className="TextLogo">ComfortZone</a>
             <div className="Searchbar">
                 <input type="text" name="SearchInput" placeholder="Search for products" />
                 <span className="SearchIcon">

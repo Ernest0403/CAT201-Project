@@ -38,9 +38,10 @@ import PaymentSuccess from './pages/user/PaymentSuccess';
 import AccountDetails from './pages/user/AccountDetails';
 import Addresses from './pages/user/Addresses';
 import Chat from './pages/user/Chat'
+import HomePage from './HomePage'
 
 
-const HomePage = () => (
+/*const HomePage = () => (
   <div>
     <Menubar />
     <Navbar />
@@ -49,7 +50,7 @@ const HomePage = () => (
       <p>Browse through our amazing furniture collections!</p>
     </div>
   </div>
-);
+);*/
 
 const App = () => {
   return (
