@@ -55,7 +55,6 @@ function Cart() {
     );
 
       fetchCartData();
-
   };
 
   //Flag to refresh once an cart is selected or unselected

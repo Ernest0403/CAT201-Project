@@ -77,6 +77,7 @@ public class Order {
     public CancellationDetails getOrder_cancellationDetails() { return order_cancellationDetails; }
     public String getOrder_status() { return order_status; }
     public String getOrder_orderDate() { return order_orderDate; }
+    public static int getOrdersCount() { return ordersCount; }
 
     public void setOrder(Order order){
         this.order_id = order.getOrder_id();
@@ -260,6 +261,7 @@ public class Order {
         }
 
     public static Map<Integer, Order> importOrders() {
+        ordersCount = 0;
         try (BufferedReader reader = new BufferedReader(new FileReader(externalCsvPath))) {
             String line;
             reader.readLine();
@@ -270,6 +272,7 @@ public class Order {
                     Order order = new Order(values);
                     orderMap.put(order.getOrder_id(), order);
                 }
+                ordersCount++;
             }
             if (orderMap.isEmpty()) {
                 System.out.println("No orders found in the CSV file.");

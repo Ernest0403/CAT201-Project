@@ -87,12 +87,12 @@ function Checkout() {
         cardCVV: ''
     });
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setShippingDetails({
-            ...shippingDetails,
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setShippingDetails((prevDetails) => ({
+            ...prevDetails,
             [name]: value,
-        });
+        }));
     };
 
     //Create order upon payment done
@@ -125,6 +125,11 @@ function Checkout() {
                         productSKU: product.productID,
                         productQuantity: product.quantity,
                     })),
+                    productPrice: Summary.SubPrice,
+                    deliveryFee: Summary.Delivery,
+                    assemblyFee: Summary.AssemblyFee,
+                    sst: Summary.SST,
+                    quantity: Summary.SelectedQuantity,
                 }),
             }
         );
@@ -176,21 +181,21 @@ function Checkout() {
                             DETAILS AND INFORMATION
                     </div>
                     <lable className='InformationLable'>Recipient Name</lable>
-                    <input type="text" value={shippingDetails.recipientName} name="ShippingRecipientNameInput" onChange={handleChange}/>
+                    <input type="text" value={shippingDetails.recipientName} name="recipientName" onChange={handleChange}/>
                     <lable className='InformationLable'>Shipping Address Details</lable>
-                    <input type="text" value={shippingDetails.address} name="ShippingAddressInput" onChange={handleChange}/>
+                    <input type="text" value={shippingDetails.address} name="address" onChange={handleChange}/>
                     <lable className='InformationLable'>Shipping Address Details (Optional)</lable>
-                    <input type="text" value = {shippingDetails.addressOptional} name= "ShippingAddressOptionalInput" onChange={handleChange}/>
+                    <input type="text" value = {shippingDetails.addressOptional} name= "addressOptional" onChange={handleChange}/>
                     <lable className='InformationLable'>City</lable>
-                    <input type="text" value = {shippingDetails.city} name= "ShippingCityInput" onChange={handleChange}/>
+                    <input type="text" value = {shippingDetails.city} name= "city" onChange={handleChange}/>
                     <lable className='InformationLable'>Postcode</lable>
-                    <input type="text" value = {shippingDetails.postcode} name= "ShippingPostcodeInput" onChange={handleChange}/>
+                    <input type="text" value = {shippingDetails.postcode} name= "postcode" onChange={handleChange}/>
                     <lable className='InformationLable'>State</lable>
-                    <input type="text" value = {shippingDetails.state} name= "ShippingStateInput" onChange={handleChange}/>
+                    <input type="text" value = {shippingDetails.state} name= "state" onChange={handleChange}/>
                     <lable className='InformationLable'>Contact Number</lable>
-                    <input type="text" value = {shippingDetails.contactNumber} name= "ShippingContactNumberInput" onChange={handleChange}/>
+                    <input type="text" value = {shippingDetails.contactNumber} name= "contactNumber" onChange={handleChange}/>
                     <lable className='InformationLable'>Notes/Messages</lable>
-                    <input type="text" value = {shippingDetails.notes} name= "ShippingNotesInput" onChange={handleChange}/>
+                    <input type="text" value = {shippingDetails.notes} name= "notes" onChange={handleChange}/>
                 </div>
                 <div className='PaymentMethod'>
                 <div className='OptionLable'>
@@ -242,13 +247,13 @@ function Checkout() {
                     {selectedPayment === "card" ?
                         <div className='ShippingDetails'>
                             <div className='InformationLable'>Card Number</div>
-                            <input type="text" value = {shippingDetails.cardNumber} name= "CardNumberInput" onChange={handleChange}/>
+                            <input type="text" value = {shippingDetails.cardNumber} name= "cardNumber" onChange={handleChange}/>
                             <div className='InformationLable'>Card's Holder Name</div>
-                            <input type="text" value = {shippingDetails.cardHolderName} name= "CardHolderNameInput" onChange={handleChange}/>
+                            <input type="text" value = {shippingDetails.cardHolderName} name= "cardHolderName" onChange={handleChange}/>
                             <div className='InformationLable'>Card Expiry Date</div>
-                            <input type="text" value = {shippingDetails.cardED} name= "CardEDInput" onChange={handleChange}/>
+                            <input type="text" value = {shippingDetails.cardED} name= "cardED" onChange={handleChange}/>
                             <div className='InformationLable'>CVV</div>
-                            <input type="text" value = {shippingDetails.cardCVV} name= "CardCVVInput" onChange={handleChange}/>
+                            <input type="text" value = {shippingDetails.cardCVV} name= "cardCVV" onChange={handleChange}/>
                         </div>
                         : <></>
                     }
