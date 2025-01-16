@@ -6,7 +6,11 @@ const Cartlist = ({productID, imageSrc, itemName, tags, price, quantity, changeQ
     //setStatus function for button
     //Use localStorage to keep track on the state changes even after refresh
     const [SelectedStatus, setStatus] = useState(
-        localStorage.getItem(`SelectedStatus_${productID}`) || "NotSelected");
+        localStorage.getItem(`SelectedStatus_${productID}`) || "NotSelected"
+
+        // Code to clear the localStorage when the initial state is wrong.
+        // localStorage.removeItem(`SelectedStatus_${productID}`)
+    );
 
     useEffect(() => {
         localStorage.setItem(`SelectedStatus_${productID}`, SelectedStatus);

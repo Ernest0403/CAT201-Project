@@ -102,6 +102,7 @@ public class Cart {
 
                 if (newQuantity == 0) {
                     removeCart(product_id);
+                    selectedItems.remove(product_id);
                 }
                 break;
             }

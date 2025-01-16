@@ -149,6 +149,25 @@ public class CartServlet extends HttpServlet{
                             carts,
                             client_cart
                     );
+
+                    //Update cart_product
+                    boolean found = false;
+                    for (int i = 0; i < cart_products.size() ; i++) {
+                        found = false;
+                        for (String productSKU : client_cart.getProduct_id())
+                        {
+                            if(cart_products.get(i).getProduct_sku().trim().equals(productSKU.trim()))
+                            {
+                                found = true;
+                                break;
+                            }
+                        }
+                        if (!found) {
+                            cart_products.remove(i);
+                            break;
+                        }
+                    }
+
                     System.out.println("Quantity updated");
                     break;
 
