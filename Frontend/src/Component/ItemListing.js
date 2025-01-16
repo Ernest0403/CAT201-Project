@@ -20,7 +20,7 @@ function ItemListing({ title, categories, roomType, defaultCategory }) {
   const [pageTitle, setPageTitle] = useState(title);
   const [sortOption, setSortOption] = useState("default");
   const [products, setProducts] = useState([]);
-  const [sidebarVisible, setSidebarVisible] = useState(false);
+  const [filterBarVisible, setFilterBarVisible] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
   const { category } = useParams();
@@ -95,8 +95,8 @@ function ItemListing({ title, categories, roomType, defaultCategory }) {
 
   const sortedItems = sortItems(filteredItems);
 
-  const toggleSidebar = () => {
-    setSidebarVisible(!sidebarVisible);
+  const toggleFilterBar = () => {
+    setFilterBarVisible(!filterBarVisible);
   };
 
   return (
@@ -105,10 +105,12 @@ function ItemListing({ title, categories, roomType, defaultCategory }) {
       <h1>{pageTitle}</h1>
       </div>
       <div className="listing-container">
-      <div className="sidebar" style={{ display: (sidebarVisible || !isMobile) ? 'block' : 'none',}}>
-        <button className="sidebar-close-btn" onClick={toggleSidebar}>
-          Close
-        </button>
+      <div className="filterBar" style={{ display: (filterBarVisible || !isMobile) ? 'block' : 'none',}}>
+        {isMobile && (
+            <button className={`filterBar-close-btn ${filterBarVisible ? 'visible' : ''}`} onClick={toggleFilterBar}>
+              Close
+            </button>
+        )}
         <div className="filter-section">
           <h3>Filter by Price</h3>
           <input
@@ -141,8 +143,8 @@ function ItemListing({ title, categories, roomType, defaultCategory }) {
       <div className="filter-container">
       {isMobile && (
         <button
-          className="sidebar-button"
-          onClick={toggleSidebar}
+          className="filterBar-button"
+          onClick={toggleFilterBar}
         >
           <img src="./Images/filter.png" alt="Filter" className="filter-icon" />
         </button>

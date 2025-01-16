@@ -17,7 +17,7 @@ const WorkRoomPage = () => {
     <ItemListing
       title="Work/Study Room"
       categories={WorkRoomCategories}
-      roomType="Work Room"
+      roomType="Work/study room"
       defaultCategory={category ? category.replace("-", " ") : ""}
     />
   );

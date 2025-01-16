@@ -17,7 +17,7 @@ const DiningRoomPage = () => {
     <ItemListing
       title="Dining Room"
       categories={DiningRoomCategories}
-      roomType="Dining Room"
+      roomType="Dining room"
       defaultCategory={category ? category.replace("-", " ") : ""}
     />
   );

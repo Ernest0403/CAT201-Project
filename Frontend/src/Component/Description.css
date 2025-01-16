@@ -43,13 +43,13 @@ body {
     color: #888;
 }
 
-ul{
+.product-details ul{
   list-style-type: disc;
   padding-left: 20px;
   color: #838080;
 }
 
-li {
+.product-details li {
   margin-bottom: 20px;
 }
 
@@ -80,16 +80,22 @@ li {
   min-width: 40px; 
 }
 
-.add-to-cart button{
+.button-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.add-to-cart button,
+.add-to-favourite button {
   background-color: #007bff;
   color: white;
-  padding: 10px 20px;
+  padding: 15px 15px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   font-weight: bold;
   width: 160px;
-  margin: 0;
+  margin-right: 20px;
 }
 
 .product-meta {
