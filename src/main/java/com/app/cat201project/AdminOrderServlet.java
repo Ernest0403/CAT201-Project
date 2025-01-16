@@ -53,13 +53,13 @@ public class AdminOrderServlet extends HttpServlet {
 
     public void exportOrders(Map<Integer, Order> orders) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
-            writer.write("id,orderNumber,customer_username,customer_contactNumber,customer_address,productIds,quantities,totalItems,productPrice,deliveryFee,assemblyFee,sst,total,paymentType,paymentStatus,cancellationReason,cancellationDate,status,orderDate\n");
+            writer.write("id,orderNumber,customer_username,customer_contactNumber,customer_address,productSkus,quantities,totalItems,productPrice,deliveryFee,assemblyFee,sst,total,paymentType,paymentStatus,cancellationReason,cancellationDate,status,orderDate\n");
 
             // iterate through the orders map and write each order's data to the file
             for (Order order : orders.values()) {
-                // handle productIds and quantities are stored as lists or arrays in the order object
-                String productId = String.join("|", order.getOrder_products().stream()
-                        .map(product -> String.valueOf(product.getProductId()))
+                // handle productSkus and quantities are stored as lists or arrays in the order object
+                String productSku = String.join("|", order.getOrder_products().stream()
+                        .map(product -> String.valueOf(product.getProductSku()))
                         .toArray(String[]::new));
 
                 String quantities = String.join("|", order.getOrder_products().stream()
@@ -72,7 +72,7 @@ public class AdminOrderServlet extends HttpServlet {
                         escapeForCSV(order.getOrder_customer().getUsername()),
                         escapeForCSV(order.getOrder_customer().getContactNumber()),
                         escapeForCSV(order.getOrder_customer().getAddress()),
-                        productId,
+                        productSku,
                         quantities,
                         order.getOrder_orderDetails().getTotalItems(),
                         order.getOrder_orderDetails().getProductPrice(),
@@ -176,7 +176,7 @@ public class AdminOrderServlet extends HttpServlet {
             // return success
             response.setStatus(HttpServletResponse.SC_OK);
             response.getWriter().write("{\"message\": \"Product updated successfully.\"}");
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().write("{\"error\": \"" + e.getMessage() + "\"}");

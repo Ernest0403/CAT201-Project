@@ -194,10 +194,10 @@ const ManageOrders = () => {
                   </tr>
 
                   { viewOrderDetails.order_products.map((product, index) => (
-                      <React.Fragment key={product.productId}>
+                      <React.Fragment key={product.productSku}>
                         <tr>
-                          <td>Product {index + 1} ID: </td>
-                          <td>{product.productId}</td>
+                          <td>Product {index + 1} Sku: </td>
+                          <td>{product.productSku}</td>
                         </tr>
                         <tr>
                           <td>Product {index + 1} Quantity: </td>

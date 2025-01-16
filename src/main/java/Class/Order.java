@@ -35,12 +35,12 @@ public class Order {
         );
 
         this.order_products = new ArrayList<>();
-        String[] productIds = values.get(5).split("\\|");
+        String[] productSkus = values.get(5).split("\\|");
         String[] quantities = values.get(6).split("\\|");
 
-        for (int i = 0; i < productIds.length; i++) {
+        for (int i = 0; i < productSkus.length; i++) {
             this.order_products.add(new ProductItem(
-                    Integer.parseInt(productIds[i]),  // product ID
+                    productSkus[i],  // product Sku
                     Integer.parseInt(quantities[i])   // quantity
             ));
         }
@@ -110,17 +110,17 @@ public class Order {
     }
 
     public static class ProductItem {
-        private int productId;
+        private String productSku;
         private int quantity;
 
         public ProductItem() {};
 
-        public ProductItem(int productId, int quantity) {
-            this.productId = productId;
+        public ProductItem(String productSku, int quantity) {
+            this.productSku = productSku;
             this.quantity = quantity;
         }
 
-        public int getProductId() { return productId; }
+        public String getProductSku() { return productSku; }
         public int getQuantity() { return quantity; }
     }
 
@@ -226,9 +226,9 @@ public class Order {
     //then exec this function
     public void writeOrderCSV() throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(externalCsvPath))) {
-                // handle productIds and quantities are stored as lists or arrays in the order object
-                String productId = String.join("|", getOrder_products().stream()
-                        .map(product -> String.valueOf(product.getProductId()))
+                // handle productSkus and quantities are stored as lists or arrays in the order object
+                String productSku = String.join("|", getOrder_products().stream()
+                        .map(product -> String.valueOf(product.getProductSku()))
                         .toArray(String[]::new));
 
                 String quantities = String.join("|", getOrder_products().stream()
@@ -241,7 +241,7 @@ public class Order {
                         escapeForCSV(getOrder_customer().getUsername()),
                         escapeForCSV(getOrder_customer().getContactNumber()),
                         escapeForCSV(getOrder_customer().getAddress()),
-                        productId,
+                        productSku,
                         quantities,
                         getOrder_orderDetails().getTotalItems(),
                         getOrder_orderDetails().getProductPrice(),
