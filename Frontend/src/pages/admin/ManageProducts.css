@@ -116,12 +116,11 @@ button:hover {
 }
 
 form {
-    width: 70vw;
-    border: 1px solid pink;
+    max-width: 60vw;
+    min-width: 30vw;
     height: auto;
     display: flex;
     flex-direction: column;
-    padding: 0rem 3rem;
     font-size: 1.25rem;
     font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
@@ -131,6 +130,7 @@ form {
     flex-direction: row;
     flex-wrap: wrap;
     margin-bottom: 1.5rem;
+    max-width: 100%;
 }
 
 .selection-container > input {
@@ -203,6 +203,22 @@ form {
 
     .quantityInput {
         width: 30%;
+    }
+
+    form {
+        max-width: 50vw;
+    }
+
+    .selection-container {
+        max-width:100%;
+    }
+
+    .fileInput {
+        max-width:70%;
+    }
+
+    .saveorcancelbtn {
+        max-width: 50%;
     }
 
 }

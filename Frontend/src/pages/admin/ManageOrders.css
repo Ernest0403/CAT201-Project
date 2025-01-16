@@ -23,9 +23,8 @@ h1 {
     table-layout: fixed;
     font-size: 1.25rem;
     border-collapse: separate;
-    border-spacing: 0rem 1rem;
+    border-spacing: 0 1rem;
     width: 90%;
-    text-align: right;
 }
 
 thead > tr:first-child{
