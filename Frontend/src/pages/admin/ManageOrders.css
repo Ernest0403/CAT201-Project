@@ -7,7 +7,7 @@
     align-items: center;
     justify-content:center;
     background-color: inherit;
-    max-width: 1200px;
+    max-width: 100%;
     margin: 0 auto;
     padding: 20px;
     border-radius: 8px;
@@ -19,14 +19,13 @@
 h1 {
     text-align: center;
 }
-
-table {
+.responsive-table table {
     table-layout: fixed;
     font-size: 1.25rem;
     border-collapse: separate;
     border-spacing: 0rem 1rem;
     width: 90%;
-
+    text-align: right;
 }
 
 thead > tr:first-child{
@@ -152,9 +151,8 @@ form {
 .saveorcancelbtn {
     border: none;
     border-radius: 5px;
-    padding: 1rem;
     margin: 1rem;
-    width: 20rem;
+    width: 12rem;
     background-color: #3e5165;
     color: white;
     align-self: center;
