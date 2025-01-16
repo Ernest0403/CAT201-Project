@@ -19,7 +19,7 @@ const LivingRoomPage = () => {
     <ItemListing
       title="Living Room"
       categories={livingRoomCategories}
-      roomType="Living Room"
+      roomType="Living room"
       defaultCategory={category ? category.replace("-", " ") : ""}
     />
   );
