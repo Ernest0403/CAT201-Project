@@ -32,16 +32,16 @@ public class Product {
         this.product_itemCategory = values.get(4);  // Item Category
         this.product_brand = values.get(5);  // Brand
         this.product_dimension = values.get(6);  // Dimension
-        this.product_weight = values.get(7);  // Weight
+        this.product_weight = values.get(7).replace("kg", "").trim();  // Weight
         this.product_colour = values.get(8);  // Colour
         this.product_material = values.get(9);  // Material
         this.product_manufacturer = values.get(10);  // Manufacturer
         this.product_arrivalDate = values.get(11);  // Arrival Date
-        this.product_quantity = Integer.parseInt(values.get(12));  // Quantity (converted to int)
-        this.product_price = Float.parseFloat(values.get(13).replace("RM", "").trim());  // Price (converted to float)
+        this.product_quantity = Integer.parseInt(values.get(12));  // Quantity
+        this.product_price = Float.parseFloat(values.get(13).replace("RM", "").trim()); // Price
         this.product_discount = Float.parseFloat(values.get(14));  // Discount (converted to float)
-        this.product_warranty = values.get(15);  // Warranty
-        this.product_orderVolume = Integer.parseInt(values.get(16));  // Order Volume (converted to int)
+        this.product_warranty = values.get(15).replace("years", "").trim();  // Warranty
+        this.product_orderVolume = Integer.parseInt(values.get(16));  // Order Volume
     }
 
     public Product(String sku, String name, String imageURL, String roomCategory, String itemCategory, String brand, String dimension, String weight, String colour, String material, String manufacturer, String arrivalDate, int quantity, float price, float discount, String warranty, int orderVolume) {

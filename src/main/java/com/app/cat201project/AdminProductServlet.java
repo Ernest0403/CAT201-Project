@@ -36,6 +36,7 @@ public class AdminProductServlet  extends HttpServlet {
             String line;
             reader.readLine();
             while ((line = reader.readLine()) != null) {
+
                 List<String> values = parseCsvLine(line);
                 System.out.println(values);
                 if (values.size() == 17) {
