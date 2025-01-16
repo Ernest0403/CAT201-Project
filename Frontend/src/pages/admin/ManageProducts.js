@@ -320,6 +320,7 @@ const ManageProducts = () => {
                               id={key}
                               name={key}
                               onChange={handleFormInputChange}
+                              className="fileInput"
                           />
                       ) : key === 'product_arrivalDate' ? (
                           <input

@@ -294,7 +294,7 @@ const ManageOrders = () => {
                         id='order_orderNumber'
                         name='order_orderNumber'
                         value={editOrderData.order_orderNumber}
-                        onChange={handleFormInputChange}
+                        disabled
                     />
                   </div>
                   <div className='selection-container'>

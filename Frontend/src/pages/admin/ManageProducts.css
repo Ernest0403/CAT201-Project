@@ -1,13 +1,13 @@
 .manageContainer {
     height: auto;
     font-size: 1.25rem;
-    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content:center;
+    justify-content: center;
     background-color: inherit;
-    --grey-color : #cccccc;
+    --grey-color: #cccccc;
     --white-color: #ffffff;
 }
 
@@ -78,7 +78,7 @@ button {
     border-radius: 10px;
     text-align: center;
     color:var(--white-color);
-    background-color:#3e5165;
+    background-color:#4caf50;
     padding: 1.5rem;
 }
 
@@ -99,7 +99,7 @@ button {
 }
 
 .btnContainer:hover{
-    background-color: #324253;
+    background-color: #45a049;
 }
 
 tbody tr:hover {
@@ -117,6 +117,7 @@ button:hover {
 
 form {
     width: 70vw;
+    border: 1px solid pink;
     height: auto;
     display: flex;
     flex-direction: column;
@@ -132,28 +133,32 @@ form {
     margin-bottom: 1.5rem;
 }
 
-div > input {
+.selection-container > input {
     display: flex;
     justify-content: right;
     width:40rem;
     padding: 0.7rem;
     background-color: var(--white-color);
-    border-style: 1px black;
+    border-style: 1px black solid;
     border-radius: 5px;
+}
+
+.fileInput {
+    min-width: 1.5rem;
 }
 
 .selection-container> label:nth-of-type(1) {
     display: flex;
     align-items: center; 
     justify-content: left;
-    width: 15rem;
+
 }
 
 .selection-container > label:nth-of-type(2) {
     display: flex;
     align-items: center; 
     justify-content: center;
-    width: 3rem;
+
 }
 
 .saveorcancelbtn {
@@ -161,7 +166,7 @@ div > input {
     border-radius: 5px;
     padding: 1rem;
     margin: 1rem;
-    width: 20px;
+    width: 12rem;
     background-color: #3e5165;
     color: white;
     align-self: center;
