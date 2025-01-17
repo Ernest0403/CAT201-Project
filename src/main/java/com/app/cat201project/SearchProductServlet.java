@@ -44,7 +44,7 @@ public class SearchProductServlet extends HttpServlet {
                     item.getProduct_weight().toLowerCase().contains(lowerQuery))
             {
                 filteredResults.add(item);
-            } else filteredResults = null;
+            };
         }
 
         response.setContentType("application/json");
