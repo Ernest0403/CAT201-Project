@@ -19,6 +19,7 @@ import Class.*;
 
 @WebServlet(name = "CheckoutServlet", value = "/Checkout-servlet")
 public class CheckoutServlet extends HttpServlet {
+    private String loginUser;
     private int client_id = 1;                                //Temporarily set the client id to 1, will connect with log in client id
     ArrayList<Cart> carts = new ArrayList<Cart>();               //Stores data from Cart list
     Cart client_cart = new Cart();                            //Stores data of the logged in client
@@ -28,6 +29,9 @@ public class CheckoutServlet extends HttpServlet {
 
     public void init() throws ServletException {
         super.init();
+
+        loginUser = Global.LoginUser;
+
         String productRealPath = getServletContext().getRealPath("Database/catProjectDataset.csv");
         products = Global.getProductList(productRealPath);
         realPath = getServletContext().getRealPath("Database/Cart.csv");
@@ -56,7 +60,7 @@ public class CheckoutServlet extends HttpServlet {
 
         //Create a cart for a client, should be modified into reading from csv
         try {
-            Cart.loadCart(products, carts, client_cart, cart_products, client_id, realPath);
+            Cart.loadCart(products, carts, client_cart, cart_products, loginUser);
         } catch (CsvValidationException e) {
             throw new RuntimeException(e);
         }
@@ -174,7 +178,7 @@ public class CheckoutServlet extends HttpServlet {
                                 cart_products.remove(j);
                                 client_cart.removeCart(SKU);
                                 for (Cart cart: carts){
-                                    if(cart.getClient_id() == client_id){
+                                    if(cart.getUsername().equals(loginUser)){
                                         cart.setCart(client_cart);
                                     }
                                 }

@@ -2,22 +2,19 @@ package com.app.cat201project;
 
 import java.io.*;
 import java.util.ArrayList;
-
 import com.opencsv.exceptions.CsvValidationException;
-import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import Class.Cart;
 import Class.Product;
 import Class.Global;
 
 @WebServlet(name = "CartServlet", value = "/Cart-servlet")
 public class CartServlet extends HttpServlet{
-
+    private String loginUser;
     private int client_id = 1;                                //Temporarily set the client id to 1, will connect with log in client id
     ArrayList<Cart> carts = new ArrayList<Cart>();               //Stores data from Cart list
     Cart client_cart = new Cart();                            //Stores data of the logged in client
@@ -27,13 +24,16 @@ public class CartServlet extends HttpServlet{
 
     public void init() throws ServletException {
         super.init();
+        //Get the login username
+        loginUser = Global.LoginUser;
+//        loginUser = "john";
         String productRealPath = getServletContext().getRealPath("Database/catProjectDataset.csv");
         products = Global.getProductList(productRealPath);
         realPath = getServletContext().getRealPath("Database/Cart.csv");
         Cart.setExternalCsvPath(realPath);
         System.out.println("Resolved File Path: " + realPath);
         try {
-            Cart.loadCart(products, carts, client_cart, cart_products, client_id, realPath);
+            Cart.loadCart(products, carts, client_cart, cart_products, loginUser);
         } catch (CsvValidationException | IOException e) {
             throw new RuntimeException(e);
         }
@@ -42,8 +42,9 @@ public class CartServlet extends HttpServlet{
 
     //Return logged in client Cart details
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        loginUser = Global.LoginUser;
         try {
-            Cart.loadCart(products, carts, client_cart, cart_products, client_id, realPath);
+            Cart.loadCart(products, carts, client_cart, cart_products, loginUser);
         } catch (CsvValidationException | IOException e) {
             throw new RuntimeException(e);
         }
@@ -115,6 +116,8 @@ public class CartServlet extends HttpServlet{
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             response.setStatus(HttpServletResponse.SC_OK);
         }
+
+        System.out.println(loginUser);
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

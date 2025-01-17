@@ -1,11 +1,11 @@
-"client_id","sku","quantity"
+"username","sku","quantity"
 
-1,"BRBF0001",2
-1,"BRBF0002",4
-1,"BRBF0003",8
-2,"BRBF0001",6
-2,"BRBF0002",7
-3,"BRBF0003",6
-5,"BRBF0001",1
-5,"BRBF0002",3
-5,"BRBF0003",4
+"John","BRBF0001",2
+"John","BRBF0002",4
+"John","BRBF0003",8
+"Johnathon","BRBF0001",6
+"Johnathon","BRBF0002",7
+"Johnatho","BRBF0003",6
+"Jonas","BRBF0001",1
+"Jonas","BRBF0002",3
+"Jonas","BRBF0003",4
