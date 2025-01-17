@@ -1,28 +1,27 @@
 import React, { useState } from 'react';
 import Sidebar from '../Component/Sidebar';
 import Header from '../Component/AdminHeader';
-import './AdminLayout.css';
+import './AdminLayout.css'; // Using the file above
 
 const AdminLayout = ({ children }) => {
     const [isSidebarOpen, setSidebarOpen] = useState(false);
 
     const toggleSidebar = () => {
-        setSidebarOpen(!isSidebarOpen); // Toggles the state
+        setSidebarOpen(!isSidebarOpen);
     };
 
     return (
         <div className="app">
-            {/* Toggle Button */}
+            {/* Hamburger button (only shows on mobile) */}
             <button className="toggle-sidebar-btn" onClick={toggleSidebar}>
                 ☰
             </button>
 
-            {/* Sidebar */}
+            {/* The .sidebar container, toggles .open */}
             <div className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
                 <Sidebar />
             </div>
 
-            {/* Main Content */}
             <div className="main-content">
                 <Header />
                 <div className="content">{children}</div>
@@ -32,5 +31,7 @@ const AdminLayout = ({ children }) => {
 };
 
 export default AdminLayout;
+
+
 
 
