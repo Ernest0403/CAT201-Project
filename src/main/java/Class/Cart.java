@@ -169,6 +169,10 @@ public class Cart {
         return size;
     }
 
+    public ArrayList<String> getSelectedArray(){
+        return selectedItems;
+    }
+
     public float getSubPrice(ArrayList<Product> ProductList){
         float SubPrice = 0;
         int i = 0;

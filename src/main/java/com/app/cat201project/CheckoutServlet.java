@@ -75,16 +75,19 @@ public class CheckoutServlet extends HttpServlet {
 
             int i = 0;
             for (Product product : cart_products) {
-                // create JSON object for each item
-                JSONObject jsonObject = new JSONObject();
+                for (String selectedSKU : client_cart.getSelectedArray()){
+                    if(selectedSKU.equals(product.getProduct_sku().trim())){
+                        // create JSON object for each item
+                        JSONObject jsonObject = new JSONObject();
 
-                jsonObject.put("productID", product.getProduct_sku().trim());
-                jsonObject.put("product", product.getProduct_name());
-                jsonObject.put("price", product.getProduct_discountedPrice());
-                if (i < client_cart.getProductListSize()) {
-                    jsonObject.put("quantity", client_cart.getQuantity(i));
+                        jsonObject.put("productID", product.getProduct_sku().trim());
+                        jsonObject.put("product", product.getProduct_name());
+                        jsonObject.put("price", product.getProduct_discountedPrice());
+                        jsonObject.put("quantity", client_cart.getQuantity(i));
+                        jsonArray.put(jsonObject);
+
+                    }
                 }
-                jsonArray.put(jsonObject);
                 i++;
             }
 
@@ -160,20 +163,21 @@ public class CheckoutServlet extends HttpServlet {
                         if (!skuBuilder.isEmpty()) {
                             skuBuilder.append("|");
                             quantityBuilder.append("|");
-                            i++;
                         }
                         skuBuilder.append(item.getString("productSKU"));
                         quantityBuilder.append(item.getInt("productQuantity"));
 
                         String SKU = item.getString("productSKU");
-                        for(int j = 0; j < cart_products.size(); j++){
-                            if(SKU.equals(cart_products.get(j).getProduct_sku())){
-                                cart_products.remove(i);
-                            }
-                            if(SKU.equals(client_cart.getProduct_id(j))){
-                                client_cart.removeCart(SKU);
-                            }
-                        }
+                        System.out.println(SKU);
+//                        for(int j = 0; j < cart_products.size(); j++){
+//                            if(SKU.equals(cart_products.get(j).getProduct_sku())){
+//                                cart_products.remove(i);
+//                            }
+//                            if(SKU.equals(client_cart.getProduct_id(j))){
+//                                client_cart.removeCart(SKU);
+//                            }
+//                        }
+                        i++;
                     }
 
                     orderRecord += skuBuilder.toString(); orderRecord += ',';
@@ -198,8 +202,7 @@ public class CheckoutServlet extends HttpServlet {
                         e.printStackTrace(); // Log the error
                     }
 
-                    client_cart.updateCartCSV(carts, client_cart);
-
+//                    client_cart.updateCartCSV(carts, client_cart);
                     break;
 
                 default:
