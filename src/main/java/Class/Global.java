@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Global {
+    public static String LoginUser;
 
     public static ArrayList<Product> getProductList(ServletContext context) {
         ArrayList<Product> ProductList = new ArrayList<Product>();

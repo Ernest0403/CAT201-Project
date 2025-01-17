@@ -1,7 +1,6 @@
 package Class;
 
 import com.opencsv.CSVReader;
-import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvValidationException;
 
 import java.io.*;
@@ -10,6 +9,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public class Cart {
+    private String username;
     private int client_id;
     private ArrayList<String> product_list = new ArrayList<>();
     private ArrayList<Integer> quantity_list = new ArrayList<>();
@@ -24,8 +24,12 @@ public class Cart {
 
     }
 
-    public Cart(int client_id) {
-        this.client_id = client_id;
+//    public Cart(int client_id) {
+//        this.client_id = client_id;
+//    }
+
+    public Cart(String username) {
+        this.username = username;
     }
 
     public static void setExternalCsvPath(String realPath) {
@@ -33,13 +37,17 @@ public class Cart {
     }
 
     public void setCart(Cart cart) {
-        this.client_id = cart.client_id;
+        this.username = cart.username;
         this.product_list = cart.product_list;
         this.quantity_list = cart.quantity_list;
     }
 
-    public int getClient_id() {
-        return client_id;
+//    public int getClient_id() {
+//        return client_id;
+//    }
+
+    public String getUsername() {
+        return username;
     }
 
     public void getPro_Quantity(String product_id) {
@@ -223,8 +231,7 @@ public class Cart {
                                 ArrayList<Cart> carts,
                                 Cart client_cart,
                                 ArrayList<Product> cart_products,
-                                int client_id,
-                                String realPath) throws IOException, CsvValidationException {
+                                String username) throws IOException, CsvValidationException {
         carts.clear();
         cart_products.clear();
 
@@ -245,13 +252,13 @@ public class Cart {
         while ((line = reader.readNext()) != null) {
             System.out.println(Arrays.toString(line));
             if (line.length == 3) {
-                int client = Integer.parseInt(line[0].trim());
+                String client = line[0].trim();
                 String sku = line[1].trim();
                 int quantity = Integer.parseInt(line[2].trim());
 
                 boolean found = false;
                 for (int i = 0; i < carts.size(); i++) {
-                    if (carts.get(i).getClient_id() == client) {
+                    if (carts.get(i).getUsername().equals(client)) {
                         carts.get(i).addCart(sku, quantity);
                         found = true;
                         break;
@@ -267,7 +274,7 @@ public class Cart {
         System.out.println("End of file reached.");
 
         for (int i = 0; i < carts.size() - 1; i++) {
-            if (carts.get(i).getClient_id() == client_id) {
+            if (carts.get(i).getUsername().equals(username)) {
                 client_cart.setCart(carts.get(i));
                 System.out.println("client_cart added." + client_cart.getProduct_id());
                 break;
@@ -301,16 +308,16 @@ public class Cart {
             writer.newLine();
             writer.flush();
 
-            System.out.println(carts.get(1).getClient_id());
+            System.out.println(carts.get(1).getUsername());
             for (Cart cart : carts) {
                 System.out.println("Total of client carts");
-                if (cart.getClient_id() == client_cart.getClient_id()) {
+                if (cart.getUsername().equals(client_cart.getUsername())) {
                     cart.setCart(client_cart);
                     int i = 0;
                     for(String product_id : cart.getProduct_id()){
                         writer.write(String.join(",",
                                 new String[]{
-                                String.valueOf(cart.getClient_id()),
+                                String.valueOf(cart.getUsername()),
                                 product_id,
                                 String.valueOf(cart.getQuantity(i))
                             })
@@ -327,7 +334,7 @@ public class Cart {
                     for(String product_id : cart.getProduct_id()){
                         writer.write(String.join(",",
                                 new String[]{
-                                        String.valueOf(cart.getClient_id()),
+                                        String.valueOf(cart.getUsername()),
                                         product_id,
                                         String.valueOf(cart.getQuantity(i))
                                 }

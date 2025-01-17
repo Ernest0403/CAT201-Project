@@ -1,6 +1,7 @@
 package com.app.cat201project;
 
 import Class.User;
+import Class.Global;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
@@ -110,6 +111,8 @@ public class LoginServlet extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             out.write("{\"status\":\"error\",\"message\":\"Invalid credentials or incorrect user type!\"}");
         }
+
+        Global.LoginUser = matchedUsername;
     }
 
     @Override
