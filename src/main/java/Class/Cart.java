@@ -150,14 +150,21 @@ public class Cart {
         else {
             selectedItems.add(product_id);
         }
+        System.out.println(selectedItems);
     }
 
     public int getSelectedItemSize(){
         int size = 0;
         int i = 0;
         for(String product_id : selectedItems){
-            size += getQuantity(i);
-            i++;
+            for(String productSKU : product_list){
+                if(productSKU.equals(product_id)){
+                    size += getQuantity(i);
+                    break;
+                }
+                i++;
+            }
+            i = 0;
         }
         return size;
     }
