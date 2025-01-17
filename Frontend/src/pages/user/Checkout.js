@@ -133,6 +133,12 @@ function Checkout() {
                 }),
             }
         );
+
+        //Remove selected state of paid items in cart
+        Carts.forEach(cart => {
+            const key = `SelectedStatus_${cart.productID}`;
+            localStorage.removeItem(key);
+        });
     };
 
     const navigate = useNavigate();
