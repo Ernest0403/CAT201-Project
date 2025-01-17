@@ -233,6 +233,7 @@ public class Cart {
                                 ArrayList<Product> cart_products,
                                 String username) throws IOException, CsvValidationException {
         carts.clear();
+        client_cart.setCart(new Cart());
         cart_products.clear();
 
         CSVReader reader;

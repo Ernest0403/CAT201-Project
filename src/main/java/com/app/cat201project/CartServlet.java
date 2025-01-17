@@ -25,8 +25,8 @@ public class CartServlet extends HttpServlet{
     public void init() throws ServletException {
         super.init();
         //Get the login username
-//        loginUser = Global.LoginUser;
-        loginUser = "John";
+        loginUser = Global.LoginUser;
+//        loginUser = "john";
         String productRealPath = getServletContext().getRealPath("Database/catProjectDataset.csv");
         products = Global.getProductList(productRealPath);
         realPath = getServletContext().getRealPath("Database/Cart.csv");
@@ -42,6 +42,7 @@ public class CartServlet extends HttpServlet{
 
     //Return logged in client Cart details
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        loginUser = Global.LoginUser;
         try {
             Cart.loadCart(products, carts, client_cart, cart_products, loginUser);
         } catch (CsvValidationException | IOException e) {
@@ -115,6 +116,8 @@ public class CartServlet extends HttpServlet{
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             response.setStatus(HttpServletResponse.SC_OK);
         }
+
+        System.out.println(loginUser);
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

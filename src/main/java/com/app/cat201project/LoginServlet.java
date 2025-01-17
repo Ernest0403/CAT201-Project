@@ -113,6 +113,7 @@ public class LoginServlet extends HttpServlet {
         }
 
         Global.LoginUser = matchedUsername;
+        System.out.println(Global.LoginUser);
     }
 
     @Override

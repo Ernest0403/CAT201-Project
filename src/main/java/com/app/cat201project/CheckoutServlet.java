@@ -29,7 +29,9 @@ public class CheckoutServlet extends HttpServlet {
 
     public void init() throws ServletException {
         super.init();
-        loginUser = "John";
+
+        loginUser = Global.LoginUser;
+
         String productRealPath = getServletContext().getRealPath("Database/catProjectDataset.csv");
         products = Global.getProductList(productRealPath);
         realPath = getServletContext().getRealPath("Database/Cart.csv");
