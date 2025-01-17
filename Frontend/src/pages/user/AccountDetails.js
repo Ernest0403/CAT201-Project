@@ -8,61 +8,46 @@ function AccountDetails() {
   const [lastName, setLastName] = useState('');
   const [displayName, setDisplayName] = useState('');
 
-  // For navigation (reset password link)
   const navigate = useNavigate();
 
-  // State to toggle success message pop-up
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-  // State for potential error message from the server
   const [errorMessage, setErrorMessage] = useState('');
 
-  // =========================
-  // 1) Fetch Current Details
-  // =========================
+  // Fetch user details on component mount
   useEffect(() => {
-    // On component mount, fetch user’s existing details (GET)
     fetch('http://localhost:8080/cat201_project_war/AccountDetailsServlet', {
       method: 'GET',
-      credentials: 'include', // if your servlet uses session
+      credentials: 'include',
     })
         .then((response) => {
           if (!response.ok) {
-            throw new Error('Failed to fetch account details');
+            throw new Error('Failed to fetch account details.');
           }
           return response.json();
         })
         .then((data) => {
-          if (data.status === 'success') {
-            // Fill the form fields from the response
-            setFirstName(data.firstName || '');
-            setLastName(data.lastName || '');
-            setDisplayName(data.displayName || '');
-          } else {
-            // If the server returned an error status
-            setErrorMessage(data.message || 'Unable to load account details.');
-          }
+          const user = data[0] || {}; // Assuming the first user in the response
+          setFirstName(user.firstName || '');
+          setLastName(user.lastName || '');
+          setDisplayName(user.displayName || '');
         })
-        .catch((err) => {
-          console.error(err);
+        .catch((error) => {
+          console.error(error);
           setErrorMessage('Error fetching account details.');
         });
   }, []);
 
-  // =========================
-  // 2) Handle Save Changes
-  // =========================
+  // Handle form submission
   const handleSaveChanges = (e) => {
     e.preventDefault();
     setErrorMessage('');
     setShowSuccessMessage(false);
 
-    // Make a POST request to update the account details
     fetch('http://localhost:8080/cat201_project_war/AccountDetailsServlet', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      credentials: 'include', // if your servlet uses session
       body: new URLSearchParams({
         firstName,
         lastName,
@@ -72,23 +57,22 @@ function AccountDetails() {
         .then((response) => {
           if (!response.ok) {
             return response.json().then((data) => {
-              throw new Error(data.message || 'Failed to save changes');
+              throw new Error(data.message || 'Failed to save changes.');
             });
           }
           return response.json();
         })
         .then((data) => {
           if (data.status === 'success') {
-            // Show success popup
             setShowSuccessMessage(true);
-            setTimeout(() => setShowSuccessMessage(false), 3000); // Auto-hide after 3s
+            setTimeout(() => setShowSuccessMessage(false), 3000);
           } else {
-            throw new Error(data.message || 'Failed to save changes');
+            throw new Error(data.message || 'Failed to save changes.');
           }
         })
-        .catch((err) => {
-          console.error(err);
-          setErrorMessage(err.message);
+        .catch((error) => {
+          console.error(error);
+          setErrorMessage(error.message);
         });
   };
 
@@ -99,18 +83,14 @@ function AccountDetails() {
   return (
       <div className="DashboardContainer">
         <UserSidebar />
-
         <div className="AccountDetails">
           <h2>Account Details</h2>
-
           {errorMessage && (
               <div className="ErrorMessage">
                 <p>Error: {errorMessage}</p>
               </div>
           )}
-
           <form onSubmit={handleSaveChanges} className="AccountDetailsForm">
-            {/* First Name */}
             <div className="form-group">
               <label htmlFor="firstName">First Name</label>
               <input
@@ -120,8 +100,6 @@ function AccountDetails() {
                   onChange={(e) => setFirstName(e.target.value)}
               />
             </div>
-
-            {/* Last Name */}
             <div className="form-group">
               <label htmlFor="lastName">Last Name</label>
               <input
@@ -131,8 +109,6 @@ function AccountDetails() {
                   onChange={(e) => setLastName(e.target.value)}
               />
             </div>
-
-            {/* Display Name */}
             <div className="form-group">
               <label htmlFor="displayName">Display Name</label>
               <input
@@ -142,8 +118,6 @@ function AccountDetails() {
                   onChange={(e) => setDisplayName(e.target.value)}
               />
             </div>
-
-            {/* Reset Password Link */}
             <div className="form-group">
               <button
                   type="button"
@@ -153,14 +127,10 @@ function AccountDetails() {
                 Reset Password? Click Here
               </button>
             </div>
-
-            {/* Save Changes */}
             <button type="submit" className="save-changes">
               Save Changes
             </button>
           </form>
-
-          {/* Success Message Pop-up */}
           {showSuccessMessage && (
               <div className="SuccessPopup">
                 <h2 className="SuccessTitle">Success</h2>
@@ -173,6 +143,11 @@ function AccountDetails() {
 }
 
 export default AccountDetails;
+
+
+
+
+
 
 
 
