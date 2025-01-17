@@ -1,11 +1,76 @@
 .TnCContainer {
-    display: flex;
-    flex-direction: column;
-    font-family: Inter;
-    text-align: justify;
+    padding: 20px;
+    margin: 40px auto;
+    max-width: 800px;
+    background: linear-gradient(to right, #f9f9f9, #e8e8e8);
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 1.2s ease-in-out;
+    font-family: 'Arial', sans-serif;
 }
 
 .TnCTitle {
-    font-size: xx-large;
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #333;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    background: linear-gradient(to right, #007bff, #00bfff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.TnCContent h2 {
+    font-size: 1.5rem;
+    color: #444;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 5px;
+    transition: color 0.3s ease;
+}
+
+.TnCContent h2:hover {
+    color: #007bff;
+}
+
+.TnCContent p {
+    font-size: 1.1rem;
+    color: #555;
+    line-height: 1.8;
+    margin-bottom: 15px;
+    text-align: justify;
+}
+
+.TnCContent .gradientText {
+    background: linear-gradient(to right, #007bff, #00bfff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: bold;
+}
+
+.emailLink {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.emailLink:hover {
+    color: #0056b3;
     text-decoration: underline;
 }
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+

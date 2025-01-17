@@ -1,33 +1,31 @@
-.admin-sidebar {
+/* ---------------------------------
+   Base Sidebar Styles (Desktop)
+---------------------------------- */
+.sidebar {
   width: 250px;
   background-color: #2c3e50;
   color: #ecf0f1;
-  height: 100vh;
   padding: 20px;
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-  transition: width 0.3s ease;
+  transition: all 0.3s ease-in-out;
 }
 
-.admin-sidebar.collapsed {
-  width: 80px;
-  padding: 10px;
-}
-
-.admin-sidebar ul {
+/* Sidebar menu list */
+.sidebar ul {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
-.admin-sidebar ul li {
+/* Each menu item */
+.sidebar ul li {
   margin: 10px 0;
 }
 
-.admin-sidebar ul li button {
+/* Buttons as menu links */
+.sidebar ul li button {
   background: none;
-  border: 1px solid #fff;
-  color: #fff;
+  border: 1px solid #fff;   /* a subtle border so they're visible */
+  color: #fff;              /* ensure text is white on dark background */
   padding: 10px;
   text-align: left;
   width: 100%;
@@ -36,37 +34,48 @@
   transition: background-color 0.3s ease;
 }
 
-.admin-sidebar ul li button:hover {
+.sidebar ul li button:hover {
   background-color: #34495e;
 }
 
-.admin-sidebar ul li.active button {
+.sidebar ul li.active button {
   background-color: #2980b9;
   font-weight: bold;
 }
 
-.admin-sidebar ul li button.logout {
+.sidebar ul li button.logout {
   background-color: #e74c3c;
 }
 
-.admin-sidebar ul li button.logout:hover {
+.sidebar ul li button.logout:hover {
   background-color: #c0392b;
 }
 
-.sidebar-toggle {
-  background: none;
-  border: none;
-  color: #fff;
-  font-size: 1.5rem;
-  margin-bottom: 20px;
-  cursor: pointer;
-  transition: transform 0.3s ease;
+/* ---------------------------------
+   Mobile Off-Canvas
+---------------------------------- */
+@media (max-width: 768px) {
+  .sidebar {
+    /* Position it off-canvas by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;           /* partial-width drawer */
+    height: 100vh;
+    transform: translateX(-250px);
+    z-index: 1000;          /* above main content */
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .sidebar.open {
+    /* Slide in when .open is toggled */
+    transform: translateX(0);
+  }
 }
 
-.sidebar-toggle:hover {
-  transform: scale(1.1);
-}
-
+/* ---------------------------------
+   Optional: Popup / Confirmation
+---------------------------------- */
 .PopupOverlay {
   position: fixed;
   top: 0;
@@ -77,7 +86,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 9999;  /* above sidebar */
 }
 
 .PopupBox {
@@ -115,29 +124,6 @@
   background-color: #5a6268;
 }
 
-@media (max-width: 768px) {
-  .admin-sidebar {
-    position: fixed;
-    height: 100%;
-    z-index: 1000;
-    transform: translateX(-250px);
-    transition: transform 0.3s ease;
-  }
-
-  .admin-sidebar.collapsed {
-    transform: translateX(0);
-  }
-
-  .sidebar-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-  }
-}
 
 
 
