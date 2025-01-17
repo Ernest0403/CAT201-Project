@@ -178,7 +178,7 @@ public class Cart {
         int i = 0;
         for(String product_id : selectedItems){
             for(Product product : ProductList){
-                if(product.getProduct_sku().equals(product_id)){
+                if(product.getProduct_sku().equals(product_id) && (i < product_list.size())){
                     SubPrice += product.getProduct_discountedPrice() * getQuantity(i);
                 }
             }

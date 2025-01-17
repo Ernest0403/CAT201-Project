@@ -86,7 +86,7 @@ public class CartServlet extends HttpServlet{
 
                 if (i < client_cart.getProductListSize()) {
                     jsonObject.put("quantity", client_cart.getQuantity(i));
-                    System.out.println("Get product");
+                    System.out.println(i);
                 }
 
                 // append it to your JSON array.
