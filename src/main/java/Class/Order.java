@@ -2,6 +2,7 @@ package Class;
 
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
+import java.time.LocalDate;
 
 import java.io.*;
 import java.util.*;
@@ -16,6 +17,8 @@ public class Order {
     private CancellationDetails order_cancellationDetails;
     private String order_status;
     private String order_orderDate;
+    private String order_comment;
+    private String order_arrivingDate;
 
     private static Map<Integer, Order> orderMap = new HashMap<>();
 
@@ -66,6 +69,8 @@ public class Order {
 
         this.order_status = values.get(17); // order status
         this.order_orderDate = values.get(18); // order date
+        this.order_comment = values.get(19).isEmpty() ? null : values.get(19);
+        this.order_arrivingDate = values.get(20);
     }
 
     public int getOrder_id() { return order_id; }
@@ -77,6 +82,8 @@ public class Order {
     public CancellationDetails getOrder_cancellationDetails() { return order_cancellationDetails; }
     public String getOrder_status() { return order_status; }
     public String getOrder_orderDate() { return order_orderDate; }
+    public String getOrder_comment() { return order_comment; }
+    public String getOrder_arrivingDate() { return order_arrivingDate; }
     public static int getOrdersCount() { return ordersCount; }
 
     public void setOrder(Order order){
@@ -89,6 +96,8 @@ public class Order {
         this.order_cancellationDetails = order.getOrder_cancellationDetails();
         this.order_status = order.getOrder_status();
         this.order_orderDate = order.getOrder_orderDate();
+        this.order_comment = order.getOrder_comment();
+        this.order_arrivingDate = order.getOrder_arrivingDate();
     }
     public static void setExternalCsvPath(String externalPath) { externalCsvPath = externalPath; }
 
@@ -178,6 +187,11 @@ public class Order {
             this.cancellationDate = cancellationDate;
         }
 
+        public CancellationDetails(String cancellationReason) {
+            this.cancellationReason = cancellationReason;
+            this.cancellationDate = LocalDate.now().toString();
+        }
+
         public String getCancellationReason() { return cancellationReason; }
         public String getCancellationDate() { return cancellationDate; }
     }
@@ -236,7 +250,7 @@ public class Order {
                         .map(product -> String.valueOf(product.getQuantity()))
                         .toArray(String[]::new));
 
-                writer.write(String.format("\"%d\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%d\",\"%f\",\"%f\",\"%f\",\"%f\",\"%f\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"\n",
+                writer.write(String.format("\"%d\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%d\",\"%f\",\"%f\",\"%f\",\"%f\",\"%f\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"\n",
                         getOrder_id(),
                         escapeForCSV(getOrder_orderNumber()),
                         escapeForCSV(getOrder_customer().getUsername()),
@@ -255,7 +269,9 @@ public class Order {
                         escapeForCSV(getOrder_cancellationDetails().getCancellationReason()),
                         getOrder_cancellationDetails().getCancellationDate(),
                         getOrder_status(),
-                        getOrder_orderDate()
+                        getOrder_orderDate(),
+                        escapeForCSV(getOrder_comment()),
+                        getOrder_arrivingDate()
                 ));
             }
         }
@@ -268,7 +284,7 @@ public class Order {
             while ((line = reader.readLine()) != null) {
                 List<String> values = parseCsvLine(line);
                 System.out.println(values);
-                if (values.size() == 19) {
+                if (values.size() == 21) {
                     Order order = new Order(values);
                     orderMap.put(order.getOrder_id(), order);
                 }
@@ -310,3 +326,5 @@ public class Order {
         return data;
     }
 }
+
+

@@ -1,162 +1,150 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from 'react';
 import "./OrderHistory.css";
 import UserSidebar from "../../Component/UserSidebar";
 
 function Orders() {
-  const [Orders, setOrders] = useState([
-    {
-      id: 123456,
-      orderdate: "25/12/2024",
-      orderDetails: {
-        totalItems: 2,
-        productPrice: 200,
-        deliveryFee: 15,
-        assemblyFee: 10,
-        sst: 12,
-        total: 237,
-      },
-      products: [
-        { productId: 1, productName: 'Table', quantity: 10},
-        { productId: 2, productName: 'Chair', quantity: 5 },
-      ],
-      cancellationDetails: {
-        cancellationReason: null,
-        cancellationDate: null,
-      },
-      arrivingdate: "30/12/2024",
-      address: "Penang",
-      price: "35.2",
-      status: "Paid",
-    },
-    {
-      id: 123457,
-      orderdate: "25/12/2024",
-      orderDetails: {
-        totalItems: 1,
-        productPrice: 150,
-        deliveryFee: 10,
-        assemblyFee: 0,
-        sst: 9,
-        total: 169,
-      },
-      products: [
-        { productId: 3, productName: 'Cupboard', quantity: 1 },
-      ],
-      cancellationDetails: {
-        cancellationReason: null,
-        cancellationDate: null,
-      },
-      arrivingdate: "30/12/2024",
-      address: "Penang",
-      price: "150",
-      status: "Shipping",
-    },
-    {
-      id: 123458,
-      orderdate: "25/12/2024",
-      orderDetails: {
-        totalItems: 1,
-        productPrice: 100,
-        deliveryFee: 10,
-        assemblyFee: 5,
-        sst: 7,
-        total: 122,
-      },
-      products: [
-        { productId: 4, productName: 'Bed', quantity: 1 },
-      ],
-      cancellationDetails: {
-        cancellationReason: null,
-        cancellationDate: null,
-      },
-      arrivingdate: "30/12/2024",
-      address: "Penang",
-      price: "100",
-      status: "Received",
-    },
-    {
-      id: 123459,
-      orderdate: "25/12/2024",
-      orderDetails: {
-        totalItems: 1,
-        productPrice: 80,
-        deliveryFee: 5,
-        assemblyFee: 0,
-        sst: 5,
-        total: 90,
-      },
-      products: [
-        { productId: 5, productName: 'Drawer', quantity: 1 },
-      ],
-      cancellationDetails: {
-        cancellationReason: 'item not match',
-        cancellationDate: '1/12/2024',
-      },
-      arrivingdate: "30/12/2024",
-      address: "Penang",
-      price: "80",
-      status: "Pending Refund",
-    },
-    {
-      id: 123460,
-      orderdate: "25/12/2024",
-      orderDetails: {
-        totalItems: 2,
-        productPrice: 180,
-        deliveryFee: 15,
-        assemblyFee: 10,
-        sst: 11,
-        total: 216,
-      },
-      products: [
-        { productId: 6, productName: 'Study Desk', quantity: 1 },
-        { productId: 7, productName: 'Clock', quantity: 1 },
-      ],
-      arrivingdate: "30/12/2024",
-      address: "Penang",
-      price: "180",
-      status: "Cancelled",
-    },
-  ]);
-
+  const [Orders, setOrders] = useState([]);
+  const [username, setUsername] = useState("loggedInUsername");
   const [view, setView] = useState({ type: "list", order: null });
   const [newComment, setNewComment] = useState("");
   const [refundReason, setRefundReason] = useState("");
   const [editRefundReason, setEditRefundReason] = useState("");
 
+  useEffect(() => {
+    fetch('http://localhost:8080/cat201_project_war/UserOrders-servlet')
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        setOrders(data);
+      })
+      .catch((error) => console.error("Error fetching orders:", error));
+  }, [username]);
+
   const handleViewChange = (type, order = null) => {
     setView({ type, order });
   };
 
-  const handleSubmitComment = (orderId) => {
-    const updatedOrders = Orders.map(order =>
-      order.id === orderId ? { ...order, comment: newComment } : order
-    );
-    setOrders(updatedOrders);
-    setNewComment("");
-    setView({ type: "list", order: null });
+  async function handleSubmitComment(orderId, updatedOrder) {
+    updatedOrder = Orders.find(order => order.order_id === orderId);
+    updatedOrder.order_comment = newComment;
+
+    fetch(`http://localhost:8080/cat201_project_war/UserOrders-servlet?id=${orderId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        originalId: orderId,
+        updatedOrder: updatedOrder,
+      }),
+    })
+      .then((response) => {
+        if (response.ok) {
+          const updatedOrders = Orders.map(order =>
+            order.order_id === orderId ? updatedOrder : order
+          );
+          setOrders(updatedOrders);
+          setNewComment("");
+          setView({ type: "list", order: null });
+        } else {
+          console.error("Failed to update comment");
+        }
+      })
+      .catch((error) => console.error("Error updating comment:", error));
   };
 
-  const handleSubmitRefund = (orderId) => {
-    const updatedOrders = Orders.map(order =>
-      order.id === orderId
-        ? { ...order, cancellationDetails: { cancellationReason: refundReason, cancellationDate: new Date().toLocaleDateString() }, status:'Pending Refund'}
-        : order
-    );
-    setOrders(updatedOrders);
-    setRefundReason("");
-    setView({ type: "list", order: null });
+  async function handleSubmitRefund(orderId, updatedOrder) {
+    updatedOrder = Orders.find(order => order.order_id === orderId);
+    updatedOrder.order_cancellationDetails = {
+      cancellationReason: refundReason,
+      cancellationDate: new Date().toLocaleDateString(),
+    };
+    updatedOrder.order_status = "Pending Refund";
+
+    fetch(`http://localhost:8080/cat201_project_war/UserOrders-servlet?id=${orderId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        originalId: orderId,
+        updatedOrder: updatedOrder,
+      }),
+    })
+      .then((response) => {
+        if (response.ok) {
+          const updatedOrders = Orders.map(order =>
+            order.order_id === orderId ? updatedOrder : order
+          );
+          setOrders(updatedOrders);
+          setRefundReason("");
+          setView({ type: "list", order: null });
+        } else {
+          console.error("Failed to submit refund");
+        }
+      })
+      .catch((error) => console.error("Error submitting refund:", error));
   };
 
-  const handleEditRefund = (orderId) => {
-    const updatedOrders = Orders.map(order =>
-      order.id === orderId
-        ? { ...order, cancellationDetails: { cancellationReason: editRefundReason, cancellationDate: new Date().toLocaleDateString() } }
-        : order
-    );
-    setOrders(updatedOrders);
-    setEditRefundReason("");
-    setView({ type: "list", order: null });
+  async function handleEditRefund(orderId, updatedOrder) {
+    updatedOrder = Orders.find((order) => order.order_id === orderId);
+    updatedOrder.order_cancellationDetails = {
+      cancellationReason: editRefundReason,
+      cancellationDate: new Date().toLocaleDateString(),
+    };
+
+    fetch(`http://localhost:8080/cat201_project_war/UserOrders-servlet?id=${orderId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        originalId: orderId,
+        updatedOrder: updatedOrder,
+      }),
+    })
+      .then((response) => {
+        if (response.ok) {
+          const updatedOrders = Orders.map((order) =>
+            order.order_id === orderId ? updatedOrder : order
+          );
+          setOrders(updatedOrders);
+          setEditRefundReason("");
+          setView({ type: "list", order: null });
+        } else {
+          console.error("Failed to edit refund");
+        }
+      })
+      .catch((error) => console.error("Error editing refund:", error));
+  };
+
+  async function handleCancelRefund(orderId, updatedOrder) {
+    updatedOrder = Orders.find(order => order.order_id === orderId);
+    updatedOrder.order_status = "Received";
+
+    fetch(`http://localhost:8080/cat201_project_war/UserOrders-servlet?id=${orderId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        originalId: orderId,
+        updatedOrder: updatedOrder,
+      }),
+    })
+      .then((response) => {
+        if (response.ok) {
+          const updatedOrders = Orders.map((order) =>
+            order.order_id === orderId ? updatedOrder : order
+          );
+          setOrders(updatedOrders);
+          setEditRefundReason("");
+          setView({ type: "list", order: null });
+        } else {
+          console.error("Failed to cancel refund");
+        }
+      })
+      .catch((error) => console.error("Error canceling refund:", error));
   };
 
   return (
@@ -167,41 +155,41 @@ function Orders() {
           <h1>Orders</h1>
           {view.type === "list" ? (
             Orders.map((order) => (
-              <div key={order.id} className="order-item">
+              <div key={order.order_id} className="order-item">
                 <div>Image</div>
                 <div>
-                  <h3>{order.products[0].productName}</h3>
-                  <p>Order Number: {order.id}</p>
-                  <p>Estimated Receiving Date: {order.arrivingdate}</p>
+                  <h3>{order.order_products && order.order_products.length > 0 ? order.order_products[0].productName : "Product Name Not Available"}</h3>
+                  <p>Order Number: {order.order_id}</p>
+                  <p>Estimated Receiving Date: {order.order_arrivingDate}</p>
                 </div>
                 <div className="status">
                   <p>Status:</p>
-                  <p><strong>{order.status}</strong></p>
-  
-                  {order.status === "Paid" || order.status === "Shipping" ? (
+                  <p><strong>{order.order_status}</strong></p>
+
+                  {order.order_status === "Paid" || order.order_status === "Shipping" ? (
                     <div className="ButtonGroup">
                       <button className="BlueButton" onClick={() => handleViewChange("details", order)}>View Order</button>
                       <button className="RedButton" onClick={() => handleViewChange("cancel", order)}>Cancel</button>
                     </div>
                   ) : null}
-  
-                  {order.status === "Received" ? (
+
+                  {order.order_status === "Received" ? (
                     <div className="ButtonGroup">
                       <button className="BlueButton" onClick={() => handleViewChange("details", order)}>View Order</button>
                       <button className="BlueButton" onClick={() => handleViewChange("rate", order)}>Rate</button>
                       <button className="RedButton" onClick={() => handleViewChange("refund", order)}>Return & Refund</button>
                     </div>
                   ) : null}
-  
-                  {order.status === "Pending Refund" ? (
+
+                  {order.order_status === "Pending Refund" ? (
                     <div className="ButtonGroup">
                       <button className="BlueButton" onClick={() => handleViewChange("details", order)}>View Order</button>
                       <button className="BlueButton" onClick={() => handleViewChange("editRefund", order)}>Edit Refund</button>
                       <button className="RedButton" onClick={() => handleViewChange("cancelRefund", order)}>Cancel Refund</button>
                     </div>
                   ) : null}
-  
-                  {order.status === "Cancelled" ? (
+
+                  {order.order_status === "Cancelled" ? (
                     <div className="ButtonGroup">
                       <button className="BlueButton" onClick={() => handleViewChange("details", order)}>View Order</button>
                     </div>
@@ -212,32 +200,32 @@ function Orders() {
           ) : view.type === "details" && view.order ? (
             <div className="orderOperationContainer rowContainer">
               <div>
-                <p><strong>Order ID:</strong> {view.order.id}</p>
-                <p><strong>Order Date:</strong> {view.order.orderdate}</p>
-                <p><strong>Arriving Date:</strong> {view.order.arrivingdate}</p>
-                <p><strong>Address:</strong> {view.order.address}</p>
-                <p><strong>Status:</strong> {view.order.status}</p>
-                <p><strong>Price:</strong> {view.order.price}</p>
+                <p><strong>Order ID:</strong> {view.order.order_id}</p>
+                <p><strong>Order Date:</strong> {view.order.order_orderDate}</p>
+                <p><strong>Arriving Date:</strong> {view.order.order_arrivingDate}</p>
+                <p><strong>Address:</strong> {view.order.order_customer.address}</p>
+                <p><strong>Status:</strong> {view.order.order_status}</p>
+                <p><strong>Price:</strong> {view.order.order_orderDetails.total}</p>
               </div>
 
               <div>
                 <strong>Order Details:</strong>
                 <div>
-                  <p>Total Items: {view.order.orderDetails.totalItems}</p>
-                  <p>Product Price: {view.order.orderDetails.productPrice}</p>
-                  <p>Delivery Fee: {view.order.orderDetails.deliveryFee}</p>
-                  <p>Assembly Fee: {view.order.orderDetails.assemblyFee}</p>
-                  <p>SST: {view.order.orderDetails.sst}</p>
-                  <p>Total: {view.order.orderDetails.total}</p>
+                  <p>Total Items: {view.order.order_orderDetails.totalItems}</p>
+                  <p>Product Price: {view.order.order_orderDetails.productPrice}</p>
+                  <p>Delivery Fee: {view.order.order_orderDetails.deliveryFee}</p>
+                  <p>Assembly Fee: {view.order.order_orderDetails.assemblyFee}</p>
+                  <p>SST: {view.order.order_orderDetails.sst}</p>
+                  <p>Total: {view.order.order_orderDetails.total}</p>
                 </div>
               </div>
 
-              {view.order.cancellationDetails.cancellationReason && view.order.cancellationDetails.cancellationDate ? (
+              {view.order.order_cancellationDetails.cancellationReason && view.order.order_cancellationDetails.cancellationDate ? (
                 <div>
                   <strong>Cancellation Details:</strong>
                   <div>
-                    <p>Reason: {view.order.cancellationDetails.cancellationReason}</p>
-                    <p>Date: {view.order.cancellationDetails.cancellationDate}</p>
+                    <p>Reason: {view.order.order_cancellationDetails.cancellationReason}</p>
+                    <p>Date: {view.order.order_cancellationDetails.cancellationDate}</p>
                   </div>
                 </div>
               ) : ('')}
@@ -246,7 +234,7 @@ function Orders() {
             </div>
           ) : view.type === "cancel" && view.order ? (
             <div className="orderOperationContainer rowContainer">
-              {view.order.status === 'Shipping' ? (
+              {view.order.order_status === 'Shipping' ? (
                 <>
                   <p>Your item is already on its way and can't be canceled now.</p>
                   <button className="BlueButton" onClick={() => setView({ type: "list", order: null })}>Back to Orders</button>
@@ -270,7 +258,7 @@ function Orders() {
               </div>
               <div className="ButtonGroup">
                 <button className="RedButton" onClick={() => setView({ type: "list", order: null })}>Cancel</button>
-                <button className="BlueButton" onClick={() => handleSubmitComment(view.order.id)}>Submit</button>
+                <button className="BlueButton" onClick={() => handleSubmitComment(view.order.order_id)}>Submit</button>
               </div>
             </div>
           ) : view.type === "refund" && view.order ? (
@@ -281,7 +269,7 @@ function Orders() {
                 <input type="text" placeholder="reason" value={refundReason} onChange={(e) => setRefundReason(e.target.value)} />
               </div>
               <div className="ButtonGroup">
-                <button className="RedButton" onClick={() => handleSubmitRefund(view.order.id)}>Submit</button>
+                <button className="RedButton" onClick={() => handleSubmitRefund(view.order.order_id)}>Submit</button>
                 <button className="BlueButton" onClick={() => setView({ type: "list", order: null })}>Cancel</button>
               </div>
             </div>
@@ -293,7 +281,7 @@ function Orders() {
                 <input type="text" placeholder="reason" value={editRefundReason} onChange={(e) => setEditRefundReason(e.target.value)} />
               </div>
               <div className="ButtonGroup">
-                <button className="RedButton" onClick={() => handleEditRefund(view.order.id)}>Submit</button>
+                <button className="RedButton" onClick={() => handleEditRefund(view.order.order_id)}>Submit</button>
                 <button className="BlueButton" onClick={() => setView({ type: "list", order: null })}>Cancel</button>
               </div>
             </div>
@@ -301,7 +289,7 @@ function Orders() {
             <div className="orderOperationContainer rowContainer">
               <p>You have successfully canceled your refund request.</p>
               <div className="ButtonGroup">
-                <button className="BlueButton" onClick={() => setView({ type: "list", order: null })}>Back to Orders</button>
+                <button className="BlueButton" onClick={() => handleCancelRefund(view.order.order_id)}>Back to Orders</button>
               </div>
             </div>
           ) : (
