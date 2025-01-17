@@ -42,6 +42,12 @@ public class CartServlet extends HttpServlet{
 
     //Return logged in client Cart details
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            Cart.loadCart(products, carts, client_cart, cart_products, client_id, realPath);
+        } catch (CsvValidationException | IOException e) {
+            throw new RuntimeException(e);
+        }
+
         // Enable CORS headers
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
@@ -80,6 +86,7 @@ public class CartServlet extends HttpServlet{
 
                 if (i < client_cart.getProductListSize()) {
                     jsonObject.put("quantity", client_cart.getQuantity(i));
+                    System.out.println("Get product");
                 }
 
                 // append it to your JSON array.
