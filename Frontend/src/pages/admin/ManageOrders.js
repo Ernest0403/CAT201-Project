@@ -277,7 +277,7 @@ const ManageOrders = () => {
                   <tr className='back2ListBtn-order'>
                     <td colSpan='2'>
                       <button type='button' onClick={handleCancel} className='saveorcancelbtn'>
-                        Back To List
+                        Back
                       </button>
                     </td>
                   </tr>
