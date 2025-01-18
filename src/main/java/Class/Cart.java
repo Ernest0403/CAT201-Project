@@ -17,6 +17,7 @@ public class Cart {
     private static ArrayList<String> selectedItems = new ArrayList<>();
     private float assemblyFee = 30;
     private String shippingType;
+    private float shippingFee = 20;
     private int SSTpercent = 6;
 
     //Constructor
@@ -42,10 +43,6 @@ public class Cart {
         this.quantity_list = cart.quantity_list;
     }
 
-//    public int getClient_id() {
-//        return client_id;
-//    }
-
     public String getUsername() {
         return username;
     }
@@ -60,6 +57,18 @@ public class Cart {
                 System.out.println("Item not found in cart");
             }
         }
+    }
+
+    public void setShippingType(String shippingType) {
+        this.shippingType = shippingType;
+        if(shippingType.equals("fast"))
+            shippingFee = 20;
+        else
+            shippingFee = 10;
+    }
+
+    public float getShippingFee() {
+        return shippingFee;
     }
 
     //add changes to cart
@@ -213,7 +222,7 @@ public class Cart {
     public float getTaxFee(ArrayList<Product> ProductList){
         float taxFee = 0;
         taxFee += getSubTotal(ProductList);
-        taxFee += 10; //Normal shipping
+        taxFee += shippingFee;
         taxFee = (float) (taxFee * 0.06);
         return (float) (Math.round(taxFee * 100.0) / 100.0);
     }
@@ -221,7 +230,7 @@ public class Cart {
     public float getTaxTotal(ArrayList<Product> ProductList){
         float taxTotal = 0;
         taxTotal += getSubTotal(ProductList);
-        taxTotal += 10;
+        taxTotal += shippingFee;
         taxTotal = (float) (taxTotal * 1.06);
         return (float) (Math.round(taxTotal * 100.0) / 100.0);
     }

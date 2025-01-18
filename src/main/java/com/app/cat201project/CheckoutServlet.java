@@ -100,7 +100,7 @@ public class CheckoutServlet extends HttpServlet {
             jsonObject.put("SubPrice", client_cart.getSubPrice(products));
             jsonObject.put("AssemblyFee", client_cart.getAssemblyFee());
             jsonObject.put("Subtotal", client_cart.getSubTotal(products));
-            jsonObject.put("Delivery", 10); //Temporary fixed value
+            jsonObject.put("Delivery", client_cart.getShippingFee()); //Temporary fixed value
             jsonObject.put("SST", client_cart.getTaxFee(products)); //Temporary fixed value
             jsonObject.put("Total", client_cart.getTaxTotal(products));
 
@@ -209,6 +209,15 @@ public class CheckoutServlet extends HttpServlet {
                     }
 
                     client_cart.updateCartCSV(carts, client_cart);
+                    break;
+
+                case "updateShip":
+                    if(jsonObject.getString("ShippingType").trim().equals("fast"))
+                    {
+                        client_cart.setShippingType("fast");
+                    }
+                    else
+                        client_cart.setShippingType("normal");
                     break;
 
                 default:
