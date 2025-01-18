@@ -15,12 +15,19 @@ body {
   margin: 50px auto;
   width: 100%;
   max-width: 1226px;
-  height: 253px;
   background: #D9D9D9;
   display: flex;
+  height: auto;
   align-items: center;
   justify-content: center;
 }
+
+.offer-image img {
+  width: 100%;   /* so the image shrinks with the container */
+  height: auto;  /* preserve aspect ratio */
+  display: block;
+}
+
 
 .chat-icon {
   position: fixed;     
