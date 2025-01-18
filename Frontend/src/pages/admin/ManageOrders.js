@@ -12,12 +12,15 @@ const ManageOrders = () => {
   const [popupMessage, setPopupMessage] = useState("");
   const [popupType, setPopupType] = useState("");
 
-
   useEffect(() => {
     fetch('http://localhost:8080/cat201_project_war/AdminOrder-servlet')
         .then(response => response.json())
         .then(data => { console.log(data); setOrders(data); })
-        .catch(error => console.error('Error fetching orders:', error));
+        .catch(error => {
+          console.error(error); // Log the error for debugging
+          setPopupType("error");
+          setPopupMessage("Failed to fetch orders. Please try again.");
+    });
   }, []);
 
   useEffect(() => {
@@ -31,7 +34,7 @@ const ManageOrders = () => {
     }
   }, [popupMessage]);
 
-  const statuses = ['Pending', 'Shipped', 'Completed', 'Cancelled', 'Full List'];
+  const statuses = ['Pending Refund', 'Shipped', 'Completed', 'Cancelled', 'Full List'];
 
   const handleStatusClick = (status) => {
     setSelectedStatus(status === 'Full List' ? null : status);
@@ -93,8 +96,8 @@ const ManageOrders = () => {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          originalId: originalId, // Send order ID for update
-          updatedOrder: editOrderData // Send the updated order details
+          originalId: originalId,
+          updatedOrder: editOrderData
         })
       });
       console.log(originalId);
@@ -102,7 +105,6 @@ const ManageOrders = () => {
         throw new Error("Failed to update order.");
       }
 
-      // Update local state only if the request was successful
       setOrders((prevOrders) =>
           prevOrders.map((order) =>
               order.order_id === editOrderData.order_id ? { ...editOrderData } : order
@@ -118,7 +120,7 @@ const ManageOrders = () => {
   };
 
   return (
-      <div className='manageContainer responsive-table'>
+      <div className='manageOrderContainer responsive-table-order'>
         <h1>Order</h1>
         {displayTable ? (
             <>
@@ -148,12 +150,12 @@ const ManageOrders = () => {
                     </tr>
                 ) : (
                     filteredOrders.map((order) => (
-                        <tr key={order.order_id}>
+                        <tr className="order-row" key={order.order_id}>
                           <td className='border-left'>{order.order_id}</td>
                           <td>{order.order_orderNumber}</td>
                           <td>{order.order_status}</td>
                           <td className='border-right'>
-                            {['Pending', 'Shipped'].includes(order.order_status) && (
+                            {['Pending Refund', 'Shipped'].includes(order.order_status) && (
                                 <button type='button' onClick={() =>handleEditClick(order)} >
                                   <img src='/Images/edit.png' alt='Edit' />
                                 </button>
@@ -267,15 +269,36 @@ const ManageOrders = () => {
                     <td>{ viewOrderDetails.order_orderDate}</td>
                   </tr>
 
+                  {/* Arriving Date */}
+                  <tr>
+                    <td>  Arriving Date:  </td>
+                    <td>{ viewOrderDetails.order_arrivingDate}</td>
+                  </tr>
+
+                  {/* Comments */}
+                  { viewOrderDetails.order_comment ? (
+                      <>
+                        <tr>
+                          <td> Comment:  </td>
+                          <td>{ viewOrderDetails.order_comment}</td>
+                        </tr>
+                      </>
+                  ) : (
+                      <tr>
+                        <td>  Comment:  </td>
+                        <td>No comment</td>
+                      </tr>
+                  )}
+
                   {/* Status */}
                   <tr>
                     <td>  Status:  </td>
                     <td>{ viewOrderDetails.order_status}</td>
                   </tr>
-                  <tr className='back2ListBtn'>
+                  <tr className='back2ListBtn-order'>
                     <td colSpan='2'>
                       <button type='button' onClick={handleCancel} className='saveorcancelbtn'>
-                        Back To List
+                        Back
                       </button>
                     </td>
                   </tr>
@@ -285,9 +308,9 @@ const ManageOrders = () => {
             </>
         ) : (
             <>
-              <div className='edit-form'>
+              <div className='edit-form-order'>
                 <form>
-                  <div className='selection-container'>
+                  <div className='selection-container-order'>
                     <label htmlFor='order_orderNumber'>Order Number:</label>
                     <input
                         type='text'
@@ -297,7 +320,7 @@ const ManageOrders = () => {
                         disabled
                     />
                   </div>
-                  <div className='selection-container'>
+                  <div className='selection-container-order'>
                     <label htmlFor='order_status'>Status:</label>
                     <select
                         id='order_status'
@@ -305,13 +328,13 @@ const ManageOrders = () => {
                         value={editOrderData.order_status}
                         onChange={handleFormInputChange}
                     >
-                      <option value='Pending'>Pending</option>
+                      <option value='Pending Refund'>Pending Refund</option>
                       <option value='Shipped'>Shipped</option>
                       <option value='Completed'>Completed</option>
                       <option value='Cancelled'>Cancelled</option>
                     </select>
                   </div>
-                  <div className='selection-container'>
+                  <div className='selection-container-order'>
                     <label htmlFor='order_orderDate'>Order Date:</label>
                     <input
                         type='date'
@@ -321,7 +344,7 @@ const ManageOrders = () => {
                         onChange={handleFormInputChange}
                     />
                   </div>
-                  <div className='selection-container'>
+                  <div className='selection-container-order'>
                     <label htmlFor='paymentStatus'>Payment Status:</label>
                     <select
                         id='paymentStatus'
@@ -335,7 +358,7 @@ const ManageOrders = () => {
                     </select>
                   </div>
 
-                  <div className='form-actions'>
+                  <div className='form-actions-order'>
                     <button type='button' onClick={handleSave} className='saveorcancelbtn'>
                       Save Changes
                     </button>

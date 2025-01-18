@@ -34,12 +34,18 @@ const ManageProducts = () => {
   const [editingItemSku, setEditingItemSku] = useState(null);
   const [popupMessage, setPopupMessage] = useState("");
   const [popupType, setPopupType] = useState("");
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deleteSku, setDeleteSku] = useState(null);
 
   useEffect(() => {
     fetch('http://localhost:8080/cat201_project_war/AdminProduct-servlet')
         .then(response => response.json())
         .then(data => { console.log(data); setItems(data); })
-        .catch(error => console.error('Error fetching products:', error));
+        .catch(error => {
+          console.error(error); // Log the error for debugging
+          setPopupType("error");
+          setPopupMessage("Failed to fetch product details. Please try again.");
+        });
   }, []);
 
   useEffect(() => {
@@ -149,9 +155,16 @@ const ManageProducts = () => {
     }
   };
 
-  const handleDeleteClick = async (sku) => {
+  const handleDeleteClick = (sku) => {
+    setDeleteSku(sku);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!deleteSku) return;
+
     try {
-      const response = await fetch(`http://localhost:8080/cat201_project_war/AdminProduct-servlet?product_sku=${sku}`, {
+      const response = await fetch(`http://localhost:8080/cat201_project_war/AdminProduct-servlet?product_sku=${deleteSku}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json"
@@ -164,16 +177,23 @@ const ManageProducts = () => {
           setPopupType('error')
         }
 
+        setIsDeleteModalOpen(false);
         setPopupMessage('Product deleted successfully.');
-        setPopupType('sucess')
+        setPopupType('success')
 
-        // remove the product from the local state
-        const updatedItems = items.filter((item) => item.product_sku !== sku);
+        const updatedItems = items.filter((item) => item.product_sku !== deleteSku);
         setItems(updatedItems);
+        setDeleteSku(null);
       } catch (error) {
         console.error('Error deleting product:', error);
-      }
+        setPopupType("error");
+        setPopupMessage(error.message);
+    }
+  };
 
+  const handleCancelDelete = () => {
+    setIsDeleteModalOpen(false);
+    setDeleteSku(null);
   };
 
   const handleAddProductClick = async () => {
@@ -233,11 +253,11 @@ const ManageProducts = () => {
   }
 
   return (
-      <div className='manageContainer responsive-table'>
+      <div className='manageContainer '>
         <h1>Product</h1>
         {displayTable ? (
             <>
-              <table>
+              <table className="responsive-table">
                 <thead>
                 <tr>
                   <td colSpan='5'>
@@ -309,20 +329,12 @@ const ManageProducts = () => {
               </button>
             </>
         ) : (
-            <div className="edit-form">
+            <div className="edit-form-product">
               <form>
                 {Object.entries(editFormData).map(([key, value]) => (
                     <div key={key} className="selection-container">
                       <label htmlFor={key}>{key}:</label>
-                      {key === 'product_src' ? (
-                          <input
-                              type="file"
-                              id={key}
-                              name={key}
-                              onChange={handleFormInputChange}
-                              className="fileInput"
-                          />
-                      ) : key === 'product_arrivalDate' ? (
+                      {key === 'product_arrivalDate' ? (
                           <input
                               type="date"
                               id={key}
@@ -387,6 +399,17 @@ const ManageProducts = () => {
               <p>{popupMessage}</p>
             </div>
         )}
+
+        {isDeleteModalOpen && (
+            <div className="modal-overlay">
+              <div className="modal-content">
+                <p>Are you sure you want to delete this product?</p>
+                <button className="yes-button" onClick={handleConfirmDelete}>Yes</button>
+                <button className="no-button" onClick={handleCancelDelete}>No</button>
+              </div>
+            </div>
+        )}
+
 
       </div>
   );

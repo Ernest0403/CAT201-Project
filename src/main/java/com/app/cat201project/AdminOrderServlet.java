@@ -37,7 +37,7 @@ public class AdminOrderServlet extends HttpServlet {
             while ((line = reader.readLine()) != null) {
                 List<String> values = parseCsvLine(line);
                 System.out.println(values);
-                if (values.size() == 19) {
+                if (values.size() == 21) {
                     Order order = new Order(values);
                     orderMap.put(order.getOrder_id(), order);
                 }
