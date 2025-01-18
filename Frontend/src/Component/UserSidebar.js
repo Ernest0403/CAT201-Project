@@ -26,10 +26,10 @@ function UserSidebar() {
                 <button className='SidebarButton' onClick={() => handleNavigation('/orders')}>Orders</button>
                 <button className='SidebarButton' onClick={() => handleNavigation('/addresses')}>Addresses</button>
                 <button className='SidebarButton' onClick={() => handleNavigation('/login')}>Log out</button>
-                <button className='SidebarNav-collapsed' onClick={handleSidebar}>{'<<'}</button>
+                <button className='SidebarNav-collapsed' onClick={handleSidebar}>{'<'}</button>
             </nav>
             : 
-            <button className='SidebarNav-collapsed' onClick={handleSidebar}>{'>>'}</button>}
+            <button className='SidebarNav-collapsed' onClick={handleSidebar}>{'>'}</button>}
             
         </>
     );
