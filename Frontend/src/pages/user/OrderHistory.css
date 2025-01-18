@@ -18,6 +18,11 @@
     flex-wrap: wrap;
 }
 
+.order-item img {
+    height: 100px;
+    width: 100px;
+}
+
 .order-item:last-child {
     border-bottom: 1px solid #0466C8;
 }

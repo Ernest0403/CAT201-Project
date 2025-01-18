@@ -16,16 +16,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import Class.Order;
+import Class.*;
 
 @WebServlet(name = "UserOrdersServlet", value = "/UserOrders-servlet")
 public class UserOrdersServlet extends HttpServlet {
+    private String loginUser;
     private static Map<Integer, Order> orderMap = new HashMap<>();
     private String FILE_PATH;
 
     @Override
     public void init() throws ServletException {
         super.init();
+        loginUser = Global.LoginUser;
         FILE_PATH = getServletContext().getRealPath("Database/order.csv");
         System.out.println("CSV File Path: " + FILE_PATH);
     }
@@ -39,7 +41,9 @@ public class UserOrdersServlet extends HttpServlet {
                 System.out.println(values);
                 if (values.size() == 21) {
                     Order order = new Order(values);
-                    orderMap.put(order.getOrder_id(), order);
+                    if (order.getOrder_customer().getUsername().equals(loginUser)) {
+                        orderMap.put(order.getOrder_id(), order);
+                    }
                 }
             }
             if (orderMap.isEmpty()) {
