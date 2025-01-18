@@ -1,4 +1,5 @@
 import './Cart.css'; //uses similar css styles with cart
+import './Favourite.css';
 import React, {useEffect, useState} from 'react';
 
 function Favourite() {
@@ -45,18 +46,13 @@ function Favourite() {
     return (
         <div>
             {Favourites.map((fav) => (
-            <div key={fav.id} className='CartCard'>
+            <div key={fav.id} className='FavCard'>
                 <div className="CartItemPhoto">
                     <img src={fav.image} alt="" />
                     </div>
                     <div className="CartItemDetails">
                         <div className="CartItemName">{fav.product}</div>
                         <div className="CartTagGroup">
-                            {/*{fav.tag.map((tag, index) => (*/}
-                            {/*    <div className="CartTag" key={index}>*/}
-                            {/*        {tag}*/}
-                            {/*    </div>*/}
-                            {/*    ))}*/}
                             <div className="CartTag">
                                 {fav.tag}
                             </div>
