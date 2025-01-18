@@ -34,13 +34,26 @@ function Checkout() {
     //Codes below are used to toggle between shipping options button
     const [selectedShip, setSelectedShip] = useState("fast");
 
-    const handleShipOption = (
+    const handleShipOption = async (
         value
     ) => {
-        if(selectedShip !== value){
+        if (selectedShip !== value) {
             setSelectedShip(value);
+
+            await fetch('http://localhost:8080/cat201_project_war/Checkout-servlet', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    action: 'updateShip',
+                    ShippingType: value,
+                })
+            });
         }
         console.log("clicked!")
+
+        fetchCartData();
     };
 
     //Codes below are used to toggle between payment method button
@@ -52,7 +65,7 @@ function Checkout() {
     const handlePaymentMethod = (
         value
     ) => {
-        if(selectedPayment !== value){
+        if (selectedPayment !== value) {
             setSelectedPayment(value);
         }
         console.log("clicked!")
