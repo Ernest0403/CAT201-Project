@@ -49,6 +49,10 @@ const Cartlist = ({productID, imageSrc, itemName, tags, price, quantity, changeQ
     const AddCart = () => {
         changeQuantity(productID, itemName, quantity+1);
     }
+
+    const RemoveCart = () => {
+        changeQuantity(productID, itemName, 0);
+    }
     
     return (
         <div className='CartCard'>
@@ -77,7 +81,7 @@ const Cartlist = ({productID, imageSrc, itemName, tags, price, quantity, changeQ
                         <button className="AddCart" onClick={AddCart}>+</button>
                     </div>
                 </div>
-                <button className="RemoveCart">Remove</button>
+                <button className="RemoveCart" onClick={RemoveCart}>Remove</button>
             </div>
             <div className="CartItemPrice">
                 <div>Price</div>
