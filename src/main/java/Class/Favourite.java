@@ -8,32 +8,32 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Favourite {
-    private int client_id;
+    private String username;
     private ArrayList<String> product_list = new ArrayList<>();
     private static String externalCsvPath;
 
     public Favourite() {}
 
-    public Favourite(int client_id) {
-        this.client_id = client_id;
+    public Favourite(String username) {
+        this.username = username;
     }
 
-    public Favourite(int client_id, ArrayList<String> product_list) {
-        this.client_id = client_id;
+    public Favourite(String username, ArrayList<String> product_list) {
+        this.username = username;
         this.product_list = product_list;
     }
 
     public void setFavourite(Favourite fav){
-        this.client_id = fav.client_id;
+        this.username = fav.username;
         this.product_list = fav.product_list;
     }
 
-    public int getClient_id() {
-        return client_id;
+    public String getUsername() {
+        return username;
     }
 
-    public void setClient_id(int client_id) {
-        this.client_id = client_id;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public ArrayList<String> getProduct_list() {
@@ -73,7 +73,7 @@ public class Favourite {
                 writer.newLine();
                 writer.write(String.join(",",
                         new String[]{
-                                String.valueOf(client_id),
+                                username,
                                 productSku,
                         }));
             }
@@ -87,8 +87,9 @@ public class Favourite {
                                 ArrayList<Favourite> favList,
                                 Favourite client_fav,
                                 ArrayList<Product> fav_products,
-                                int client_id) throws IOException, CsvValidationException {
+                                String username) throws IOException, CsvValidationException {
         favList.clear();
+        client_fav.setFavourite(new Favourite());
         fav_products.clear();
 
         CSVReader reader;
@@ -108,12 +109,12 @@ public class Favourite {
         while ((line = reader.readNext()) != null) {
             System.out.println(Arrays.toString(line));
             if (line.length == 2) {
-                int client = Integer.parseInt(line[0].trim());
+                String client = line[0].trim();
                 String sku = line[1].trim();
 
                 boolean found = false;
                 for (int i = 0; i < favList.size(); i++) {
-                    if (favList.get(i).getClient_id() == client) {
+                    if (favList.get(i).getUsername().equals(client)) {
                         favList.get(i).addFavourite(sku);
                         found = true;
                         break;
@@ -128,12 +129,18 @@ public class Favourite {
         }
         System.out.println("End of file reached.");
 
-        for (int i = 0; i < favList.size() - 1; i++) {
-            if (favList.get(i).getClient_id() == client_id) {
+        boolean existUser = false;
+        for (int i = 0; i < favList.size(); i++) {
+            if (favList.get(i).getUsername().equals(username)) {
+                System.out.println(favList.get(i).getUsername());
                 client_fav.setFavourite(favList.get(i));
                 System.out.println("client_fav added." + client_fav.getProduct_list());
+                existUser = true;
                 break;
             }
+        }
+        if(!existUser) {
+            client_fav.setUsername(username);
         }
 
         for (int i = 0; i < client_fav.getProduct_list().size(); i++) {
@@ -162,13 +169,13 @@ public class Favourite {
 
             for (Favourite fav : favList) {
                 System.out.println("Total of client favs");
-                if (fav.getClient_id() == client_fav.getClient_id()) {
+                if (fav.getUsername().equals(client_fav.getUsername())) {
                     fav.setFavourite(client_fav);
                     int i = 0;
                     for(String product_id : fav.getProduct_list()){
                         writer.write(String.join(",",
                                 new String[]{
-                                        String.valueOf(fav.getClient_id()),
+                                        String.valueOf(fav.getUsername()),
                                         product_id
                                 })
 
@@ -183,7 +190,7 @@ public class Favourite {
                     for(String product_id : fav.getProduct_list()){
                         writer.write(String.join(",",
                                 new String[]{
-                                        String.valueOf(fav.getClient_id()),
+                                        String.valueOf(fav.getUsername()),
                                         product_id
                                 }
                         ));

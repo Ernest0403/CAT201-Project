@@ -43,6 +43,9 @@ public class Cart {
         this.quantity_list = cart.quantity_list;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
     public String getUsername() {
         return username;
     }
@@ -274,12 +277,16 @@ public class Cart {
         }
         System.out.println("End of file reached.");
 
-        for (int i = 0; i < carts.size() - 1; i++) {
+        boolean existUser = false;
+        for (int i = 0; i < carts.size(); i++) {
             if (carts.get(i).getUsername().equals(username)) {
                 client_cart.setCart(carts.get(i));
                 System.out.println("client_cart added." + client_cart.getProduct_id());
                 break;
             }
+        }
+        if(!existUser){
+            client_cart.setUsername(username);
         }
 
         //for each cart product in the list

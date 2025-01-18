@@ -15,7 +15,6 @@ import Class.Global;
 @WebServlet(name = "CartServlet", value = "/Cart-servlet")
 public class CartServlet extends HttpServlet{
     private String loginUser;
-    private int client_id = 1;                                //Temporarily set the client id to 1, will connect with log in client id
     ArrayList<Cart> carts = new ArrayList<Cart>();               //Stores data from Cart list
     Cart client_cart = new Cart();                            //Stores data of the logged in client
     ArrayList<Product> products;                              //Stores Products data of the system

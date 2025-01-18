@@ -11,14 +11,13 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import Class.*;
 
 @WebServlet(name = "FavouriteServlet", value = "/Favourite-servlet")
 public class FavouriteServlet extends HttpServlet {
-    private int client_id = 1;
+    private String loginUser;
     ArrayList<Favourite> favouriteList = new ArrayList<Favourite>();                  //Stores data from Cart list
     Favourite client_fav = new Favourite();                                        //Stores data of the logged in client
     ArrayList<Product> products;          //Stores Products data of the system
@@ -27,13 +26,14 @@ public class FavouriteServlet extends HttpServlet {
 
     public void init() throws ServletException {
         super.init();
+        loginUser = Global.LoginUser;
         String productRealPath = getServletContext().getRealPath("Database/catProjectDataset.csv");
         products = Global.getProductList(productRealPath);
         realPath = getServletContext().getRealPath("Database/Favourite.csv");
         Favourite.setExternalCsvPath(realPath);
         //Create a cart for a client, should be modified into reading from csv
         try {
-            Favourite.loadFav(products, favouriteList, client_fav, fav_products, client_id);
+            Favourite.loadFav(products, favouriteList, client_fav, fav_products, loginUser);
         } catch (CsvValidationException | IOException e) {
             throw new RuntimeException(e);
         }
@@ -43,7 +43,11 @@ public class FavouriteServlet extends HttpServlet {
 
     //Return logged in client Cart details
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        try {
+            Favourite.loadFav(products, favouriteList, client_fav, fav_products, loginUser);
+        } catch (CsvValidationException | IOException e) {
+            throw new RuntimeException(e);
+        }
         // Enable CORS headers
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
