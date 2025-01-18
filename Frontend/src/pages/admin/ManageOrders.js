@@ -16,7 +16,11 @@ const ManageOrders = () => {
     fetch('http://localhost:8080/cat201_project_war/AdminOrder-servlet')
         .then(response => response.json())
         .then(data => { console.log(data); setOrders(data); })
-        .catch(error => console.error('Error fetching orders:', error));
+        .catch(error => {
+          console.error(error); // Log the error for debugging
+          setPopupType("error");
+          setPopupMessage("Failed to fetch orders. Please try again.");
+    });
   }, []);
 
   useEffect(() => {
@@ -30,7 +34,7 @@ const ManageOrders = () => {
     }
   }, [popupMessage]);
 
-  const statuses = ['Pending', 'Shipped', 'Completed', 'Cancelled', 'Full List'];
+  const statuses = ['Pending Refund', 'Shipped', 'Completed', 'Cancelled', 'Full List'];
 
   const handleStatusClick = (status) => {
     setSelectedStatus(status === 'Full List' ? null : status);
@@ -92,8 +96,8 @@ const ManageOrders = () => {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          originalId: originalId, // Send order ID for update
-          updatedOrder: editOrderData // Send the updated order details
+          originalId: originalId,
+          updatedOrder: editOrderData
         })
       });
       console.log(originalId);
@@ -101,7 +105,6 @@ const ManageOrders = () => {
         throw new Error("Failed to update order.");
       }
 
-      // Update local state only if the request was successful
       setOrders((prevOrders) =>
           prevOrders.map((order) =>
               order.order_id === editOrderData.order_id ? { ...editOrderData } : order
@@ -152,7 +155,7 @@ const ManageOrders = () => {
                           <td>{order.order_orderNumber}</td>
                           <td>{order.order_status}</td>
                           <td className='border-right'>
-                            {['Pending', 'Shipped'].includes(order.order_status) && (
+                            {['Pending Refund', 'Shipped'].includes(order.order_status) && (
                                 <button type='button' onClick={() =>handleEditClick(order)} >
                                   <img src='/Images/edit.png' alt='Edit' />
                                 </button>
@@ -304,7 +307,7 @@ const ManageOrders = () => {
                         value={editOrderData.order_status}
                         onChange={handleFormInputChange}
                     >
-                      <option value='Pending'>Pending</option>
+                      <option value='Pending Refund'>Pending Refund</option>
                       <option value='Shipped'>Shipped</option>
                       <option value='Completed'>Completed</option>
                       <option value='Cancelled'>Cancelled</option>
