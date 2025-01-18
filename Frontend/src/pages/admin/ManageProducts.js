@@ -314,15 +314,7 @@ const ManageProducts = () => {
                 {Object.entries(editFormData).map(([key, value]) => (
                     <div key={key} className="selection-container">
                       <label htmlFor={key}>{key}:</label>
-                      {key === 'product_src' ? (
-                          <input
-                              type="file"
-                              id={key}
-                              name={key}
-                              onChange={handleFormInputChange}
-                              className="fileInput"
-                          />
-                      ) : key === 'product_arrivalDate' ? (
+                      {key === 'product_arrivalDate' ? (
                           <input
                               type="date"
                               id={key}

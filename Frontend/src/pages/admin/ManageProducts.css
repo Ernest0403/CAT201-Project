@@ -32,23 +32,23 @@ tr:not(first-child) {
 }
 
 .border-left {
-    border-top-left-radius: 10px; 
-    border-bottom-left-radius: 10px; 
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
     border: 1px solid var(--grey-color) ;
     border-right: 0;
 }
 
 .border-right {
-    border-top-right-radius: 10px; 
+    border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
     border: 1px solid var(--grey-color);
     border-left: 0;
 }
 
 tr td:not(:first-child):not(:last-child) {
-    border: 1px solid var(--grey-color); 
-    border-left: 0; 
-    border-right: 0; 
+    border: 1px solid var(--grey-color);
+    border-left: 0;
+    border-right: 0;
 }
 
 td:nth-last-child(1),
@@ -70,7 +70,7 @@ button {
     border: none;
     text-align: center;
     background-color: inherit;
-    margin: 1rem 0;  
+    margin: 1rem 0;
 }
 
 .btnContainer {
@@ -133,30 +133,27 @@ form {
     max-width: 100%;
 }
 
-.selection-container > input {
-    display: flex;
-    justify-content: right;
-    width:40rem;
-    padding: 0.7rem;
-    background-color: var(--white-color);
-    border-style: 1px black solid;
-    border-radius: 5px;
-}
-
-.fileInput {
-    min-width: 1.5rem;
-}
-
 .selection-container> label:nth-of-type(1) {
     display: flex;
-    align-items: center; 
+    align-items: center;
     justify-content: left;
+    width:30%;
+}
 
+.selection-container > input[type="text"],
+.selection-container > input[type="date"] {
+    display: flex;
+    justify-content: right;
+    width: 60%;
+    padding: 0.7rem;
+    margin-left: 5%;
+    background-color: var(--white-color);
+    border-radius: 5px;
 }
 
 .selection-container > label:nth-of-type(2) {
     display: flex;
-    align-items: center; 
+    align-items: center;
     justify-content: center;
 
 }
@@ -213,8 +210,15 @@ form {
         max-width:100%;
     }
 
-    .fileInput {
-        max-width:70%;
+    .selection-container > input[type="text"],
+    .selection-container > input[type="date"] {
+        display: flex;
+        justify-content: right;
+        width: 80%;
+        padding: 0.7rem;
+        background-color: var(--white-color);
+        border-radius: 5px;
+        margin-left: 0;
     }
 
     .saveorcancelbtn {
