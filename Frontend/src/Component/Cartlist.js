@@ -63,11 +63,6 @@ const Cartlist = ({productID, imageSrc, itemName, tags, price, quantity, changeQ
             <div className="CartItemDetails">
                 <div className="CartItemName">{itemName}</div>
                 <div className="CartTagGroup">
-                    {/*{tags.map((tag, index) => (*/}
-                    {/*    <div className="CartTag" key={index}>*/}
-                    {/*        {tag}*/}
-                    {/*    </div>*/}
-                    {/*    ))}*/}
                     <div className="CartTag">
                         {tags}
                     </div>

@@ -73,7 +73,12 @@ function Cart() {
   return (
       <div className='CartView'>
           <div className='ItemList'>
-              {Carts.length === 0? "no cart" : Carts.map((cart) => (
+              {Carts.length === 0?
+                  <p className='NoCart'>No Cart!
+                      <br />
+                          Select the furnitures you loved!
+                  </p>
+                  : Carts.map((cart) => (
                   <Cartlist
                       productID={cart.productID}
                       imageSrc={cart.image}
