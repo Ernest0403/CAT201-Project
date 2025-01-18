@@ -13,6 +13,8 @@ const ItemPage = () => {
   const [reviews, setReviews] = useState([]);
   const [reviewsToShow, setReviewsToShow] = useState(3);
   const [showMore, setShowMore] = useState(false);
+  const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState("");
 
   useEffect(() => {
       const updateSliceRange = () => {
@@ -30,6 +32,13 @@ const ItemPage = () => {
         window.removeEventListener("resize", updateSliceRange);
       };
   }, []);
+
+  useEffect(() => {
+    if (message) {
+      const timer = setTimeout(() => setMessage(""), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [message]);
 
   useEffect(() => {
     const fetchProductData = async () => {
@@ -100,12 +109,16 @@ const ItemPage = () => {
       });
 
       if (response.ok) {
-        alert("Cart updated successfully!");
+        setMessageType("success");
+        setMessage("Item has been added successfully!");
       } else {
-        alert("Failed to update cart.");
+        setMessageType("error");
+        setMessage("Failed to add the item.");
       }
     } catch (error) {
       console.error("Error adding to cart:", error);
+      setMessageType("error");
+      setMessage("An error occurred while adding to the cart.");
     }
   };
 
@@ -123,12 +136,16 @@ const ItemPage = () => {
       });
 
       if (response.ok) {
-        alert("Cart updated successfully!");
+        setMessageType("success");
+        setMessage("Added to favourites!");
       } else {
-        alert("Failed to update cart.");
+        setMessageType("error");
+        setMessage("Failed to add to favourites.");
       }
     } catch (error) {
-      console.error("Error adding to cart:", error);
+      console.error("Error adding to favourites:", error);
+      setMessageType("error");
+      setMessage("An error occurred while adding to favourites.");
     }
   };
 
@@ -211,6 +228,11 @@ const ItemPage = () => {
   return (
     <div className="main-container">
     <div className="main-container">
+      {message && (
+        <div className={`message-box ${messageType}`}>
+          {message}
+        </div>
+      )}
       <div className="desc-container">
         <img src={item.product_src} alt= {item.product_name} className="product-image"/>
         <div className="product-details">
