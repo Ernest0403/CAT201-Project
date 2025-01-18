@@ -3,13 +3,11 @@
     justify-content: space-evenly;
     gap: 15px;
     flex-wrap: wrap;
-    padding-right: 2%;
-    padding-left: 2%;
-    padding-top: 25px;
-    padding-bottom: 25px;
+    padding: 25px 2%;
     background-color: #023E7D;
     flex-grow: 1;
     margin: 0;
+    border-radius: 20px;
 }
 
 .ItemList {
@@ -20,15 +18,30 @@
     padding-top: 17px;
     height: 100%;
     padding-bottom: 17px;
+    animation: fadeIn 1s ease-in-out;
 
     @media screen and (max-width: 769px) {
         width: 100%;
     }
 }
 
-.ItemList {
-    display: row;
+.NoCart{
+    text-align: center;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    background: linear-gradient(to right, #0466C8, #007bff, #00bfff, #007bff);
+    -webkit-background-clip: text;
+    background-size: 200%;
+    -webkit-text-fill-color: transparent;
+    animation: animate-gradient 1.5s linear infinite;
+}
 
+@keyframes animate-gradient {
+    to {
+        background-position: 200%;
+    }
 }
 
 .Summary {
@@ -40,11 +53,9 @@
     max-height: 364px;
     position: sticky;
     top: 25px;
-    position: sticky;
-    top: 25px;
     padding-top: 30px;
     padding-bottom: 15px;
-
+    animation: fadeIn 1s ease-in-out;
     @media screen and (max-width: 769px) {
         width: 100%;
     }
@@ -54,7 +65,7 @@
     font-size: 38px;
     text-decoration: underline;
     margin-top: -10px;
-    margin-bottom: -10px;
+    margin-bottom: 20px;
 }
 
 .Summary .SummaryBreakdown {

@@ -1,0 +1,24 @@
+.FavCard {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px 10px 20px;
+    min-width: 320px;
+    border-width: 1px;
+    border-style: solid;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    gap: 20px;
+    height: auto;
+    flex-wrap: wrap;
+    border-radius: 30px;
+    background: linear-gradient(to right, #f7fbff, #d7e7ff, #f8fbff);
+    background-size: 200%;
+    animation: animate-gradient 3s linear infinite, fadeIn 1s ease-in-out;
+    font-weight: bold;
+    border-color: #bdf3ff;
+}
+
+@keyframes animate-gradient {
+    to {
+        background-position: 200%;
+    }
+}
