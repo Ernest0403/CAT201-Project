@@ -269,6 +269,27 @@ const ManageOrders = () => {
                     <td>{ viewOrderDetails.order_orderDate}</td>
                   </tr>
 
+                  {/* Arriving Date */}
+                  <tr>
+                    <td>  Arriving Date:  </td>
+                    <td>{ viewOrderDetails.order_arrivingDate}</td>
+                  </tr>
+
+                  {/* Comments */}
+                  { viewOrderDetails.order_comment ? (
+                      <>
+                        <tr>
+                          <td> Comment:  </td>
+                          <td>{ viewOrderDetails.order_comment}</td>
+                        </tr>
+                      </>
+                  ) : (
+                      <tr>
+                        <td>  Comment:  </td>
+                        <td>No comment</td>
+                      </tr>
+                  )}
+
                   {/* Status */}
                   <tr>
                     <td>  Status:  </td>
