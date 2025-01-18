@@ -12,7 +12,6 @@ const ManageOrders = () => {
   const [popupMessage, setPopupMessage] = useState("");
   const [popupType, setPopupType] = useState("");
 
-
   useEffect(() => {
     fetch('http://localhost:8080/cat201_project_war/AdminOrder-servlet')
         .then(response => response.json())
@@ -118,7 +117,7 @@ const ManageOrders = () => {
   };
 
   return (
-      <div className='manageContainer responsive-table'>
+      <div className='manageOrderContainer responsive-table-order'>
         <h1>Order</h1>
         {displayTable ? (
             <>
@@ -148,7 +147,7 @@ const ManageOrders = () => {
                     </tr>
                 ) : (
                     filteredOrders.map((order) => (
-                        <tr key={order.order_id}>
+                        <tr className="order-row" key={order.order_id}>
                           <td className='border-left'>{order.order_id}</td>
                           <td>{order.order_orderNumber}</td>
                           <td>{order.order_status}</td>
@@ -272,7 +271,7 @@ const ManageOrders = () => {
                     <td>  Status:  </td>
                     <td>{ viewOrderDetails.order_status}</td>
                   </tr>
-                  <tr className='back2ListBtn'>
+                  <tr className='back2ListBtn-order'>
                     <td colSpan='2'>
                       <button type='button' onClick={handleCancel} className='saveorcancelbtn'>
                         Back To List
@@ -285,9 +284,9 @@ const ManageOrders = () => {
             </>
         ) : (
             <>
-              <div className='edit-form'>
+              <div className='edit-form-order'>
                 <form>
-                  <div className='selection-container'>
+                  <div className='selection-container-order'>
                     <label htmlFor='order_orderNumber'>Order Number:</label>
                     <input
                         type='text'
@@ -297,7 +296,7 @@ const ManageOrders = () => {
                         disabled
                     />
                   </div>
-                  <div className='selection-container'>
+                  <div className='selection-container-order'>
                     <label htmlFor='order_status'>Status:</label>
                     <select
                         id='order_status'
@@ -311,7 +310,7 @@ const ManageOrders = () => {
                       <option value='Cancelled'>Cancelled</option>
                     </select>
                   </div>
-                  <div className='selection-container'>
+                  <div className='selection-container-order'>
                     <label htmlFor='order_orderDate'>Order Date:</label>
                     <input
                         type='date'
@@ -321,7 +320,7 @@ const ManageOrders = () => {
                         onChange={handleFormInputChange}
                     />
                   </div>
-                  <div className='selection-container'>
+                  <div className='selection-container-order'>
                     <label htmlFor='paymentStatus'>Payment Status:</label>
                     <select
                         id='paymentStatus'
@@ -335,7 +334,7 @@ const ManageOrders = () => {
                     </select>
                   </div>
 
-                  <div className='form-actions'>
+                  <div className='form-actions-order'>
                     <button type='button' onClick={handleSave} className='saveorcancelbtn'>
                       Save Changes
                     </button>

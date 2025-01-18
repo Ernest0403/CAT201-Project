@@ -39,8 +39,12 @@ const ManageProducts = () => {
     fetch('http://localhost:8080/cat201_project_war/AdminProduct-servlet')
         .then(response => response.json())
         .then(data => { console.log(data); setItems(data); })
-        .catch(error => console.error('Error fetching products:', error));
-  }, []);
+        .catch(error => {
+          console.error('Error fetching orders:', error);
+          setPopupType("error");
+          setPopupMessage("Failed to fetch products. Please try again."); // Corrected message
+        });
+  }, [])
 
   useEffect(() => {
     if (popupMessage) {
@@ -165,15 +169,15 @@ const ManageProducts = () => {
         }
 
         setPopupMessage('Product deleted successfully.');
-        setPopupType('sucess')
+        setPopupType('success')
 
-        // remove the product from the local state
         const updatedItems = items.filter((item) => item.product_sku !== sku);
         setItems(updatedItems);
       } catch (error) {
         console.error('Error deleting product:', error);
-      }
-
+        setPopupType("error");
+        setPopupMessage(error.message);
+    }
   };
 
   const handleAddProductClick = async () => {
@@ -233,11 +237,11 @@ const ManageProducts = () => {
   }
 
   return (
-      <div className='manageContainer responsive-table'>
+      <div className='manageContainer '>
         <h1>Product</h1>
         {displayTable ? (
             <>
-              <table>
+              <table className="responsive-table">
                 <thead>
                 <tr>
                   <td colSpan='5'>
@@ -309,7 +313,7 @@ const ManageProducts = () => {
               </button>
             </>
         ) : (
-            <div className="edit-form">
+            <div className="edit-form-product">
               <form>
                 {Object.entries(editFormData).map(([key, value]) => (
                     <div key={key} className="selection-container">
