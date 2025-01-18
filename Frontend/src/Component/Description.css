@@ -134,6 +134,36 @@ body {
   padding: 10px;
 }
 
+.tabs-content li {
+  margin-bottom: 20px;
+}
+
+.tabs-content strong {
+  color: black;
+}
+
+.reviews-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.review-card {
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.review-header {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.review-body {
+  font-size: 14px;
+}
+
 .related-products h2 {
   margin-bottom: 40px;
   text-align: left;

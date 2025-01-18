@@ -19,5 +19,6 @@
 <a href="ForgetPasswordServlet">Forget Password Servlet</a>
 <a href="PromotionServlet">Promotion Servlet</a>
 <a href="CustomerServiceServlet">Customer Service Servlet</a>
+<a href="Review-servlet">Review Servlet</a>
 </body>
 </html>

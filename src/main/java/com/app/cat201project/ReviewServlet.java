@@ -17,18 +17,15 @@ import java.util.List;
 import java.util.Map;
 
 import Class.Order;
-import Class.Global;
 
-@WebServlet(name = "UserOrdersServlet", value = "/UserOrders-servlet")
-public class UserOrdersServlet extends HttpServlet {
-    private String loginUser;
+@WebServlet(name = "ReviewServlet", value = "/Review-servlet")
+public class ReviewServlet extends HttpServlet {
     private static Map<Integer, Order> orderMap = new HashMap<>();
     private String FILE_PATH;
 
     @Override
     public void init() throws ServletException {
         super.init();
-        loginUser = Global.LoginUser;
         FILE_PATH = getServletContext().getRealPath("Database/order.csv");
         System.out.println("CSV File Path: " + FILE_PATH);
     }
@@ -42,9 +39,7 @@ public class UserOrdersServlet extends HttpServlet {
                 System.out.println(values);
                 if (values.size() == 21) {
                     Order order = new Order(values);
-                    if (order.getOrder_customer().getUsername().equals(loginUser)) {
-                        orderMap.put(order.getOrder_id(), order);
-                    }
+                    orderMap.put(order.getOrder_id(), order);
                 }
             }
             if (orderMap.isEmpty()) {
@@ -147,57 +142,6 @@ public class UserOrdersServlet extends HttpServlet {
 
         // send JSON response to the frontend
         response.getWriter().write(jsonResponse);
-    }
-
-    @Override
-    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // add CORS headers
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-        response.setHeader("Access-Control-Allow-Headers", "Content-Type");
-        response.setContentType("application/json"); // Set the response content type as JSON
-
-        try {
-            // read JSON from request
-            BufferedReader reader = request.getReader();
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.registerModule(new JavaTimeModule());
-
-            // parse incoming JSON with originalId and updatedOrder
-            Map<Integer, Object> incomingData = objectMapper.readValue(reader, Map.class);
-            Integer originalId = (Integer) incomingData.get("originalId");
-            Order updatedOrder = objectMapper.convertValue(incomingData.get("updatedOrder"), Order.class);
-
-            if (originalId == null || updatedOrder == null) {
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-                response.getWriter().write("{\"error\": \"Missing originalId or updatedOrder.\"}");
-                return;
-            }
-
-            // check if the oder exists
-            if (!orderMap.containsKey(originalId)) {
-                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                response.getWriter().write("{\"error\": \"Product with SKU " + originalId + " not found.\"}");
-                return;
-            }
-
-            // update the order in the map
-            orderMap.put(updatedOrder.getOrder_id(), updatedOrder);
-            exportOrders(orderMap);
-
-            System.out.println("Incoming Data: " + incomingData);
-            System.out.println("Original ID: " + originalId);
-            System.out.println("Updated Order: " + updatedOrder);
-
-
-            // return success
-            response.setStatus(HttpServletResponse.SC_OK);
-            response.getWriter().write("{\"message\": \"Product updated successfully.\"}");
-        } catch (IOException e) {
-            e.printStackTrace();
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            response.getWriter().write("{\"error\": \"" + e.getMessage() + "\"}");
-        }
     }
 
     @Override
