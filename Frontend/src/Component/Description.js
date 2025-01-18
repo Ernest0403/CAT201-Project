@@ -10,6 +10,9 @@ const ItemPage = () => {
   const [activeTab, setActiveTab] = useState("Description");
   const [quantity, setQuantity] = useState(1);
   const [sliceRange, setSliceRange] = useState(5);
+  const [reviews, setReviews] = useState([]);
+  const [reviewsToShow, setReviewsToShow] = useState(3);
+  const [showMore, setShowMore] = useState(false);
 
   useEffect(() => {
       const updateSliceRange = () => {
@@ -46,6 +49,27 @@ const ItemPage = () => {
                 ).slice(0, sliceRange);
 
                 setRelatedItems(relatedFiltered);
+
+                const ordersResponse = await fetch(`http://localhost:8080/cat201_project_war/Review-servlet`);
+                const ordersData = await ordersResponse.json();
+
+                let productReviews = [];
+
+                ordersData.forEach(order => {
+                  order.order_products.forEach(product => {
+                    if (product.productSku === selectedProduct.product_sku) {
+                      const comment = order.order_comment;
+                      if (comment && comment.trim() !== "") {
+                        productReviews.push({
+                          comment: comment,
+                          orderId: order.order_id,
+                        });
+                      }
+                    }
+                  });
+                });
+
+                setReviews(productReviews);
               } else {
                 console.error("Product not found");
               }
@@ -127,7 +151,48 @@ const ItemPage = () => {
           </div>
         );
       case "Reviews":
-        return <p>No reviews yet. Be the first to review this product!</p>;
+      return (
+        <div>
+          {reviews.length > 0 ? (
+            <div className="reviews-container">
+              {reviews.slice(0, reviewsToShow).map((review, index) => (
+                <div key={index} className="review-card">
+                  <div className="review-header">
+                    <strong>Order ID:</strong> {review.orderId}
+                  </div>
+                  <div className="review-body">
+                    <p><strong>Review:</strong> {review.comment}</p>
+                  </div>
+                </div>
+              ))}
+              {reviews.length > reviewsToShow && !showMore && (
+                <button className="view-more-btn" onClick={() => setShowMore(true)}>
+                  View More
+                </button>
+              )}
+              {showMore && (
+                <>
+                  {reviews.slice(reviewsToShow).map((review, index) => (
+                    <div key={index} className="review-card">
+                      <div className="review-header">
+                        <strong>Order ID:</strong> {review.orderId}
+                      </div>
+                      <div className="review-body">
+                        <p><strong>Review:</strong> {review.comment}</p>
+                      </div>
+                    </div>
+                  ))}
+                  <button className="view-more-btn" onClick={() => setShowMore(false)}>
+                    View Less
+                  </button>
+                </>
+              )}
+            </div>
+          ) : (
+            <p>No reviews yet. Be the first to review this product!</p>
+          )}
+        </div>
+      );
       default:
         return null;
     }
@@ -165,11 +230,13 @@ const ItemPage = () => {
             <span>{quantity}</span>
             <button onClick={handleIncrease}>+</button>
           </div>
-          <div className="add-to-cart">
-            <button onClick={handleAddToCart}>Add to cart</button>
-          </div>
-          <div className="add-to-cart">
-            <button onClick={handleAddToFav}>Add to favourite</button>
+          <div className="button-container">
+              <div className="add-to-cart">
+                <button onClick={handleAddToCart}>Add to cart</button>
+              </div>
+              <div className="add-to-favourite">
+                <button onClick={handleAddToFav}>Add to favourite</button>
+              </div>
           </div>
           <div className="product-meta">
             <p><strong>SKU:</strong> {item.product_sku}</p>
