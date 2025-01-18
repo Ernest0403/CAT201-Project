@@ -4,21 +4,43 @@ import UserSidebar from "../../Component/UserSidebar";
 
 function Orders() {
   const [Orders, setOrders] = useState([]);
-  const [username, setUsername] = useState("loggedInUsername");
   const [view, setView] = useState({ type: "list", order: null });
   const [newComment, setNewComment] = useState("");
   const [refundReason, setRefundReason] = useState("");
   const [editRefundReason, setEditRefundReason] = useState("");
+  const [productDetails, setProductDetails] = useState({});
 
   useEffect(() => {
     fetch('http://localhost:8080/cat201_project_war/UserOrders-servlet')
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         setOrders(data);
+        data.forEach(order => {
+          const productSku = order.order_products.productSku || order.order_products[0].productSku;
+          if (productSku) {
+            fetchProductDetails(productSku, order.order_id);
+          }
+        });
       })
       .catch((error) => console.error("Error fetching orders:", error));
-  }, [username]);
+  }, []);
+
+  const fetchProductDetails = (productSku, orderId) => {
+    fetch(`http://localhost:8080/cat201_project_war/Product-servlet?sku=${productSku}`)
+      .then((response) => response.json())
+      .then((data) => {
+        const product = data.find(item => item.product_sku === productSku);
+        if (product) {
+          setProductDetails(prevState => ({
+            ...prevState,
+            [orderId]: product
+          }));
+        } else {
+            console.error(`Product with SKU ${productSku} not found`);
+        }
+      })
+      .catch((error) => console.error("Error fetching product details:", error));
+  };
 
   const handleViewChange = (type, order = null) => {
     setView({ type, order });
@@ -156,9 +178,15 @@ function Orders() {
           {view.type === "list" ? (
             Orders.map((order) => (
               <div key={order.order_id} className="order-item">
-                <div>Image</div>
+                {productDetails[order.order_id] ? (
+                  <>
+                    <img src={productDetails[order.order_id].product_src} alt={productDetails[order.order_id].product_name} />
+                    <h3>{productDetails[order.order_id].product_name}</h3>
+                  </>
+                ) : (
+                  <p>Loading product details...</p>
+                )}
                 <div>
-                  <h3>{order.order_products && order.order_products.length > 0 ? order.order_products[0].productName : "Product Name Not Available"}</h3>
                   <p>Order Number: {order.order_id}</p>
                   <p>Estimated Receiving Date: {order.order_arrivingDate}</p>
                 </div>
