@@ -33,13 +33,12 @@
 }
 
 .CartItemPhoto img {
-    width: 90%;
-    height: 90%;
-    object-fit: contain;
+    width: 100%;
+    height: 100%;
 }
 
 .CartItemPhoto {
-    border-color: black;
+    border-color: white;
     border-width: 1px;
     border-style: solid;
     width: 150px;
@@ -49,6 +48,8 @@
     min-height: 150px;
     align-content: center;
     vertical-align: middle;
+    overflow: hidden;
+    object-fit: cover;
 }
 
 .CartItemDetials {

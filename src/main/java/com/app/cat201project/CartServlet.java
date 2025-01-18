@@ -15,7 +15,6 @@ import Class.Global;
 @WebServlet(name = "CartServlet", value = "/Cart-servlet")
 public class CartServlet extends HttpServlet{
     private String loginUser;
-    private int client_id = 1;                                //Temporarily set the client id to 1, will connect with log in client id
     ArrayList<Cart> carts = new ArrayList<Cart>();               //Stores data from Cart list
     Cart client_cart = new Cart();                            //Stores data of the logged in client
     ArrayList<Product> products;                              //Stores Products data of the system
@@ -26,12 +25,12 @@ public class CartServlet extends HttpServlet{
         super.init();
         //Get the login username
         loginUser = Global.LoginUser;
-//        loginUser = "john";
         String productRealPath = getServletContext().getRealPath("Database/catProjectDataset.csv");
         products = Global.getProductList(productRealPath);
         realPath = getServletContext().getRealPath("Database/Cart.csv");
         Cart.setExternalCsvPath(realPath);
         System.out.println("Resolved File Path: " + realPath);
+
         try {
             Cart.loadCart(products, carts, client_cart, cart_products, loginUser);
         } catch (CsvValidationException | IOException e) {
@@ -153,6 +152,7 @@ public class CartServlet extends HttpServlet{
                     break;
 
                 case "updateQuantity":
+                    System.out.println(client_cart.getProduct_id());
                     client_cart.updateCart(
                             jsonObject.getString("productId").trim(),
                             jsonObject.getInt("quantity"),
