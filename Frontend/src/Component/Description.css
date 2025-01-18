@@ -199,6 +199,29 @@ body {
   object-fit: cover;
 }
 
+.message-box {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 15px 20px;
+  border-radius: 5px;
+  font-size: 18px;
+  z-index: 1000;
+  text-align: center;
+  width: auto;
+}
+
+.message-box.success {
+  background-color: #4caf50;
+  color: white;
+}
+
+.message-box.error {
+  background-color: #f44336;
+  color: white;
+}
+
 @media (max-width: 1024px) {
     .main-container {
         margin: 0;
