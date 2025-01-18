@@ -73,7 +73,7 @@ public class Cart {
 
     //add changes to cart
     public void addCart(String product_id, int quantity) {
-        if(product_list.size() == 0){
+        if(product_list.isEmpty()){
             product_list.add(product_id);
             quantity_list.add(quantity);
         }
@@ -81,7 +81,7 @@ public class Cart {
             boolean found = false;
             for(int i = 0; i < product_list.size(); i++)
             {
-                if(product_list.get(i) == product_id){
+                if(product_list.get(i).equals(product_id)){
                     quantity_list.set(i, quantity_list.get(i) + quantity);
                     found = true;
                 }
@@ -131,16 +131,7 @@ public class Cart {
     public void addToCart(String product_id, int addQuantity, ArrayList<Cart> carts, Cart client_cart) {
         System.out.println("Update product_id" + product_id);
         System.out.println("New quantity from JSON" + addQuantity);
-
-        for (int i = 0; i < client_cart.product_list.size(); i++) {
-            System.out.println("Looping product_id" + client_cart.product_list.get(i));
-            //This if not executed
-            if (Objects.equals(client_cart.product_list.get(i), product_id)) {
-                client_cart.addCart(product_list.get(i), addQuantity);
-                break;
-            }
-        }
-
+        client_cart.addCart(product_id, addQuantity);
         updateCartCSV(carts, client_cart);
     }
 
@@ -318,7 +309,7 @@ public class Cart {
             writer.newLine();
             writer.flush();
 
-            System.out.println(carts.get(1).getUsername());
+//            System.out.println(carts.get(1).getUsername());
             for (Cart cart : carts) {
                 System.out.println("Total of client carts");
                 if (cart.getUsername().equals(client_cart.getUsername())) {

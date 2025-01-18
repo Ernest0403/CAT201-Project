@@ -26,12 +26,12 @@ public class CartServlet extends HttpServlet{
         super.init();
         //Get the login username
         loginUser = Global.LoginUser;
-//        loginUser = "john";
         String productRealPath = getServletContext().getRealPath("Database/catProjectDataset.csv");
         products = Global.getProductList(productRealPath);
         realPath = getServletContext().getRealPath("Database/Cart.csv");
         Cart.setExternalCsvPath(realPath);
         System.out.println("Resolved File Path: " + realPath);
+
         try {
             Cart.loadCart(products, carts, client_cart, cart_products, loginUser);
         } catch (CsvValidationException | IOException e) {
@@ -153,6 +153,7 @@ public class CartServlet extends HttpServlet{
                     break;
 
                 case "updateQuantity":
+                    System.out.println(client_cart.getProduct_id());
                     client_cart.updateCart(
                             jsonObject.getString("productId").trim(),
                             jsonObject.getInt("quantity"),
