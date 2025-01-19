@@ -21,12 +21,10 @@ public class LoginServlet extends HttpServlet {
     public void init() throws ServletException {
         super.init();
 
-        // If your CSV is physically located in src/main/webapp/resources/users.csv,
-        // Tomcat will expand it into a local file, so we use getRealPath:
+
         String realPath = getServletContext().getRealPath("Database/users.csv");
         LOGGER.info("LoginServlet init. CSV real path: " + realPath);
 
-        // Instruct the User singleton to read/write from this path if needed
         User.setExternalCsvPath(realPath);
     }
 

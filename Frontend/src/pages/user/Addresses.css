@@ -1,10 +1,10 @@
-/* Container to match other pages' structure */
+
 .DashboardContainer {
     display: flex;
     width: 100%;
   }
   
-  /* Main addresses content area */
+
   .AddressesContent {
     flex: 1;
     padding: 20px;
@@ -30,7 +30,7 @@
     margin-top: 0;
   }
   
-  /* Add / Edit buttons inside the columns */
+
   .AddButton,
   .EditButton {
     margin-top: 10px;
@@ -42,7 +42,7 @@
     cursor: pointer;
   }
   
-  /* Modal backdrop */
+
   .ModalBackdrop {
     position: fixed;
     top: 0;
@@ -53,7 +53,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 9999; /* ensure it's on top of other elements */
+    z-index: 9999;
   }
   
   /* Modal content box */
@@ -85,9 +85,9 @@
     gap: 10px;
   }
   
-  /* Buttons within modal */
+
   .SaveButton {
-    background-color: #28a745; /* green */
+    background-color: #28a745;
     border: none;
     color: #fff;
     padding: 8px 16px;
@@ -96,7 +96,7 @@
   }
   
   .CancelButton {
-    background-color: #dc3545; /* red */
+    background-color: #dc3545;
     border: none;
     color: #fff;
     padding: 8px 16px;
@@ -104,7 +104,7 @@
     cursor: pointer;
   }
   
-  /* Success popup in the style of the screenshot */
+
   .SuccessPopup {
     position: fixed;
     top: 50%;
@@ -120,9 +120,9 @@
   }
   
   .SuccessTitle {
-    color: #28a745; /* green color for "Success" heading */
+    color: #28a745;
     margin-bottom: 10px;
-    font-size: 1.5rem; /* adjust as needed */
+    font-size: 1.5rem;
   }
   
   .SuccessPopup p {

@@ -1,6 +1,3 @@
-/* ---------------------------------
-   General Layout
----------------------------------- */
 .app {
     display: flex;
     min-height: 100vh;
@@ -8,7 +5,7 @@
     font-family: Arial, sans-serif;
 }
 
-/* Main content area */
+
 .main-content {
     flex: 1;
     display: flex;
@@ -22,10 +19,10 @@
     overflow-y: auto;
 }
 
-/* Toggle (hamburger) button */
+
 .toggle-sidebar-btn {
-    display: none;               /* hidden on desktop */
-    position: absolute;          /* we show it in mobile */
+    display: none;
+    position: absolute;
     top: 10px;
     left: 10px;
     background-color: #3498db;
@@ -33,24 +30,22 @@
     border: none;
     padding: 8px 12px;
     cursor: pointer;
-    z-index: 1100;               /* above the sidebar */
+    z-index: 1100;
 }
 
 .toggle-sidebar-btn:hover {
     background-color: #2980b9;
 }
 
-/* ---------------------------------
-   Responsive: Mobile / Tablet
----------------------------------- */
+
 @media (max-width: 768px) {
     .app {
-        flex-direction: row;       /* we still want side-by-side structure */
-        overflow-x: hidden;        /* avoid horizontal scroll for off-canvas */
+        flex-direction: row;
+        overflow-x: hidden;
     }
 
     .toggle-sidebar-btn {
-        display: block;            /* show the toggle on small screens */
+        display: block;
     }
 }
 

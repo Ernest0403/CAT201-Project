@@ -75,7 +75,7 @@ p {
 }
 
 .chart-container {
-    height: 400px; /* Set a larger height for 12 months */
+    height: 400px;
     background: #fff;
     border: 1px solid #ddd;
     border-radius: 5px;

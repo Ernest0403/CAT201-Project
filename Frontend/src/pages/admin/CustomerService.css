@@ -7,7 +7,7 @@
 
 .inquiry-list {
   display: flex;
-  flex-direction: column; /* Vertical layout */
+  flex-direction: column;
   gap: 20px;
   justify-content: center;
 }
@@ -88,11 +88,11 @@ textarea {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: #ffffff; /* White background */
+  background-color: #ffffff;
   border-radius: 12px;
   padding: 20px 40px;
   text-align: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   font-family: Arial, sans-serif;
   z-index: 1000;
   width: 300px;
@@ -101,11 +101,11 @@ textarea {
 .popup-message h2 {
   font-size: 1.5em;
   margin: 0 0 10px;
-  color: #28a745; /* Green for success, can be replaced dynamically */
+  color: #28a745;
 }
 
 .popup-message.error h2 {
-  color: #dc3545; /* Red for error */
+  color: #dc3545;
 }
 
 .popup-message p {

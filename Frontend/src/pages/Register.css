@@ -10,29 +10,29 @@
 .RegisterContainer {
     background-color: #d9d9d9;
     border-radius: 10px;
-    padding: 40px; /* Increased padding for better spacing */
+    padding: 40px;
     width: 100%;
-    max-width: 600px; /* Increased max-width for a larger box */
+    max-width: 600px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     text-align: center;
-    box-sizing: border-box; /* Include padding and border in the width */
+    box-sizing: border-box;
 }
 
 h2 {
     margin-bottom: 20px;
-    font-size: 2rem; /* Slightly larger heading */
+    font-size: 2rem;
     color: #333;
 }
 
 .RegisterForm {
     display: flex;
     flex-direction: column;
-    gap: 20px; /* Space between form elements */
-    width: 100%; /* Ensure the form matches the container's width */
+    gap: 20px;
+    width: 100%;
 }
 
 label {
-    text-align: left; /* Align labels to the left */
+    text-align: left;
     font-weight: bold;
     color: #333;
 }
@@ -43,8 +43,8 @@ input {
     border-radius: 5px;
     font-size: 1rem;
     background-color: #fff;
-    width: 100%; /* Make inputs match the form's width */
-    box-sizing: border-box; /* Include padding in width calculation */
+    width: 100%;
+    box-sizing: border-box;
 }
 
 button.RegisterButton {
@@ -53,10 +53,10 @@ button.RegisterButton {
     color: white;
     border: none;
     border-radius: 5px;
-    font-size: 1.2rem; /* Slightly larger font for the button */
+    font-size: 1.2rem;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    width: 100%; /* Make the button span the container width */
+    width: 100%;
 }
 
 button.RegisterButton:hover {

@@ -69,22 +69,21 @@ h2 {
 }
 
 .LoginButton {
-  background-color: #007BFF; /* Blue color */
-  color: white; /* White text */
-  border: none; /* No border */
-  padding: 10px 20px; /* Padding for the button */
-  border-radius: 5px; /* Rounded corners */
-  font-size: 16px; /* Font size */
-  cursor: pointer; /* Pointer cursor on hover */
-  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .LoginButton:hover {
-  background-color: #0056b3; /* Darker blue on hover */
+  background-color: #0056b3;
 }
 
 
-/* Forgot password link at the bottom of the form */
 .ForgotPassword {
   color: #007BFF;
   cursor: pointer;
@@ -96,7 +95,7 @@ h2 {
   text-decoration: underline;
 }
 
-/* Register link styling */
+
 .RegisterLink {
   text-align: center;
   margin-top: 10px;
