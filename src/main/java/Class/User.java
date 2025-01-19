@@ -11,32 +11,16 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A singleton class to manage user records, supporting two modes:
- *  1) Classpath resource (users.csv) [READ-ONLY]
- *  2) External file path [READ+WRITE]
- */
+
 public class User {
 
-    // -------------------------------------------------
-    // 1) Singleton instance & data storage
-    // -------------------------------------------------
 
-    private static User instance;          // Singleton instance
-    private static String externalCsvPath; // If null, we read from resource. If set, we read/write to that file.
 
-    /**
-     * In-memory list of user records, each record is a String[]:
-     *   [0] = userType ("user", "admin", etc.)
-     *   [1] = username
-     *   [2] = email
-     *   [3] = password
-     *   [4] = firstName (optional)
-     *   [5] = lastName (optional)
-     *   [6] = displayName (optional)
-     *   [7] = billingAddress (optional)
-     *   [8] = shippingAddress (optional)
-     */
+    private static User instance;
+    private static String externalCsvPath;
+
+
+
     private final List<String[]> allUsers;
 
     // -------------------------------------------------
@@ -47,9 +31,7 @@ public class User {
         reloadData();
     }
 
-    /**
-     * Retrieve the singleton instance, creating it if necessary.
-     */
+
     public static User getInstance() {
         if (instance == null) {
             synchronized (User.class) {
@@ -61,15 +43,7 @@ public class User {
         return instance;
     }
 
-    // -------------------------------------------------
-    // 3) External CSV Path Configuration
-    // -------------------------------------------------
 
-    /**
-     * Set the external file path (absolute path on the filesystem).
-     * If this is set to a non-null value, the system will use that file for read/write.
-     * If it is null, it falls back to the classpath resource (users.csv) read-only mode.
-     */
     public static void setExternalCsvPath(String path) {
         externalCsvPath = path;
         if (instance != null) {
@@ -77,14 +51,7 @@ public class User {
         }
     }
 
-    // -------------------------------------------------
-    // 4) Loading / Reloading Data
-    // -------------------------------------------------
 
-    /**
-     * Clears the list and loads data from either an external file or
-     * the internal classpath resource.
-     */
     private synchronized void reloadData() {
         allUsers.clear();
 
@@ -95,9 +62,7 @@ public class User {
         }
     }
 
-    /**
-     * Load from a file on the filesystem. Allows read+write.
-     */
+
     private void loadFromExternalFile(String path) {
         try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
             String line;
@@ -115,9 +80,7 @@ public class User {
         }
     }
 
-    /**
-     * Load from a classpath resource in read-only mode.
-     */
+
     private void loadFromResource(String resourceName) {
         try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(resourceName);
              BufferedReader reader = (inputStream != null)
@@ -144,14 +107,7 @@ public class User {
         }
     }
 
-    // -------------------------------------------------
-    // 5) Saving Data (only works if externalCsvPath != null)
-    // -------------------------------------------------
 
-    /**
-     * Saves the in-memory user list back to the external file (if set).
-     * If in resource mode (externalCsvPath == null), logs a warning and does nothing.
-     */
     public synchronized void saveData() {
         if (externalCsvPath == null) {
             System.err.println("[User] WARNING: saveData() called but externalCsvPath is null. " +
@@ -172,20 +128,12 @@ public class User {
         }
     }
 
-    // -------------------------------------------------
-    // 6) Public Methods: getAllUsers, addUser, etc.
-    // -------------------------------------------------
 
-    /**
-     * Returns a shallow copy of all user records.
-     */
     public synchronized List<String[]> getAllUsers() {
         return new ArrayList<>(allUsers);  // defensive copy
     }
 
-    /**
-     * Finds a user by username or email. Returns the first matched row, or null if not found.
-     */
+
     public synchronized String[] findUserByUsernameOrEmail(String usernameOrEmail) {
         for (String[] userData : allUsers) {
             if (userData.length >= 3) {
@@ -199,19 +147,13 @@ public class User {
         return null;
     }
 
-    /**
-     * Adds a new user record to the in-memory list.
-     * If you want to persist this, call saveData() afterward (if externalCsvPath is set).
-     */
+
     public synchronized void addUser(String[] newUserRecord) {
         allUsers.add(newUserRecord);
         System.out.println("[User] addUser: " + String.join(",", newUserRecord));
     }
 
-    /**
-     * Updates a user's password in-memory. To actually save it to file,
-     * call saveData() if externalCsvPath is set.
-     */
+
     public synchronized boolean updatePassword(String usernameOrEmail, String newPassword) {
         String[] row = findUserByUsernameOrEmail(usernameOrEmail);
         if (row != null && row.length >= 4) {

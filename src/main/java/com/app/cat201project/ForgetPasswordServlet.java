@@ -20,8 +20,7 @@ public class ForgetPasswordServlet extends HttpServlet {
     public void init() throws ServletException {
         super.init();
 
-        // If your CSV is physically located in src/main/webapp/resources/users.csv,
-        // Tomcat will expand it into a local file. We get the absolute path:
+
         String realPath = getServletContext().getRealPath("Database/users.csv");
         LOGGER.info("ForgetPasswordServlet init. CSV real path: " + realPath);
 

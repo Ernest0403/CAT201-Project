@@ -22,13 +22,11 @@ public class RegisterServlet extends HttpServlet {
     public void init() throws ServletException {
         super.init();
 
-        // If your CSV is physically located in src/main/webapp/resources/users.csv,
-        // Tomcat will expand it, so we get the absolute path to that expanded file:
+
         String realPath = getServletContext().getRealPath("Database/users.csv");
         LOGGER.info("RegisterServlet init. CSV real path: " + realPath);
 
-        // Tell the User singleton to load from (and write to) this external file:
-        // That way, changes will persist if Tomcat doesn't overwrite on redeploy.
+
         User.setExternalCsvPath(realPath);
     }
 
@@ -104,19 +102,7 @@ public class RegisterServlet extends HttpServlet {
             return;
         }
 
-        // === 5) Create a new user record
-        // CSV columns might be:
-        //   [0] userType
-        //   [1] username
-        //   [2] email
-        //   [3] password
-        //   [4] firstName
-        //   [5] lastName
-        //   [6] displayName
-        //   [7] billingAddress
-        //   [8] shippingAddress
-        //
-        // For now, store the first 4. The rest can be empty strings.
+
         String[] newUser = new String[] {
                 userType,
                 username.trim(),
