@@ -18,10 +18,10 @@ import Class.*;
 @WebServlet(name = "FavouriteServlet", value = "/Favourite-servlet")
 public class FavouriteServlet extends HttpServlet {
     private String loginUser;
-    ArrayList<Favourite> favouriteList = new ArrayList<Favourite>();                  //Stores data from Cart list
-    Favourite client_fav = new Favourite();                                        //Stores data of the logged in client
-    ArrayList<Product> products;          //Stores Products data of the system
-    ArrayList<Product> fav_products = new ArrayList<Product>();//Temporarily set the client id to 1, will connect with log in client id
+    ArrayList<Favourite> favouriteList = new ArrayList<Favourite>();     //Stores data from Cart list
+    Favourite client_fav = new Favourite();                              //Stores data of the logged in client
+    ArrayList<Product> products;                                         //Stores Products data of the system
+    ArrayList<Product> fav_products = new ArrayList<Product>();          //Temporarily set the client id to 1, will connect with log in client id
     String realPath;
 
     public void init() throws ServletException {
@@ -31,7 +31,7 @@ public class FavouriteServlet extends HttpServlet {
         products = Global.getProductList(productRealPath);
         realPath = getServletContext().getRealPath("Database/Favourite.csv");
         Favourite.setExternalCsvPath(realPath);
-        //Create a cart for a client, should be modified into reading from csv
+        //Read cart from csv
         try {
             Favourite.loadFav(products, favouriteList, client_fav, fav_products, loginUser);
         } catch (CsvValidationException | IOException e) {
@@ -78,7 +78,6 @@ public class FavouriteServlet extends HttpServlet {
                 jsonObject.put("tag", product.getProduct_itemCategory());
                 jsonObject.put("price", product.getProduct_price());
 
-                // append it to your JSON array.
                 jsonArray.put(jsonObject);
                 i++;
             }

@@ -4,11 +4,7 @@ import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
 import com.opencsv.exceptions.CsvValidationException;
-import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
@@ -20,11 +16,10 @@ import Class.*;
 @WebServlet(name = "CheckoutServlet", value = "/Checkout-servlet")
 public class CheckoutServlet extends HttpServlet {
     private String loginUser;
-    private int client_id = 1;                                //Temporarily set the client id to 1, will connect with log in client id
-    ArrayList<Cart> carts = new ArrayList<Cart>();               //Stores data from Cart list
-    Cart client_cart = new Cart();                            //Stores data of the logged in client
-    ArrayList<Product> products;                              //Stores Products data of the system
-    ArrayList<Product> cart_products = new ArrayList<Product>();    //Stores Products that is within the logged in client's cart
+    ArrayList<Cart> carts = new ArrayList<Cart>();                   //Stores data from Cart list
+    Cart client_cart = new Cart();                                   //Stores data of the logged in client
+    ArrayList<Product> products;                                     //Stores Products data of the system
+    ArrayList<Product> cart_products = new ArrayList<Product>();     //Stores Products that is within the logged in client's cart
     String realPath;
 
     public void init() throws ServletException {
@@ -58,7 +53,7 @@ public class CheckoutServlet extends HttpServlet {
         response.setDateHeader("Expires", 0);
         response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
-        //Create a cart for a client, should be modified into reading from csv
+        //Reading cart from csv
         try {
             Cart.loadCart(products, carts, client_cart, cart_products, loginUser);
         } catch (CsvValidationException e) {
@@ -100,14 +95,14 @@ public class CheckoutServlet extends HttpServlet {
             jsonObject.put("SubPrice", client_cart.getSubPrice(products));
             jsonObject.put("AssemblyFee", client_cart.getAssemblyFee());
             jsonObject.put("Subtotal", client_cart.getSubTotal(products));
-            jsonObject.put("Delivery", client_cart.getShippingFee()); //Temporary fixed value
-            jsonObject.put("SST", client_cart.getTaxFee(products)); //Temporary fixed value
+            jsonObject.put("Delivery", client_cart.getShippingFee());
+            jsonObject.put("SST", client_cart.getTaxFee(products));
             jsonObject.put("Total", client_cart.getTaxTotal(products));
 
             // Write JSON to response
             jsonResponse.put("cartProducts", jsonArray);
             jsonResponse.put("fullSummary", jsonObject);
-            System.out.println(jsonResponse.toString());
+            System.out.println(jsonResponse);
             response.setStatus(HttpServletResponse.SC_OK);
             response.getWriter().write(jsonResponse.toString());
         } catch (Exception e) {
@@ -133,7 +128,6 @@ public class CheckoutServlet extends HttpServlet {
         response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
         response.setContentType("application/json");
-        PrintWriter out = response.getWriter();
 
         //read request and store in temporary string
         BufferedReader reader = request.getReader();
@@ -161,7 +155,6 @@ public class CheckoutServlet extends HttpServlet {
                     JSONArray itemsArray = jsonObject.getJSONArray("items");
                     StringBuilder quantityBuilder = new StringBuilder();
                     StringBuilder skuBuilder = new StringBuilder();
-                    int quantity = 0;
                     for (int i = 0; i < itemsArray.length(); i++) {
                         JSONObject item = itemsArray.getJSONObject(i);
                         if (!skuBuilder.isEmpty()) {
@@ -197,7 +190,7 @@ public class CheckoutServlet extends HttpServlet {
                     orderRecord += jsonObject.getString("PaymentType").trim(); orderRecord += ',';
                     orderRecord += "Completed"; orderRecord += ',';
                     orderRecord += ',';orderRecord += ',';orderRecord += ',';
-                    orderRecord += String.valueOf(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+                    orderRecord += LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                     System.out.println(orderRecord);
 
                     //more details to be added
@@ -211,6 +204,7 @@ public class CheckoutServlet extends HttpServlet {
                     client_cart.updateCartCSV(carts, client_cart);
                     break;
 
+                    //When the client change desired shipping method
                 case "updateShip":
                     if(jsonObject.getString("ShippingType").trim().equals("fast"))
                     {
