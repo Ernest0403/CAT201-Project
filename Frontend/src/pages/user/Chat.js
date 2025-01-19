@@ -23,7 +23,7 @@ function Chat() {
     // After 3 seconds, hide pop-up and navigate back
     setTimeout(() => {
       setShowSuccessMessage(false);
-      navigate(-1); // -1 goes back one page in history
+      navigate(-1);
     }, 3000);
   };
 

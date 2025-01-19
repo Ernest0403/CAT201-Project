@@ -1,10 +1,9 @@
-/* Container (similar to your other pages) */
 .DashboardContainer {
   display: flex;
   width: 100%;
 }
 
-/* Main content area for Account Details */
+
 .AccountDetails {
   flex: 1;
   padding: 20px;
@@ -58,23 +57,23 @@
   margin-top: 5px;
 }
 
-/* Success pop-up styling (centered, white box, green heading) */
+
 .SuccessPopup {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 320px;
-  background-color: #fff;          /* White background */
+  background-color: #fff;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.3);
   text-align: center;
-  z-index: 9999;                   /* On top of all elements */
+  z-index: 9999;
 }
 
 .SuccessTitle {
-  color: #28a745;                  /* Green for “Success” */
+  color: #28a745;
   margin-bottom: 10px;
   font-size: 1.5rem;
 }

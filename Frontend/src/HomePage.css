@@ -23,8 +23,8 @@ body {
 }
 
 .offer-image img {
-  width: 100%;   /* so the image shrinks with the container */
-  height: auto;  /* preserve aspect ratio */
+  width: 100%;
+  height: auto;
   display: block;
 }
 

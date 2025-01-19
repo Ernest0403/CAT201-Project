@@ -68,9 +68,9 @@
   }
 .form-buttons {
   display: flex;
-  justify-content: flex-start; /* Align buttons to the left */
-  gap: 20px; /* Add spacing between the buttons */
-  margin-top: 15px; /* Optional: Add space above the button group */
+  justify-content: flex-start;
+  gap: 20px;
+  margin-top: 15px;
 }
 
 

@@ -39,7 +39,8 @@ function Login() {
         }
 
         try {
-            const response = await fetch("http://localhost:8080/cat201_project_war/LoginServlet", {
+            const response = await fetch("http://localhost:8080/cat201_project_war/LoginServlet",
+                {
                 method: "POST",
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
                 body: new URLSearchParams({
