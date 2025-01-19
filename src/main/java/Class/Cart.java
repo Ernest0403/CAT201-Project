@@ -10,7 +10,6 @@ import java.util.Objects;
 
 public class Cart {
     private String username;
-    private int client_id;
     private ArrayList<String> product_list = new ArrayList<>();
     private ArrayList<Integer> quantity_list = new ArrayList<>();
     private static String externalCsvPath;
@@ -18,16 +17,11 @@ public class Cart {
     private float assemblyFee = 30;
     private String shippingType;
     private float shippingFee = 20;
-    private int SSTpercent = 6;
 
     //Constructor
     public Cart() {
 
     }
-
-//    public Cart(int client_id) {
-//        this.client_id = client_id;
-//    }
 
     public Cart(String username) {
         this.username = username;
@@ -106,7 +100,6 @@ public class Cart {
             }
         }
     }
-
 
     //Update cart if add and subtract are handled in frontend
     public void updateCart(String product_id, int newQuantity, ArrayList<Cart> carts, Cart client_cart) {

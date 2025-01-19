@@ -1,7 +1,5 @@
 package Class;
 
-import com.opencsv.CSVReader;
-import com.opencsv.exceptions.CsvValidationException;
 import java.time.LocalDate;
 
 import java.io.*;
@@ -18,9 +16,7 @@ public class Order {
     private String order_status;
     private String order_orderDate;
     private String order_comment;
-    private String order_arrivingDate;
-
-    private static Map<Integer, Order> orderMap = new HashMap<>();
+    private String order_arrivingDate;;
 
     private static String externalCsvPath;
     private static int ordersCount;
@@ -194,136 +190,6 @@ public class Order {
 
         public String getCancellationReason() { return cancellationReason; }
         public String getCancellationDate() { return cancellationDate; }
-    }
-
-//    public static void loadOrderCSV(ArrayList<Product> products,
-//                                    ArrayList<Order> orderList,
-//                                    Order client_order,
-//                                    ArrayList<Product> order_products,
-//                                    String client_username) throws CsvValidationException, IOException {
-//        orderList.clear();
-//        order_products.clear();
-//        ordersCount = 0;
-//
-//        CSVReader reader;
-//        try {
-//            reader = new CSVReader(
-//                    new FileReader(externalCsvPath)
-//            );
-//            System.out.println("File found"); //Found
-//        } catch (FileNotFoundException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        String[] line;
-//        reader.readNext();
-//        System.out.println("Reader read");
-//
-//        while ((line = reader.readNext()) != null) {
-//            System.out.println(Arrays.toString(line));
-//            Order order = new Order(List.of(line));
-//            orderList.add(order);
-//            ordersCount++;
-//        }
-//        System.out.println("End of file reached.");
-//
-//        for (int i = 0; i < orderList.size() - 1; i++) {
-//            if (orderList.get(i).getOrder_customer().getUsername().equals(client_username)) {
-//                client_order.setOrder(orderList.get(i));
-//                System.out.println("client_order added.");
-//                break;
-//            }
-//        }
-//    }
-
-    //Need to define a new order first
-    //Load order to know the next value
-    //then exec this function
-    public void writeOrderCSV() throws IOException {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(externalCsvPath))) {
-                // handle productSkus and quantities are stored as lists or arrays in the order object
-                String productSku = String.join("|", getOrder_products().stream()
-                        .map(product -> String.valueOf(product.getProductSku()))
-                        .toArray(String[]::new));
-
-                String quantities = String.join("|", getOrder_products().stream()
-                        .map(product -> String.valueOf(product.getQuantity()))
-                        .toArray(String[]::new));
-
-                writer.write(String.format("\"%d\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%d\",\"%f\",\"%f\",\"%f\",\"%f\",\"%f\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"\n",
-                        getOrder_id(),
-                        escapeForCSV(getOrder_orderNumber()),
-                        escapeForCSV(getOrder_customer().getUsername()),
-                        escapeForCSV(getOrder_customer().getContactNumber()),
-                        escapeForCSV(getOrder_customer().getAddress()),
-                        productSku,
-                        quantities,
-                        getOrder_orderDetails().getTotalItems(),
-                        getOrder_orderDetails().getProductPrice(),
-                        getOrder_orderDetails().getDeliveryFee(),
-                        getOrder_orderDetails().getAssemblyFee(),
-                        getOrder_orderDetails().getSst(),
-                        getOrder_orderDetails().getTotal(),
-                        getOrder_paymentDetails().getPaymentType(),
-                        getOrder_paymentDetails().getPaymentStatus(),
-                        escapeForCSV(getOrder_cancellationDetails().getCancellationReason()),
-                        getOrder_cancellationDetails().getCancellationDate(),
-                        getOrder_status(),
-                        getOrder_orderDate(),
-                        escapeForCSV(getOrder_comment()),
-                        getOrder_arrivingDate()
-                ));
-            }
-        }
-
-    public static Map<Integer, Order> importOrders() {
-        ordersCount = 0;
-        try (BufferedReader reader = new BufferedReader(new FileReader(externalCsvPath))) {
-            String line;
-            reader.readLine();
-            while ((line = reader.readLine()) != null) {
-                List<String> values = parseCsvLine(line);
-                System.out.println(values);
-                if (values.size() == 21) {
-                    Order order = new Order(values);
-                    orderMap.put(order.getOrder_id(), order);
-                }
-                ordersCount++;
-            }
-            if (orderMap.isEmpty()) {
-                System.out.println("No orders found in the CSV file.");
-            }
-        } catch (IOException e) {
-            System.out.println("Error reading the file: " + e.getMessage());
-        }
-        return orderMap;
-    }
-
-    private static String escapeForCSV(String data) {
-        if (data == null) {
-            return "";
-        }
-        return data.replace("\"", "\"\"");
-    }
-
-    private static List<String> parseCsvLine(String line) {
-        boolean inQuotes = false;
-        List<String> data = new ArrayList<>();
-        StringBuilder currentField = new StringBuilder();
-        for (char c : line.toCharArray()) {
-            if (c == '"') {
-                inQuotes = !inQuotes;
-            } else if (c == ',' && !inQuotes) {
-                data.add(currentField.toString().trim());
-                currentField.setLength(0);
-            } else {
-                currentField.append(c);
-            }
-        }
-        if (!currentField.isEmpty()) {
-            data.add(currentField.toString().trim());
-        }
-        return data;
     }
 }
 

@@ -88,8 +88,6 @@ public class CartServlet extends HttpServlet{
                     jsonObject.put("quantity", client_cart.getQuantity(i));
                     System.out.println(i);
                 }
-
-                // append it to your JSON array.
                 jsonArray.put(jsonObject);
                 i++;
             }
@@ -100,14 +98,14 @@ public class CartServlet extends HttpServlet{
             jsonObject.put("AssemblyFee", client_cart.getAssemblyFee());
             jsonObject.put("Subtotal", client_cart.getSubTotal(products));
 
-            // Write JSON to response
+
             jsonResponse.put("cartProducts", jsonArray);
             jsonResponse.put("Summary", jsonObject);
-            System.out.println(jsonResponse.toString());
+            System.out.println(jsonResponse);
             response.setStatus(HttpServletResponse.SC_OK);
             response.getWriter().write(jsonResponse.toString());
         } catch (Exception e) {
-            e.printStackTrace(); // Log the error
+            e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().write("{\"error\": \"Internal server error occurred.\"}");
         }
@@ -119,14 +117,13 @@ public class CartServlet extends HttpServlet{
         System.out.println(loginUser);
     }
 
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         // CORS headers
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
         response.setContentType("application/json");
-        PrintWriter out = response.getWriter();
 
         //read request and store in temporary string
         BufferedReader reader = request.getReader();
@@ -161,7 +158,7 @@ public class CartServlet extends HttpServlet{
                     );
 
                     //Update cart_product
-                    boolean found = false;
+                    boolean found;
                     for (int i = 0; i < cart_products.size() ; i++) {
                         found = false;
                         for (String productSKU : client_cart.getProduct_id())
