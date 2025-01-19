@@ -128,6 +128,8 @@ public class Favourite {
             }
         }
         System.out.println("End of file reached.");
+        System.out.println(favList.get(0).getUsername());
+        System.out.println();
 
         boolean existUser = false;
         for (int i = 0; i < favList.size(); i++) {

@@ -43,6 +43,7 @@ public class FavouriteServlet extends HttpServlet {
 
     //Return logged in client Cart details
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        loginUser = Global.LoginUser;
         try {
             Favourite.loadFav(products, favouriteList, client_fav, fav_products, loginUser);
         } catch (CsvValidationException | IOException e) {
