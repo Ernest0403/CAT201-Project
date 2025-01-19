@@ -69,7 +69,6 @@ public class LoginServlet extends HttpServlet {
 
         // Check each record for a match
         for (String[] userData : allUsers) {
-            // Expect at least 4 columns: [0]=userType, [1]=username, [2]=email, [3]=password
             if (userData.length < 4) {
                 continue;
             }
